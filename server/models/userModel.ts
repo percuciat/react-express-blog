@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model, Document} from 'mongoose';
 
 const userSchema = new Schema({
     name: {
@@ -34,5 +34,12 @@ const userSchema = new Schema({
     timestamps: true
 });
 
+export interface SavedUserDocument extends Document {
+    account: string;
+    password: string;
+}
 
-export default model('User', userSchema);
+export const userSchemaModel = model<SavedUserDocument>('User', userSchema)
+/*
+
+export default model('User', userSchema);*/
