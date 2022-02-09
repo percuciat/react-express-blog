@@ -20,7 +20,9 @@ app.use(cookieParser());
 
 
 // Routes
-app.use('/api', routes.authRouter)
+app.use('/auth', routes.authRouter);
+app.use('/post', routes.postRouter);
+app.use('/', routes.app);
 
 // Database
 import './config/database'

@@ -1,13 +1,47 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import '~antd/dist/antd.css';
+
+
+:root {
+  --primaryColor: hsl(209, 34%, 30%);
+  --attentionColor: #f5a718;
+  --attentionViolet: #9e15d6;
+  --boldColor: hsl(209, 61%, 16%);
+  --whiteColor: #f0f0f0;
+  --grayLightColor: #f1f5f8;
+  --grayDarkColor: #dae2ec;
+
+  --darkThemeSecondary: #0d1117;
+  --darkThemePrimary: #161b22;
+  --darkThemeMoon: #f4dc49;
+  --darkThemeTextLight: #f0f6fc;
+  --darkThemeText: #c9d1d9;
+
+  --clr-grey-4: hsl(209, 28%, 39%);
+  /* grey used for paragraphs */
+  --grayColor: hsl(210, 22%, 49%);
+  --clr-grey-8: hsl(210, 31%, 80%);
+  --clr-green-dark: hsl(125, 67%, 35%);
+  --clr-red-dark: hsl(360, 67%, 44%);
+  --clr-red-light: hsl(360, 71%, 66%);
+  --ff-primary: 'Roboto', sans-serif;
+  --ff-secondary: 'Sen', sans-serif;
+  --ff-third: 'Reggae One', sans-serif;
+  --transition: all 0.3s linear;
+  --spacing: 0.2rem;
+  --radius: 0.25rem;
+  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.wrapperGlobal{
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
 }

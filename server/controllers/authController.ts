@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import {generateAccessToken, generateActiveToken, generateRefreshToken} from '../config/generateToken'
 
 
-const authC = {
+const authController = {
     register: async (req: Request, res: Response) => {
         try {
             const {name, account, password} = req.body
@@ -32,4 +32,4 @@ const authC = {
     }
 }
 
-export default authC
+export default authController
