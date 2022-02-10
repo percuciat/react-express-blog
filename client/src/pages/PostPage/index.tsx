@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, Input, Button, Row, Col} from 'antd';
-import {Link, Outlet} from "react-router-dom";
+import {makeRequestXHR} from "../../api";
+import {Post} from "../../components";
 
 const PostPage = () => {
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
+    const [posts, setPosts] = useState([]);
+    useEffect(() => {
+        makeRequestXHR('get', {
+            url: '/',
+        }).then(r => {
+            console.log('RR', r)
+            setPosts(r.data)
+        })
+
+    }, [])
+    const onFinish = async (values: any) => {
+        const responseServer = await makeRequestXHR('post', {
+            url: '/create',
+            data: values
+        });
+        console.log('Success:', responseServer);
     };
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
@@ -12,6 +27,15 @@ const PostPage = () => {
     return (
         <>
             <h1>PostPage</h1>
+            <ul>
+                {
+                    posts.map((el: any) => {
+                        return <Post key={el.title} title={el.title}
+                                     content={el.content}/>
+                    })
+                }
+            </ul>
+
             <Row gutter={16}>
                 <Col className="gutter-row" span={6}>
                     <Button type="primary">
@@ -19,8 +43,6 @@ const PostPage = () => {
                     </Button>
                 </Col>
             </Row>
-
-
             <Form
                 name="basic"
                 labelCol={{
@@ -36,9 +58,7 @@ const PostPage = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <Form.Item
-                    label="Title"
-                    name="title"
+                <Form.Item label="Title" name="title"
                     rules={[
                         {
                             required: true,
@@ -48,7 +68,6 @@ const PostPage = () => {
                 >
                     <Input/>
                 </Form.Item>
-
                 <Form.Item
                     label="Content"
                     name="content"
@@ -61,9 +80,7 @@ const PostPage = () => {
                 >
                     <Input/>
                 </Form.Item>
-
-                <Form.Item
-                    wrapperCol={{
+                <Form.Item wrapperCol={{
                         offset: 8,
                         span: 16,
                     }}
