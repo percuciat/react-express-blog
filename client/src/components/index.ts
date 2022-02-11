@@ -1,5 +1,7 @@
-import Post from './Post'
+import Modal from './Modal'
+import FormPost from './FormPost'
 
 export {
-    Post
+    FormPost,
+    Modal
 }
