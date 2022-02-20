@@ -1,10 +1,12 @@
 import {Request, Response} from 'express'
-import Users from '../models/userModel';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {generateAccessToken, generateActiveToken, generateRefreshToken} from '../config/generateToken'
+import {model} from 'mongoose';
+import userModel from '../models/userModel';
 
 
+const Users = model('User', userModel);
 const authController = {
     register: async (req: Request, res: Response) => {
         try {
@@ -30,6 +32,6 @@ const authController = {
             return res.status(500).json({msg: err.message})
         }
     }
-}
+};
 
 export default authController

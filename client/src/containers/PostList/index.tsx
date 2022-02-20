@@ -1,42 +1,32 @@
 import React, {useState} from 'react';
 import {List, Button, Skeleton, Col} from "antd";
 import {CloseCircleOutlined, EditOutlined, LoadingOutlined} from '@ant-design/icons';
-import {Modal, FormPost} from "../../components";
-import {makeRequestXHR} from "../../api";
+
+type TEl = {_id: string, title: string, content: string};
 
 const PostList = (props: any) => {
-    const {postsData, hasLoading, create} = props;
-    const [show, setShow] = useState(false);
-    const [postInfo, setPostInfo] = useState({});
-    const [modalHeaderText, setModalHeaderText] = useState('');
+    const {setModal, setModalHeader, setOperationHandler, setPostInfo, postsData, deletePost, hasLoading, } = props;
 
-    const createPost = (v) => {
-        setShow(false)
-        create(v)
+    const editPost = ({_id, title, content, category}) => {
+        setModal(true);
+        setModalHeader('Edit Post');
+        setPostInfo((prevState) => ({...prevState, _id, title, content, category}));
+        setOperationHandler('edit')
     };
 
-    const editPost = ({title, content}) => {
-        setShow(true);
-        setModalHeaderText('Edit Post');
-        setPostInfo((prevState) => ({...prevState, title, content}));
+    const handlerDeletePost = ({_id}) => {
+        setModal(true);
+        setModalHeader('Delete Post');
+        setOperationHandler('delete');
+        setPostInfo((prevState) => ({...prevState, _id}));
+        /*deletePost(_id)*/
     };
 
-    const deletePost = () => {
-
-    };
-
-    const showModal = () => {
-        setShow(true);
-        setPostInfo({})
-        setModalHeaderText('Create Post');
-    };
-
-    const handlerError = () => {
-
-    }
-
-    const closeModal = () => {
-        setShow(false)
+    const createPost = () => {
+        setModal(true);
+        setPostInfo({});
+        setModalHeader('Create Post');
+        setOperationHandler('create')
     };
 
     return (
@@ -50,20 +40,17 @@ const PostList = (props: any) => {
                       spinning: hasLoading,
                       indicator: <LoadingOutlined  style={{ fontSize: 25 }}/>
                   }}
-                  footer={<Button type="primary" onClick={showModal}>create</Button>}
+                  footer={<Button type="primary" onClick={createPost}>create</Button>}
                   renderItem={(el: any) => {
                       return (
-                          <List.Item
-                              actions={
-                                  [
+                          <List.Item key={el._id} actions={[
                                       <EditOutlined className="postIcon"
                                                     style={{ fontSize: 25 }}
                                                     onClick={() => editPost(el)}/>,
                                       <CloseCircleOutlined className="postIcon"
                                                            style={{ fontSize: 25 }}
-                                                           onClick={deletePost}/>
-                                  ]}
-                          >
+                                                           onClick={() => handlerDeletePost(el)}/>
+                                       ]}>
                               <Skeleton title={true} loading={el.loading} active>
                                   <List.Item.Meta
                                       title={el.title}
@@ -75,14 +62,6 @@ const PostList = (props: any) => {
                       )
                   }}>
             </List>
-            <Modal isVisible={show}
-                   text={modalHeaderText}
-                   handlerOk={showModal}
-                   handlerCancel={closeModal}>
-                <FormPost postInfo={postInfo}
-                          onFinishFailed={handlerError}
-                          onFinish={createPost}/>
-            </Modal>
         </>
     );
 };

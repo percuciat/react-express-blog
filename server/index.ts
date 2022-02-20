@@ -17,8 +17,9 @@ app.use(cookieParser());
 
 
 // Routes
-app.use('/auth', routes.authRouter)
-app.use('/', routes.postRouter)
+app.use('/auth', routes.authRouter);
+app.use('/category', routes.categoryRouter);
+app.use('/', routes.postRouter);
 /*app.use('/post', routes.postRouter);
 app.use('/', routes.app);*/
 

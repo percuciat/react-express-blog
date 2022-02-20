@@ -1,11 +1,12 @@
 import {Request, Response} from 'express'
-import postService from '../services/postService';
+import categoryService from '../services/categoryService';
 
-const postController = {
+const categoryController = {
+
     async create(req: Request, res: Response) {
         try {
-            const {title, content, category} = req.body;
-            const {status, message, payload} = await postService.create(title, content, category);
+            const {category} = req.body;
+            const {status, message, payload} = await categoryService.create(category);
             if(status === 'Error') {
                 return res.status(501).json({
                     status: status,
@@ -23,10 +24,11 @@ const postController = {
         }
 
     },
+
     async index(req: Request, res: Response) {
         try {
-            const {count, filter, category} = req.query;
-            const {status, message, payload} = await postService.posts(count, filter, category);
+           /* const {count, filter} = req.query;*/
+            const {status, message, payload} = await categoryService.categories(/*count, filter*/);
             return res.status(200).json({
                 status,
                 message,
@@ -36,30 +38,11 @@ const postController = {
             return res.status(500).json({message: error.message})
         }
     },
-    async update(req: Request, res: Response) {
-        try {
-            const {_id, title, content, category } = req.body;
-            const {status, message, payload} = await postService.update(_id, title, content, category);
-            if(status === 'Error') {
-                return res.status(501).json({
-                    status: status,
-                    message: message
-                })
-            } else {
-                res.status(200).json({
-                    status: status,
-                    message: message,
-                    data: payload
-                })
-            }
-        } catch (err: any) {
-            return res.status(500).json({message: err})
-        }
-    },
+
     async delete(req: Request, res: Response) {
         try {
             const { _id } = req.body;
-            const {status, message, payload} = await postService.delete(_id);
+            const {status, message, payload} = await categoryService.delete(_id);
             if (status === 'Error') {
                 return res.status(501).json({
                     status,
@@ -77,4 +60,4 @@ const postController = {
     }
 };
 
-export default postController
+export default categoryController;

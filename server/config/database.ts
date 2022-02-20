@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const URI = process.env.MONGODB_URL
+const URI = process.env.MONGODB_URL;
 
 mongoose.connect(`${URI}`, {
     useCreateIndex: true,
@@ -9,5 +9,5 @@ mongoose.connect(`${URI}`, {
     useUnifiedTopology: true
 }, (err) => {
     if (err) throw err;
-    console.log('Mongodb connection')
-})
+    console.log('---Mongodb connection RUN---')
+});

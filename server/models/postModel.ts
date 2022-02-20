@@ -1,4 +1,6 @@
 import {Schema, model} from 'mongoose';
+import categorySchema from './categoryModel';
+import userSchema from './userModel';
 
 const postModel = new Schema({
     title: {
@@ -10,6 +12,12 @@ const postModel = new Schema({
         type: String,
         required: [true, 'please add content'],
         trim: true,
+    },
+    category: {
+        ref: categorySchema
+    },
+    author: {
+        ref: userSchema
     }
 },{
     timestamps: true
