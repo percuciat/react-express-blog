@@ -1,33 +1,60 @@
 import {Request, Response, NextFunction} from "express";
+import validator from 'validator';
+
 
 export const validRegister = async (req: Request, res: Response, next: NextFunction) => {
-    const { name, account, password } = req.body
+    const {name, account, password} = req.body;
+    const errors = [];
 
-    if(!name) {
-        return res.status(400).json({msg: "Please add your name."})
-    } else if (name.length > 20 ) {
-        return res.status(400).json({msg: "Your name is up to 20 char."})
+    if (!name) {
+        errors.push("Please add your name.");
+    } else if (name.length > 20) {
+        errors.push("Your name is up to 20 char.");
     }
 
-    if(!account) {
-        return res.status(400).json({msg: "Please add your email or phone number."})
-    } else if (!validateEmail(account)) {
-        return res.status(400).json({msg: "Your email format is incorrect."})
+    if (!account) {
+        errors.push("Please add your email or phone number.");
+    } else if (!validator.isEmail(account) && !validator.isMobilePhone(account)) {
+        errors.push("Your email (test@yandex.ru) or phone (+723424224) format is incorrect.")
     }
 
-    if(password.length < 6) {
-        return res.status(400).json({msg: "Password must be at least 6 chars."})
+    if (!password) {
+        errors.push("Please add your password.");
+    } else if (!validator.isLength(password, {min: 8, max: 16})) {
+        errors.push("Password must be at least 8 chars and max 16 chars.");
     }
 
-    next();
+    if (errors.length) {
+        res.status(400).json({
+            msg: errors
+        })
+    } else {
+        next();
+    }
 };
 
-function validPhone(phone: string) {
-    const phoneRe = /^[2-9]\d{2}[2-9]\d{2}\d{4}$/;
-    return phoneRe.test(phone);
-}
+export const validLogin = async (req: Request, res: Response, next: NextFunction) => {
+    const {account, password} = req.body;
+    const errors = [];
 
-function validateEmail (email: string) {
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRe.test(email)
+    if (!account) {
+        errors.push("Please add your email or phone number.");
+    } else if (!validator.isEmail(account) && !validator.isMobilePhone(account)) {
+        errors.push("Your email (test@yandex.ru) or phone (+723424224) format is incorrect.")
+    }
+
+    if (!password) {
+        errors.push("Please add your password.");
+    } else if (!validator.isLength(password, {min: 8, max: 16})) {
+        errors.push("Password must be at least 8 chars and max 16 chars.");
+    }
+
+    if (errors.length) {
+        res.status(400).json({
+            msg: errors
+        })
+    } else {
+        next();
+    }
 };
+

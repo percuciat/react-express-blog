@@ -1,5 +1,6 @@
 import {Schema} from 'mongoose';
 
+
 const userSchema = new Schema({
     name: {
         type: String,
@@ -33,6 +34,11 @@ const userSchema = new Schema({
 }, {
     timestamps: true
 });
+
+export interface SavedUserDocument extends Document {
+    account: string;
+    password: string;
+}
 
 
 export default userSchema;

@@ -9,4 +9,8 @@ router.get('/', async function (r, res) {
     return res.json({key:"value"});
 });
 
+
+/*router.post('/welcome', verifyToken, (req, res, ) => {
+    res.status(200).send("Welcome 🙌 ");
+});*/
 export default router;
