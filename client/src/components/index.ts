@@ -1,9 +1,6 @@
-import Modal from './Modal'
-import FormPost from './FormPost'
-import FilterPost from './FilterPost'
+import Alert from './Alert';
+import FormPost from './FormPost';
+import Filter from './Filter';
+import Modal from './Modal';
 
-export {
-    FormPost,
-    FilterPost,
-    Modal
-}
+export { Alert, FormPost, Filter, Modal };

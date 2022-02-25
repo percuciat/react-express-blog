@@ -1,7 +1,7 @@
 import express from 'express';
 import postController from '../controllers/postController';
 import postSchema from '../schemas/post/postSchema';
-import { postValidatorSchema } from '../middlewares/postValidator';
+import { validatorSchema } from '../middlewares/validator';
 const postRouter = express.Router();
 
 
@@ -12,12 +12,12 @@ postRouter.get('/', postController.index);
 
 postRouter.post('/create',
     postSchema,
-    postValidatorSchema,
+    validatorSchema,
     postController.create);
 
 postRouter.put('/update',
     postSchema,
-    postValidatorSchema,
+    validatorSchema,
     postController.update);
 
 postRouter.delete('/delete', postController.delete);

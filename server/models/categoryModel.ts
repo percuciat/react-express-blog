@@ -1,9 +1,10 @@
 import {Schema} from 'mongoose';
 
 const categorySchema = new Schema({
-    category: {
+    name: {
         type: String,
-        required: [true, 'please add category'],
+        required: [true, 'please add category name'],
+        unique: true,
     }
 },{
     timestamps: false

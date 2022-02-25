@@ -4,9 +4,26 @@ import categoryModel from '../models/categoryModel';
 
 const CategoryModel = model('Category', categoryModel);
 const categoryService =  {
-    async create(category: string) {
+    async categories(/*count, filter*/) {
         try {
-            const categoryData = await CategoryModel.findOne({category});
+            const categoriesAll = await CategoryModel.find();
+            return {
+                status: 'OK',
+                message: 'Success',
+                payload: categoriesAll
+            }
+        } catch (e) {
+            return {
+                status: 'Error',
+                message: 'Server Error',
+                payload: []
+            }
+        }
+    },
+
+    async create(name: string) {
+        try {
+            const categoryData = await CategoryModel.findOne({name});
             if (categoryData) {
                 return {
                     status: 'Error',
@@ -14,11 +31,11 @@ const categoryService =  {
                     payload: []
                 }
             } else {
-                const post = await CategoryModel.create({category});
+                const newCategoryData = await CategoryModel.create({name});
                 return {
                     status: 'OK',
                     message: 'Category has created.',
-                    payload: post
+                    payload: newCategoryData
                 }
             }
         } catch (e) {
@@ -42,23 +59,6 @@ const categoryService =  {
             }
         }
     },
-
-    async categories(/*count, filter*/) {
-        try {
-            const categoriesAll = await CategoryModel.find();
-            return {
-                status: 'OK',
-                message: 'Success',
-                payload: categoriesAll
-            }
-        } catch (e) {
-            return {
-                status: 'Error',
-                message: 'Server Error',
-                payload: []
-            }
-        }
-    }
 };
 
 export default categoryService;

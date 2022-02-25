@@ -5,8 +5,8 @@ const categoryController = {
 
     async create(req: Request, res: Response) {
         try {
-            const {category} = req.body;
-            const {status, message, payload} = await categoryService.create(category);
+            const {category: name} = req.body;
+            const {status, message, payload} = await categoryService.create(name);
             if(status === 'Error') {
                 return res.status(501).json({
                     status: status,

@@ -5,6 +5,8 @@ const postController = {
     async create(req: Request, res: Response) {
         try {
             const {title, content, category} = req.body;
+            console.log('req.body--', req.body);
+            
             const {status, message, payload} = await postService.create(title, content, category);
             if(status === 'Error') {
                 return res.status(501).json({
@@ -39,6 +41,8 @@ const postController = {
     async update(req: Request, res: Response) {
         try {
             const {_id, title, content, category } = req.body;
+            console.log('req.body--', req.body);
+            
             const {status, message, payload} = await postService.update(_id, title, content, category);
             if(status === 'Error') {
                 return res.status(501).json({

@@ -22,11 +22,12 @@ const postService =  {
                     payload: []
                 }
             } else {
-                const post = await PostModel.create({_uniqId, title, content, category});
+                console.log('new Post--', category);
+                const newPost = await PostModel.create({_uniqId, title, content, category});
                 return {
                     status: 'OK',
                     message: 'Post has created.',
-                    payload: post
+                    payload: newPost
                 }
             }
         } catch (e) {
@@ -43,7 +44,6 @@ const postService =  {
                 payload: newPost
             }
         } catch (e) {
-            console.log('--newPost', e );
             return {
                 status: 'Error',
                 message: 'Post not found for updating operation.',
