@@ -1,10 +1,11 @@
-## MERN Stack Build  a blog app using MERN  + Typescript + Redux  + Bootstrap 5 + ReactQuill + Socket.io + Twilio
-> + Register, login with Email or Phone number.
-> + Quick login with Google, Facebook, SMS.
-> + Forgot password, reset password and register a new account by Email or SMS verification.
-> + Update personal information (name, password and avatar)
-> + Create new blog with React quill.
-> + Comment realtime with Socket.io
-> + Pagination, search with autocomplete Mongodb
+## MERN Stack Build  a blog app using MERN  + Typescript + Redux Toolkit + Ant Design
+
+First introducing with Full-Stack development.
+
+> + CRUD posts, update categories.
+> - Pagination
+> - Register, login with Email or Phone number.
+> - Forgot password, reset password and register a new account by Email or SMS verification.
+
 
 
