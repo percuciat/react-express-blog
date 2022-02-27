@@ -6,12 +6,14 @@ import { store } from 'store';
 import App from './App';
 /*import reportWebVitals from './reportWebVitals';*/
 import './index.css';
+import GlobalStyles from 'styles/global';
 
 ReactDOM.render(
   /* <React.StrictMode>*/
   <Provider store={store}>
     <BrowserRouter>
       <App />
+      <GlobalStyles />
     </BrowserRouter>
   </Provider>,
   /*</React.StrictMode>*/ document.getElementById('root')

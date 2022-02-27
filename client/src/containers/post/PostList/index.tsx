@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { List, Button, Skeleton } from 'antd';
+import { Alert, List, Button, Skeleton, Pagination } from 'antd';
 import { CloseCircleOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Alert, FormPost, Modal } from 'components';
+import { AlertConfirm, Modal } from 'components';
+import PostForm from 'containers/post/PostForm';
+import { LoadingIndicatorS } from 'styles/commonComponents';
 
 import { useAppSelector, useAppDispatch } from 'hooks/useRedux';
-import { selectPostData, selectPostLoading } from 'store/slices/post';
+import { selectPostData, selectPostLoading, selectPostErrors } from 'store/slices/post';
 import { selectCategoryData } from 'store/slices/category';
-import { fetchPosts, createPost, updatePost, deletePost } from 'store/slices/post/actions';
-
-type TEl = { _id: string; title: string; content: string };
+import {
+  fetchPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  resetErrorsFromStore,
+} from 'store/slices/post/actions';
 
 const PostList = (props: any) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategoryData);
   const hasLoading = useAppSelector(selectPostLoading);
   const posts = useAppSelector(selectPostData);
+  const backendErrors = useAppSelector(selectPostErrors);
+
+  const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [localPostInfo, setLocalPostInfo] = useState<any>({
     info: {},
@@ -28,29 +37,32 @@ const PostList = (props: any) => {
 
   const closeModal = () => {
     setShowModal(false);
+    if (backendErrors.status) {
+      dispatch(resetErrorsFromStore());
+    }
   };
 
-  const handlerError = () => {};
+  const handlerError = (e) => {
+    console.log('e handleer', e);
+  };
 
   const updatePostHandler = ({ _id, title, content, category }) => {
     setShowModal(true);
     setLocalPostInfo((prevState) => {
-      console.log('prevState--', prevState);
-
       return {
         ...prevState,
-        info: { ...prevState.info, _id: 'LLLLL', title: 'asdas', content: 'cont', category: 'CAt' },
+        info: { _id, title, content, category },
         operation: update,
         titleModal: 'Edit Post',
       };
     });
   };
 
-  const update = (newPostFormData) => {
-    console.log('ocalPostInfo', localPostInfo);
-
-    /* dispatch(updatePost({ ...newPostFormData, _id: localPostInfo.info._id }));
-    setShowModal(false); */
+  const update = async (newPostFormData, otherInfo) => {
+    const response = await dispatch(updatePost({ ...newPostFormData, _id: otherInfo }));
+    if (response.payload.status !== 'Error') {
+      setShowModal(false);
+    }
   };
 
   const createPostHandler = () => {
@@ -63,11 +75,11 @@ const PostList = (props: any) => {
     }));
   };
 
-  const create = (newPostFormData) => {
-    console.log('newPostFormData--', newPostFormData);
-
-    dispatch(createPost(newPostFormData));
-    setShowModal(false);
+  const create = async (newPostFormData) => {
+    const response = await dispatch(createPost(newPostFormData));
+    if (response.payload.status !== 'Error') {
+      setShowModal(false);
+    }
   };
 
   const deletePostHandler = ({ _id }) => {
@@ -75,20 +87,20 @@ const PostList = (props: any) => {
     setLocalPostInfo((prevState) => ({
       ...prevState,
       info: { _id },
-      operation: _delete,
       titleModal: 'Delete Post',
     }));
   };
 
-  const _delete = () => {
-    dispatch(deletePost(localPostInfo.info._id));
-    setShowModal(false);
+  const _delete = async () => {
+    const response = await dispatch(deletePost(localPostInfo.info._id));
+    if (response.payload.status !== 'Error') {
+      setShowModal(false);
+    }
   };
 
   return (
     <>
       <List
-        className="demo-loadmore-list"
         itemLayout="horizontal"
         dataSource={posts}
         locale={{
@@ -96,11 +108,11 @@ const PostList = (props: any) => {
         }}
         loading={{
           spinning: hasLoading,
-          indicator: <LoadingOutlined style={{ fontSize: 25 }} />,
+          indicator: <LoadingIndicatorS />,
         }}
         footer={
-          <Button type="primary" onClick={createPostHandler}>
-            create
+          <Button type="primary" title="Create Post" onClick={createPostHandler}>
+            Create
           </Button>
         }
         renderItem={(el: any) => {
@@ -109,11 +121,13 @@ const PostList = (props: any) => {
               key={el._id}
               actions={[
                 <EditOutlined
+                  title="Edit post"
                   className="postIcon"
                   style={{ fontSize: 25 }}
                   onClick={() => updatePostHandler(el)}
                 />,
                 <CloseCircleOutlined
+                  title="Delete post"
                   className="postIcon"
                   style={{ fontSize: 25 }}
                   onClick={() => deletePostHandler(el)}
@@ -127,18 +141,35 @@ const PostList = (props: any) => {
             </List.Item>
           );
         }}
-      ></List>
+      >
+        <Pagination simple defaultCurrent={page} total={5} />
+      </List>
       <Modal isVisible={showModal} text={localPostInfo.titleModal} handlerCancel={closeModal}>
-        {localPostInfo.titleModal === 'Delete Post' ? (
-          <Alert handler={_delete} text="Are you sure?" />
-        ) : (
-          <FormPost
-            postInfo={localPostInfo.info}
-            category={categories}
-            onFinishFailed={handlerError}
-            onFinish={localPostInfo.operation}
-          />
-        )}
+        <>
+          {localPostInfo.titleModal === 'Delete Post' ? (
+            <AlertConfirm handler={_delete} text="Are you sure?" />
+          ) : (
+            <PostForm
+              postInfo={localPostInfo.info}
+              category={categories}
+              onFinishFailed={handlerError}
+              onFinish={localPostInfo.operation}
+            />
+          )}
+          {backendErrors.status &&
+            backendErrors.errorData.map((errors) => {
+              return (
+                <Alert
+                  key={errors.value}
+                  message="Error"
+                  showIcon
+                  description={errors.message}
+                  type="error"
+                  closable
+                />
+              );
+            })}
+        </>
       </Modal>
     </>
   );

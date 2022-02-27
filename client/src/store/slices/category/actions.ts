@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { makeRequestXHR } from 'api';
 
 export const fetchCategories = createAsyncThunk(
@@ -47,3 +47,6 @@ export const deleteCategory = createAsyncThunk(
     }
   }
 );
+
+
+export const resetErrorsFromStore = createAction('category/RESET_ERRORS');

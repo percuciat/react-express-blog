@@ -1,5 +1,4 @@
 import {Schema, model} from 'mongoose';
-import categorySchema from './categoryModel';
 import userSchema from './userModel';
 
 const postModel = new Schema({
@@ -14,7 +13,8 @@ const postModel = new Schema({
         trim: true,
     },
     category: {
-        ref: categorySchema
+        type: Schema.Types.String,
+        ref: 'Category'
     },
     author: {
         ref: userSchema

@@ -4,21 +4,26 @@ import { Button, Form, Input, Select } from 'antd';
 interface IFormPost {
   category: Array<any>;
   postInfo: any;
-  onFinish: (v: any) => void;
-  onFinishFailed: () => any;
+  onFinish: (valuesForm: any, otherPostInfo?: any) => void;
+  onFinishFailed: (e: any) => any;
 }
 
-const FormPost = (props: IFormPost) => {
+const PostForm = (props: IFormPost) => {
   const { postInfo, onFinish, onFinishFailed, category } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
+    form.resetFields();
     form.setFieldsValue({
       title: postInfo.title,
       content: postInfo.content,
       category: postInfo.category,
     });
   }, [postInfo, form]);
+
+  const submitForm = (formData) => {
+    onFinish(formData, postInfo._id);
+  };
 
   return (
     <Form
@@ -30,7 +35,7 @@ const FormPost = (props: IFormPost) => {
         span: 16,
       }}
       form={form}
-      onFinish={onFinish}
+      onFinish={submitForm}
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
@@ -40,6 +45,11 @@ const FormPost = (props: IFormPost) => {
           {
             required: true,
             message: 'Please input title!',
+            whitespace: true,
+          },
+          {
+            min: 3,
+            message: 'Title must be more than 3 chars!',
           },
         ]}
       >
@@ -52,6 +62,11 @@ const FormPost = (props: IFormPost) => {
           {
             required: true,
             message: 'Please input content!',
+            whitespace: true,
+          },
+          {
+            min: 5,
+            message: 'Content must be more than 5 chars!',
           },
         ]}
       >
@@ -91,4 +106,4 @@ const FormPost = (props: IFormPost) => {
   );
 };
 
-export default FormPost;
+export default PostForm;

@@ -8,9 +8,11 @@ const categoryController = {
             const {category: name} = req.body;
             const {status, message, payload} = await categoryService.create(name);
             if(status === 'Error') {
-                return res.status(501).json({
+                return res.status(400).json({
                     status: status,
-                    message: message
+                    errorData: [{
+                        message: message
+                    }]
                 })
             } else {
                 res.status(200).json({
@@ -20,7 +22,12 @@ const categoryController = {
                 })
             }
         } catch (error) {
-            return res.status(500).json({message: error.message})
+            return res.status(400).json({
+                status: 'Error',
+                errorData: [{
+                    message: error.message
+                }]
+            })
         }
 
     },
@@ -35,7 +42,12 @@ const categoryController = {
                 data: payload
             })
         } catch (error) {
-            return res.status(500).json({message: error.message})
+            return res.status(400).json({
+                status: 'Error',
+                errorData: [{
+                    message: error.message
+                }]
+            })
         }
     },
 
@@ -44,9 +56,11 @@ const categoryController = {
             const { _id } = req.body;
             const {status, message, payload} = await categoryService.delete(_id);
             if (status === 'Error') {
-                return res.status(501).json({
-                    status,
-                    message,
+                return res.status(400).json({
+                    status: status,
+                    errorData: [{
+                        message: message
+                    }]
                 })
             }
             return res.status(200).json({
@@ -55,7 +69,12 @@ const categoryController = {
                 data: payload
             })
         } catch (error) {
-            return res.status(500).json({message: error.message})
+            return res.status(400).json({
+                status: 'Error',
+                errorData: [{
+                    message: error.message
+                }]
+            })
         }
     }
 };

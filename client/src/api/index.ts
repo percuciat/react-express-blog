@@ -1,20 +1,40 @@
 import {
-    AxiosRequestConfig as IOptionsApi,
-    Method as TMethodApi,
-    AxiosResponse,
-    AxiosError,
+  AxiosRequestConfig as IOptionsApi,
+  Method as TMethodApi,
+  AxiosResponse,
+  AxiosError,
 } from 'axios';
 import axios from 'axios';
 import { storage } from '../storage';
 
 const axiosCommon = axios.create({
-    baseURL: `http://localhost:5000`,
-   /* withCredentials: true,*/
-   /* headers: {
+  baseURL: `http://localhost:5000`,
+  /* withCredentials: true,*/
+  /* headers: {
         Authorization: storage.getItemStorage('token') || '',
     },*/
-    params: {},
+  params: {},
 });
+
+axiosCommon.interceptors.request.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    console.log('REQUEST error axios interceptor:', error);
+    return Promise.reject(error);
+  }
+);
+
+axiosCommon.interceptors.response.use(
+  async (response: AxiosResponse) => {
+    return response;
+  },
+  async function (error) {
+    console.log('RESPONSE interceptor error:', error.response);
+    return Promise.reject(error.response);
+  }
+);
 
 /*
 axiosCommon.interceptors.request.use(
@@ -62,21 +82,21 @@ axiosCommon.interceptors.response.use(
 */
 
 export function makeRequestXHR(
-    method: TMethodApi,
-    options: IOptionsApi
+  method: TMethodApi,
+  options: IOptionsApi
 ): Promise<AxiosResponse<typeof options.data>> {
-    return axiosCommon
-        .request({method, url: options.url, data: options.data, ...options})
-        .then((res) => {
-            if (res.data.status === 'error') {
-                console.log(`Axios request failed with code: ${res.data.error_message}`);
-                throw res.data;
-            }
-            console.log('Axios request fulfilled with data:', res.data);
+  return axiosCommon
+    .request({ method, url: options.url, data: options.data, ...options })
+    .then((res) => {
+      if (res.data.status === 'error') {
+        console.log(`Axios request failed with code: ${res.data.error_message}`);
+        throw res.data;
+      }
+      /*  console.log('Axios request fulfilled with data:', res.data); */
 
-            return res.data;
-        })
-        .catch((errorAxios) => {
-            throw errorAxios;
-        });
+      return res.data;
+    })
+    .catch((errorAxios) => {
+      throw errorAxios.data;
+    });
 }

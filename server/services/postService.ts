@@ -15,6 +15,7 @@ const postService =  {
         try {
             const _uniqId = v4();
             const post = await PostModel.findOne({title});
+            console.log('category SERVICE--', category);
             if (post) {
                 return {
                     status: 'Error',
@@ -22,8 +23,8 @@ const postService =  {
                     payload: []
                 }
             } else {
-                console.log('new Post--', category);
-                const newPost = await PostModel.create({_uniqId, title, content, category});
+                const newPost = await PostModel.create({_uniqId, title, content, category: category});
+                console.log('new Post--', newPost);
                 return {
                     status: 'OK',
                     message: 'Post has created.',
@@ -31,7 +32,11 @@ const postService =  {
                 }
             }
         } catch (e) {
-            return e
+            return {
+                status: 'Error',
+                message: e,
+                payload: []
+            }
         }
     },
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { makeRequestXHR } from 'api';
 
 export const fetchPosts = createAsyncThunk(
@@ -41,8 +41,8 @@ export const updatePost = createAsyncThunk(
         data: updatePostDataForm,
       });
       return newPost.data;
-    } catch (e) {
-      return rejectWithValue(e);
+    } catch (err) {
+      return rejectWithValue(err);
     }
   }
 );
@@ -63,3 +63,5 @@ export const deletePost = createAsyncThunk(
     }
   }
 );
+
+export const resetErrorsFromStore = createAction('post/RESET_ERRORS');

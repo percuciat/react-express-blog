@@ -1,17 +1,29 @@
 import { createSlice, current } from '@reduxjs/toolkit';
-import { fetchPosts, createPost, updatePost, deletePost } from './actions';
+import { fetchPosts, createPost, updatePost, deletePost, resetErrorsFromStore } from './actions';
+
+type TErrorItem = {
+  message: string;
+  value?: string;
+  param?: string;
+};
 
 const { actions, reducer } = createSlice({
   name: 'post',
   initialState: {
     posts: [] as any,
     isLoading: false,
+    errors: {} as any,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(resetErrorsFromStore, (state, action) => {
+        state.errors = {};
+      })
+
       .addCase(fetchPosts.pending, (state, action) => {
         state.isLoading = true;
+        state.errors = {};
       })
       .addCase(fetchPosts.fulfilled, function addFetchedPostsToStore(state, action) {
         state.isLoading = false;
@@ -20,10 +32,12 @@ const { actions, reducer } = createSlice({
 
       .addCase(fetchPosts.rejected, (state, action) => {
         state.isLoading = false;
+        state.errors = action.payload;
       })
 
       .addCase(createPost.pending, (state, action) => {
         state.isLoading = true;
+        state.errors = {};
       })
 
       .addCase(createPost.fulfilled, function addCreatedPostToStore(state, { payload }) {
@@ -33,10 +47,12 @@ const { actions, reducer } = createSlice({
 
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false;
+        state.errors = action.payload;
       })
 
       .addCase(updatePost.pending, (state, action) => {
         state.isLoading = true;
+        state.errors = {};
       })
 
       .addCase(updatePost.fulfilled, function addUpdatedPostToStore(state, { payload }) {
@@ -52,10 +68,12 @@ const { actions, reducer } = createSlice({
 
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false;
+        state.errors = action.payload;
       })
 
       .addCase(deletePost.pending, (state, action) => {
         state.isLoading = true;
+        state.errors = {};
       })
 
       .addCase(deletePost.fulfilled, function addCreatedPostToStore(state, { payload }) {
@@ -66,11 +84,13 @@ const { actions, reducer } = createSlice({
 
       .addCase(deletePost.rejected, (state, action) => {
         state.isLoading = false;
+        state.errors = action.payload;
       });
   },
 });
 
 export const selectPostData = (state) => state.post.posts;
 export const selectPostLoading = (state) => state.post.isLoading;
+export const selectPostErrors = (state) => state.post.errors;
 
 export default reducer;

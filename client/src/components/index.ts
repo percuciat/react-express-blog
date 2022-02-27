@@ -1,6 +1,5 @@
-import Alert from './Alert';
-import FormPost from './FormPost';
+import AlertConfirm from './AlertConfirm';
 import Filter from './Filter';
 import Modal from './Modal';
 
-export { Alert, FormPost, Filter, Modal };
+export { AlertConfirm, Filter, Modal };

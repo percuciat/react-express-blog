@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button } from '_antd';
 
-const Alert = (props: any) => {
+const AlertConfirm = (props: any) => {
   const { text, handler } = props;
   return (
     <div>
@@ -13,4 +13,4 @@ const Alert = (props: any) => {
   );
 };
 
-export default Alert;
+export default AlertConfirm;
