@@ -50,3 +50,10 @@ export const deleteCategory = createAsyncThunk(
 
 
 export const resetErrorsFromStore = createAction('category/RESET_ERRORS');
+export const setCurrentCategory = createAction('category/SET_CURRENT_CATEGORY', function prepare(currentCategory: string) {
+  return {
+    payload: {
+      currentCategory,
+    },
+  }
+});

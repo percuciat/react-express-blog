@@ -1,20 +1,25 @@
 import { createSlice, current } from '@reduxjs/toolkit';
-import { fetchCategories, createCategory, deleteCategory, resetErrorsFromStore } from './actions';
+import { fetchCategories, createCategory, deleteCategory, resetErrorsFromStore, setCurrentCategory } from './actions';
 
 const { actions, reducer } = createSlice({
   name: 'category',
   initialState: {
     categories: [] as any,
+    currentCategory: 'all',
     isLoading: false,
     errors: {} as any,
   },
-  reducers: {},
+  reducers: {
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(resetErrorsFromStore, (state, action) => {
+      .addCase(setCurrentCategory, (state, action) => {
+        state.currentCategory = action.payload.currentCategory;
+      })
+      .addCase(resetErrorsFromStore, (state) => {
         state.errors = {};
       })
-      .addCase(fetchCategories.pending, (state, action) => {
+      .addCase(fetchCategories.pending, (state) => {
         state.isLoading = true;
         state.errors = {};
       })
@@ -61,6 +66,7 @@ const { actions, reducer } = createSlice({
 });
 
 export const selectCategoryData = (state) => state.category.categories;
+export const selectCurrentCategory = (state) => state.category.currentCategory;
 export const selectIsLoading = (state) => state.category.isLoading;
 export const selectCategoryErrors = (state) => state.category.errors;
 

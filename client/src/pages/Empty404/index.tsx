@@ -1,13 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Result } from 'antd';
 
 const Empty404: any = () => {
-
-    return (
-        <>
-            <h1>Empty404</h1>
-        </>
-    );
+  return (
+    <Result
+      status="404"
+      title="404"
+      subTitle="Sorry, the page you visited does not exist."
+      extra={
+        <Link to="/" type="primary">
+          Back Home
+        </Link>
+      }
+    />
+  );
 };
 
 export default Empty404;

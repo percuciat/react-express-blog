@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
-import { PostList, PostFilter } from 'containers';
+import { Posts, PostFilter } from 'containers';
 
 const PostPage = () => {
   return (
@@ -15,7 +15,7 @@ const PostPage = () => {
       </Row>
       <Row>
         <Col span={24}>
-          <PostList />
+          <Posts />
         </Col>
       </Row>
     </>
