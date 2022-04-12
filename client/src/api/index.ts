@@ -7,7 +7,7 @@ import {
 import axios from 'axios';
 import { storage } from '../storage';
 
-const axiosCommon = axios.create({
+export const axiosCommon = axios.create({
   baseURL: `http://localhost:5000`,
   /* withCredentials: true,*/
   /* headers: {

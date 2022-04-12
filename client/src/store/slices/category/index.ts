@@ -1,16 +1,24 @@
 import { createSlice, current } from '@reduxjs/toolkit';
-import { fetchCategories, createCategory, deleteCategory, resetErrorsFromStore, setCurrentCategory } from './actions';
+import {
+  fetchCategories,
+  createCategory,
+  deleteCategory,
+  resetErrorsFromStore,
+  setCurrentCategory,
+} from './actions';
+import { CategoryState } from './types';
+
+const initialState: CategoryState = {
+  categories: [],
+  currentCategory: '',
+  isLoading: false,
+  errors: {},
+};
 
 const { actions, reducer } = createSlice({
   name: 'category',
-  initialState: {
-    categories: [] as any,
-    currentCategory: 'all',
-    isLoading: false,
-    errors: {} as any,
-  },
-  reducers: {
-  },
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(setCurrentCategory, (state, action) => {

@@ -1,19 +1,16 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 import { fetchPosts, createPost, updatePost, deletePost, resetErrorsFromStore } from './actions';
+import { PostsState } from './types';
 
-type TErrorItem = {
-  message: string;
-  value?: string;
-  param?: string;
+const initialState: PostsState = {
+  posts: [],
+  isLoading: false,
+  errors: {},
 };
 
 const { actions, reducer } = createSlice({
   name: 'post',
-  initialState: {
-    posts: [] as any,
-    isLoading: false,
-    errors: {} as any,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

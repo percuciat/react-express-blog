@@ -9,6 +9,7 @@ export const fetchPosts = createAsyncThunk(
                 count: 4,
                 filter: 'desc'
             }*/
+
       const posts = await makeRequestXHR('get', { url: '/', params });
       return posts.data;
     } catch (e) {

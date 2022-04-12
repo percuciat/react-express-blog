@@ -10,7 +10,7 @@ import GlobalStyles from 'styles/global';
 
 ReactDOM.render(
   /* <React.StrictMode>*/
-  <Provider store={store}>
+  <Provider store={store()}>
     <BrowserRouter>
       <App />
       <GlobalStyles />

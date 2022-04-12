@@ -14,7 +14,7 @@ const Filter = (props: IFilter) => {
     <>
       {
         <Select defaultValue={defaultValue} style={{ width: 120 }} onChange={handler}>
-          <Select.Option value="all">All</Select.Option>
+          <Select.Option value="">All</Select.Option>
           {options.map((el: any) => {
             return (
               <Select.Option key={el._id} value={el.name}>

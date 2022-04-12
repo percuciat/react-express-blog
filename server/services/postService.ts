@@ -76,7 +76,7 @@ const postService =  {
 
     async posts(count, filter, category) {
         try {
-            const postsAll = await PostModel.find(category !== 'all' ? {category: category} : {})
+            const postsAll = await PostModel.find(category ? {category: category} : {})
                 .limit(count || 10)
                 .sort({title: filter || 'asc'});
             return {
