@@ -10,7 +10,7 @@ import { fetchCategories, deleteCategory } from 'store/slices/category/actions';
 
 const CategoryList = (props: any) => {
   const [showModal, setShowModal] = useState(false);
-  const [infoCategory, setInfoCategory] = useState({ _id: '' });
+  const [infoCategory, setInfoCategory] = useState({ _id: 0 });
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectIsLoading);
   const categories = useAppSelector(selectCategoryData);

@@ -7,10 +7,11 @@ export const fetchPosts = createAsyncThunk(
     try {
       /* params: {
                 count: 4,
+                page: 1,
                 filter: 'desc'
             }*/
 
-      const posts = await makeRequestXHR('get', { url: '/', params });
+      const posts = await makeRequestXHR('get', { url: '/post', params });
       return posts.data;
     } catch (e) {
       return rejectWithValue(e);
@@ -23,7 +24,7 @@ export const createPost = createAsyncThunk(
   async (postDataForm: any, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('post', {
-        url: '/create',
+        url: '/post/create',
         data: postDataForm,
       });
       return newPost.data;
@@ -38,7 +39,7 @@ export const updatePost = createAsyncThunk(
   async (updatePostDataForm: any, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('put', {
-        url: '/update',
+        url: '/post/update',
         data: updatePostDataForm,
       });
       return newPost.data;
@@ -53,7 +54,7 @@ export const deletePost = createAsyncThunk(
   async (idPost: any, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('delete', {
-        url: '/delete',
+        url: '/post/delete',
         data: {
           _id: idPost,
         },

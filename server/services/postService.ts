@@ -15,7 +15,6 @@ const postService =  {
         try {
             const _uniqId = v4();
             const post = await PostModel.findOne({title});
-            console.log('category SERVICE--', category);
             if (post) {
                 return {
                     status: 'Error',
@@ -74,10 +73,11 @@ const postService =  {
         }
     },
 
-    async posts(count, filter, category) {
+    async posts(count, filter, category, page) {
         try {
             const postsAll = await PostModel.find(category ? {category: category} : {})
-                .limit(count || 10)
+               /*  .skip((page - 1) * (count || 5))
+                .limit(count || 5) */
                 .sort({title: filter || 'asc'});
             return {
                 status: 'OK',

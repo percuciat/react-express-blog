@@ -124,7 +124,7 @@ describe('category Actions', () => {
         name: 'birds',
       },
     };
-    let mockCategory = { _id: 23232 };
+    let mockCategory = 23232 ;
     mock.onDelete(`/category/delete`).reply(200, mockResult);
 
     await _store.dispatch(deleteCategory(mockCategory)).then((result) => {

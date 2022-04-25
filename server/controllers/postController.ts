@@ -20,7 +20,7 @@ const postController = {
                     data: payload
                 })
             }
-        } catch (error) {
+        } catch (error: any) {
             return res.status(500).json({
                 status: 'Error',
                 errorData: [{
@@ -32,14 +32,14 @@ const postController = {
     },
     async index(req: Request, res: Response) {
         try {
-            const {count, filter, category} = req.query;
-            const {status, message, payload} = await postService.posts(count, filter, category);
+            const {count, filter, category, page} = req.query;
+            const {status, message, payload} = await postService.posts(count, filter, category, page);
             return res.status(200).json({
                 status,
                 message,
                 data: payload
             })
-        } catch (error) {
+        } catch (error: any) {
             return res.status(500).json({
                 status: 'Error',
                 errorData: [{
@@ -93,7 +93,7 @@ const postController = {
                 message,
                 data: payload
             })
-        } catch (error) {
+        } catch (error: any) {
             return res.status(500).json({
                 status: 'Error',
                 errorData: [{

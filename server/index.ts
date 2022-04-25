@@ -5,13 +5,15 @@ dotenv.config();
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
+import bodyParser from 'body-parser'
 import routes from "./routes";
 
 // Middleware
 const app = express();
+
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({limit: '10mb'}));
 app.use(morgan('dev'));
 app.use(cookieParser());
 
@@ -19,9 +21,7 @@ app.use(cookieParser());
 // Routes
 app.use('/auth', routes.authRouter);
 app.use('/category', routes.categoryRouter);
-app.use('/', routes.postRouter);
-/*app.use('/post', routes.postRouter);
-app.use('/', routes.app);*/
+app.use('/post', routes.postRouter);
 
 // Database
 import './config/database'

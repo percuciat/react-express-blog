@@ -13,9 +13,11 @@ import {
   resetErrorsFromStore,
 } from 'store/slices/post/actions';
 
+import { TLocalPostInfo } from './types';
+
 const Posts = (props) => {
   const [showModal, setShowModal] = useState(false);
-  const [localPostInfo, setLocalPostInfo] = useState<any>({
+  const [localPostInfo, setLocalPostInfo] = useState<TLocalPostInfo>({
     info: {},
     titleModal: '',
     operation: '',
@@ -67,8 +69,8 @@ const Posts = (props) => {
   };
 
   const operations = {
-    create: create,
-    update: update,
+    create,
+    update,
   };
 
   return (

@@ -33,7 +33,7 @@ export const createCategory = createAsyncThunk(
 
 export const deleteCategory = createAsyncThunk(
   'category/DELETE_CATEGORY',
-  async (_id: { _id: number }, { rejectWithValue }) => {
+  async (_id: number, { rejectWithValue }) => {
     try {
       const categories = await makeRequestXHR('delete', {
         url: '/category/delete',

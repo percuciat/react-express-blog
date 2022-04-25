@@ -46,7 +46,7 @@ describe('post Actions', () => {
         },
       ],
     };
-    mock.onGet(`/`, { params: { category: '' } }).reply(200, mockResult);
+    mock.onGet(`/post`, { params: { category: '' } }).reply(200, mockResult);
 
     await _store.dispatch(fetchPosts({ category: '' })).then((result) => {
       expect(result.type).toBe('post/FETCH_POSTS/fulfilled');
@@ -77,7 +77,7 @@ describe('post Actions', () => {
       },
     };
 
-    mock.onPost(`/create`).reply(200, mockResult);
+    mock.onPost(`/post/create`).reply(200, mockResult);
     await _store.dispatch(createPost(mockData)).then((result) => {
       expect(result.type).toBe('post/CREATE_POST/fulfilled');
       expect(result.payload).toEqual(mockResult.data);
@@ -113,7 +113,7 @@ describe('post Actions', () => {
         ],
       },
     });
-    mock.onDelete(`/delete`).reply(200, mockResult);
+    mock.onDelete(`/post/delete`).reply(200, mockResult);
 
     await _store.dispatch(deletePost(mockDeleted)).then((result) => {
       expect(result.type).toBe('post/DELETE_POST/fulfilled');
@@ -141,7 +141,7 @@ describe('post Actions', () => {
     let mockResult = {
       data: mockData,
     };
-    mock.onPut(`/update`).reply(200, mockResult);
+    mock.onPut(`/post/update`).reply(200, mockResult);
 
     await _store.dispatch(updatePost(mockData)).then((result) => {
       expect(result.type).toBe('post/UPDATE_POST/fulfilled');

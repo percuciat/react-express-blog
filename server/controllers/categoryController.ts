@@ -21,7 +21,7 @@ const categoryController = {
                     data: payload
                 })
             }
-        } catch (error) {
+        } catch (error: any) {
             return res.status(400).json({
                 status: 'Error',
                 errorData: [{
@@ -41,7 +41,7 @@ const categoryController = {
                 message,
                 data: payload
             })
-        } catch (error) {
+        } catch (error: any) {
             return res.status(400).json({
                 status: 'Error',
                 errorData: [{
@@ -68,7 +68,7 @@ const categoryController = {
                 message,
                 data: payload
             })
-        } catch (error) {
+        } catch (error: any) {
             return res.status(400).json({
                 status: 'Error',
                 errorData: [{

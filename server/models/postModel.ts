@@ -16,6 +16,10 @@ const postModel = new Schema({
         type: Schema.Types.String,
         ref: 'Category'
     },
+    image: {
+        data: Buffer,
+        contentType: String
+    },
     author: {
         ref: userSchema
     }
