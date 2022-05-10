@@ -1,6 +1,5 @@
 import React from 'react';
 import { List, Skeleton } from 'antd';
-import { CloseCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { TPostListItemProps } from '../../types';
 import styled from 'styled-components';
 
@@ -10,25 +9,15 @@ const SPostAdditionalInfo = styled.div`
 `;
 
 const PostListItem = (props: TPostListItemProps) => {
-  const { elementList, deletePostHandler, updatePostHandler } = props;
+  const { elementList, postOperations } = props;
+  const actionOperations = postOperations.map((actionComponent) => {
+    actionComponent.props.onClick.bind(null, elementList)
+    return actionComponent
+  });
 
   return (
     <List.Item
-      /* key={elementList._id} */
-      actions={[
-        <EditOutlined
-          title="Edit post"
-          className="postIcon"
-          style={{ fontSize: 25 }}
-          onClick={() => updatePostHandler(elementList)}
-        />,
-        <CloseCircleOutlined
-          title="Delete post"
-          className="postIcon"
-          style={{ fontSize: 25 }}
-          onClick={() => deletePostHandler(elementList._id)}
-        />,
-      ]}
+      actions={actionOperations}
     >
       <Skeleton title={true} loading={elementList.loading} active>
         <List.Item.Meta title={elementList.title} description={elementList.content} />

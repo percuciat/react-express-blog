@@ -25,12 +25,16 @@ export type TLocalPostInfo = {
 };
 
 export type TPostListProps = {
-  setShowModal: (a: boolean) => void;
-  setLocalPostInfo: (a: TLocalPostInfo) => void;
+  posts: any;
+  postElementOperations: any;
+  footerOperations: any;
+  setShowModal?: (a: boolean) => void;
+  setLocalPostInfo?: (a: TLocalPostInfo) => void;
 };
 
 export type TPostListItemProps = {
   elementList: any;
-  deletePostHandler: (a: Post) => void;
-  updatePostHandler: (a: Post) => void;
+  postOperations: any;
+  /*  deletePostHandler: (a: Post) => void;
+  updatePostHandler: (a: Post) => void; */
 };

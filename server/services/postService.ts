@@ -73,12 +73,13 @@ const postService =  {
         }
     },
 
-    async posts(count, filter, category, page) {
+    async posts(count, filterTitle, filterDate, category, page) {
         try {
             const postsAll = await PostModel.find(category ? {category: category} : {})
                /*  .skip((page - 1) * (count || 5))
                 .limit(count || 5) */
-                .sort({title: filter || 'asc'});
+                .sort({title: filterTitle});
+                
             return {
                 status: 'OK',
                 message: 'Success',

@@ -8,21 +8,17 @@ const SFooter = styled.div`
   column-gap: 2rem;
 `;
 
-
 const PostListFooter = (props) => {
-  const {
-    createPostHandler,
-    paginationOptions,
-    handlePaginationChange,
-    postsData,
-    handlePageSize,
-  } = props;
+  const { footerOperations, paginationOptions, handlePaginationChange, postsData, handlePageSize } =
+    props;
   const paginationSizeIntervals = ['5', '10', '15', '20'];
   return (
     <SFooter>
-      <Button type="primary" title="Create Post" onClick={createPostHandler}>
-        Create
-      </Button>
+      {footerOperations.createPostHandler && (
+        <Button type="primary" title="Create Post" onClick={footerOperations.createPostHandler}>
+          Create
+        </Button>
+      )}
       {postsData.length > paginationSizeIntervals[0] && (
         <Pagination
           current={paginationOptions.current}
