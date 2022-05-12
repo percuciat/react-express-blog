@@ -7,7 +7,6 @@ import PostList from './PostList';
 import { useAppSelector, useAppDispatch } from 'hooks/useRedux';
 import { selectPostErrors, selectPostData } from 'store/slices/post';
 import { selectCategoryData } from 'store/slices/category';
-import { selectCurrentCategory } from 'store/slices/category';
 
 import { fetchPosts } from 'store/slices/post/actions';
 import {
@@ -28,15 +27,12 @@ const Posts = (props) => {
     operation: '',
   });
   const dispatch = useAppDispatch();
-  const currentCategory = useAppSelector(selectCurrentCategory);
   const posts = useAppSelector(selectPostData);
   const isAuth = false;
 
   useEffect(() => {
-    dispatch(fetchPosts({ category: currentCategory })); /* .then(() => {
-      setPaginationOptions(defaultState);
-    }); */
-  }, [dispatch, currentCategory]);
+   dispatch(fetchPosts(filterForFetchPosts)); 
+  }, [dispatch, filterForFetchPosts]);
 
   const backendErrors = useAppSelector(selectPostErrors);
   const categories = useAppSelector(selectCategoryData);

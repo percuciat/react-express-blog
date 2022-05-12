@@ -1,17 +1,20 @@
 import PostModel from '../models/postModel';
 import {v4} from 'uuid';
+import {IResponse} from './types';
 
-interface IResponse {
-    status: 'Error' | 'OK',
-    message: string,
-    payload: any
-}
-interface ICreate {
-    (count: number | undefined, filter: string | undefined): Promise<IResponse>
+type TMethods<T> = {
+    (...args: Array<T>): Promise<IResponse>
 }
 
-const postService =  {
-    async create(title: string, content: string, category: string) {
+interface IpostService {
+    create: TMethods<string>
+    update: TMethods<string>
+    delete: TMethods<string>
+    posts: TMethods<{[key:string]: any}>
+}
+
+const postService: IpostService =  {
+    async create(title, content, category) {
         try {
             const _uniqId = v4();
             const post = await PostModel.findOne({title});
@@ -23,7 +26,6 @@ const postService =  {
                 }
             } else {
                 const newPost = await PostModel.create({_uniqId, title, content, category: category});
-                console.log('new Post--', newPost);
                 return {
                     status: 'OK',
                     message: 'Post has created.',
@@ -33,13 +35,13 @@ const postService =  {
         } catch (e) {
             return {
                 status: 'Error',
-                message: e,
+                message: `Server Error ${e}`,
                 payload: []
             }
         }
     },
 
-    async update(_id: string, title: string, content: string, category: string) {
+    async update(_id, title, content, category) {
         try {
             const newPost = await PostModel.findByIdAndUpdate({_id}, {title, content, category}, {new: true});
             return {
@@ -50,13 +52,13 @@ const postService =  {
         } catch (e) {
             return {
                 status: 'Error',
-                message: 'Post not found for updating operation.',
+                message: `Post not found for updating operation. ${e}`,
                 payload: []
             }
         }
     },
 
-    async delete(_id: string) {
+    async delete(_id) {
         const post = await PostModel.findByIdAndDelete({_id});
         if(!post) {
             return {
@@ -73,12 +75,23 @@ const postService =  {
         }
     },
 
-    async posts(count, filterTitle, filterDate, category, page) {
+    async posts(query) {
+        /* : {count: number; filterTitle: string; filterDate: number; category: any; page: any} 
+        {createdAt: filterDate }
+        filterTitle = '', filterDate = 1
+        */
+        const {count = 25, filterSort, category, page} = query;
+        const mapFilterSort = {
+            date: {createdAt: -1},
+            title: {title: ''}
+        };
+        const setCategory = category ? {category: category} : {}
+        
         try {
-            const postsAll = await PostModel.find(category ? {category: category} : {})
-               /*  .skip((page - 1) * (count || 5))
-                .limit(count || 5) */
-                .sort({title: filterTitle});
+            const postsAll = await PostModel
+                .find(setCategory)
+                .sort(mapFilterSort[filterSort])
+                .limit(+count);
                 
             return {
                 status: 'OK',
@@ -88,7 +101,7 @@ const postService =  {
         } catch (e) {
             return {
                 status: 'Error',
-                message: 'Server Error',
+                message: `Server Error ${e}`,
                 payload: []
             }
         }

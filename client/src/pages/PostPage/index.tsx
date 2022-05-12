@@ -1,8 +1,12 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import { Posts, PostFilter } from 'containers';
+import { useAppSelector } from 'hooks/useRedux';
+import { selectCurrentCategory } from 'store/slices/category';
 
 const PostPage = () => {
+  const currentCategory = useAppSelector(selectCurrentCategory);
+  const filterForFetchPosts = { category: currentCategory, filterSort: 'title' };
   return (
     <>
       <Row align="middle">
@@ -15,7 +19,7 @@ const PostPage = () => {
       </Row>
       <Row>
         <Col span={24}>
-          <Posts />
+          <Posts filterForFetchPosts={filterForFetchPosts} />
         </Col>
       </Row>
     </>

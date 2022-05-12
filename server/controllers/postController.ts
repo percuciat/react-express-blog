@@ -32,8 +32,8 @@ const postController = {
     },
     async index(req: Request, res: Response) {
         try {
-            const {count, filter, category, page} = req.query;
-            const {status, message, payload} = await postService.posts(count, filter, category, page);
+           /*  const {count, filter, category, page} = ; */
+            const {status, message, payload} = await postService.posts(req.query);
             return res.status(200).json({
                 status,
                 message,

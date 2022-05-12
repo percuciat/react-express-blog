@@ -5,7 +5,6 @@ import { Spin } from 'antd';
 import { selectIsLoading, selectCategoryData, selectCurrentCategory } from 'store/slices/category';
 import { useAppSelector, useAppDispatch } from 'hooks/useRedux';
 import { fetchCategories, setCurrentCategory } from 'store/slices/category/actions';
-import { fetchPosts } from 'store/slices/post/actions';
 
 const PostFilter = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +17,6 @@ const PostFilter = () => {
   }, [dispatch]);
 
   const filterPosts = (value: string) => {
-    dispatch(fetchPosts({ category: value }));
     dispatch(setCurrentCategory(value));
   };
 

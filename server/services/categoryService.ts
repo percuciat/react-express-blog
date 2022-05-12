@@ -1,9 +1,19 @@
 import {model} from 'mongoose';
 import categoryModel from '../models/categoryModel';
+import {IResponse} from './types';
 
+type TMethods<T> = {
+    (...args: Array<T>): Promise<IResponse>
+}
+
+interface IcategoryService {
+    categories: TMethods<undefined>
+    create: TMethods<string>
+    delete: TMethods<string>
+}
 
 const CategoryModel = model('Category', categoryModel);
-const categoryService =  {
+const categoryService: IcategoryService =  {
     async categories(/*count, filter*/) {
         try {
             const categoriesAll = await CategoryModel.find();
@@ -15,13 +25,13 @@ const categoryService =  {
         } catch (e) {
             return {
                 status: 'Error',
-                message: 'Server Error',
+                message: `Server Error ${e}`,
                 payload: []
             }
         }
     },
 
-    async create(name: string) {
+    async create(name) {
         try {
             const categoryData = await CategoryModel.findOne({name});
             if (categoryData) {
@@ -39,11 +49,15 @@ const categoryService =  {
                 }
             }
         } catch (e) {
-            return e
+            return {
+                status: 'Error',
+                message: `Server Error ${e}`,
+                payload: []
+            }
         }
     },
 
-    async delete(_id: string) {
+    async delete(_id) {
         const post = await CategoryModel.findByIdAndDelete({_id});
         if(!post) {
             return {
