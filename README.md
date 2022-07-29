@@ -1,8 +1,21 @@
-## MERN Stack Build  a blog app using MERN  + Typescript + Redux Toolkit + Ant Design
+## Full-Stack Blog app  
 
-First introducing with Full-Stack development.
+#
+App has bootstrapped with MERN stack and TypeScript. MVP - CRUD operations.
 
-> + CRUD posts, update categories.
+Using packages:
+
+### frontend
+
+- React 17+,
+- RTK,
+- AntD,
+- Jest
+
+### backend
+
+- Express 4+
+- MongoDB
 
 
 
