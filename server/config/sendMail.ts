@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+/* const nodemailer = require('nodemailer');
 import {OAuth2Client} from 'google-auth-library'
 
 const OAUTH_PLAYGROUND = 'https://developers.google.com/oauthplayground';
@@ -27,7 +27,7 @@ const sendEmail = async (to: string, urlLog: string, msg: string) => {
                 access_token
             }
         });*/
-        const transport = nodemailer.createTransport({
+/*  const transport = nodemailer.createTransport({
             host: "smtp.ethereal.email",
             port: 587,
             secure: false,
@@ -57,4 +57,4 @@ const sendEmail = async (to: string, urlLog: string, msg: string) => {
     }
 };
 
-export default sendEmail;
+export default sendEmail; */

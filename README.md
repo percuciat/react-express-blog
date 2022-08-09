@@ -1,13 +1,14 @@
-## Full-Stack Blog app  
+## [in progress] Full-Stack Blog app  
 
 #
-App has bootstrapped with MERN stack and TypeScript. MVP - CRUD operations.
+App has bootstrapped with CRA + NodeJS. MVP - CRUD operations.
 
 Using packages:
 
 ### frontend
 
 - React 17+,
+- TypeScript
 - RTK,
 - AntD,
 - Jest
@@ -15,7 +16,7 @@ Using packages:
 ### backend
 
 - Express 4+
-- MongoDB
+- PostgreSQL
 
 
 
