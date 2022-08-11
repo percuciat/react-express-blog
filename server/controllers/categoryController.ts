@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+/* import {Request, Response} from 'express'
 import categoryService from '../services/categoryService';
 
 const categoryController = {
@@ -34,8 +34,8 @@ const categoryController = {
 
     async index(req: Request, res: Response) {
         try {
-           /* const {count, filter} = req.query;*/
-            const {status, message, payload} = await categoryService.categories(/*count, filter*/);
+           
+            const {status, message, payload} = await categoryService.categories();
             return res.status(200).json({
                 status,
                 message,
@@ -79,4 +79,5 @@ const categoryController = {
     }
 };
 
-export default categoryController;
+export default categoryController; */
+export default {}

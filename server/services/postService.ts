@@ -1,4 +1,61 @@
-import PostModel from '../models/postModel';
+import PostModel from "../models/sequelize/post";
+import { v4 } from "uuid";
+
+type TMethods<T> = {
+  (...args: Array<T>): Promise<any>;
+};
+
+interface IpostService {
+  client: any;
+  models: any;
+  /* create: TMethods<string>;
+  update: TMethods<string>;
+  delete: TMethods<string>;
+  posts: TMethods<{ [key: string]: any }>; */
+}
+
+/* class PostService implements IpostService {
+  client: any;
+  models: any;
+  constructor(sequelize) {
+    PostModel(sequelize);
+    this.client = sequelize;
+    this.models = sequelize.models;
+  }
+  async getPosts(query) {
+    return "Worked!!!";
+  }
+}
+
+export default PostService; */
+
+import PostRepository from "../repository/posts";
+
+class PostService {
+  constructor() {}
+
+  async getPosts() {
+    return await PostRepository.getPosts();
+  }
+
+  async createPost(post) {
+    const _uniqId = v4();
+    post.uid = _uniqId;
+    return await PostRepository.createPost(post);
+  }
+
+  async updatePost(post) {
+    return await PostRepository.updatePost(post);
+  }
+
+  async deletePost(postId) {
+    return await PostRepository.deletePost(postId);
+  }
+}
+
+export default new PostService();
+
+/* import PostModel from '../models/postModel';
 import {v4} from 'uuid';
 import {IResponse} from './types';
 
@@ -76,10 +133,6 @@ const postService: IpostService =  {
     },
 
     async posts(query) {
-        /* : {count: number; filterTitle: string; filterDate: number; category: any; page: any} 
-        {createdAt: filterDate }
-        filterTitle = '', filterDate = 1
-        */
         const {count = 25, filterSort, category, page} = query;
         const mapFilterSort = {
             date: {createdAt: -1},
@@ -108,4 +161,4 @@ const postService: IpostService =  {
     }
 };
 
-export default postService;
+export default postService; */

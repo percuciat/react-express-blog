@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import db from "./query/queries";
+/* import db from "./query/queries"; */
 dotenv.config();
 
 import cors from "cors";
@@ -22,15 +22,15 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 // Routes
-/* app.use('/auth', routes.authRouter); 
-app.use("/category", routes.categoryRouter);
-app.use("/post", routes.postRouter);*/
+/* app.use('/auth', routes.authRouter);  */
+/* app.use("/category", routes.categoryRouter); */
+// routes.postRouter
+app.use("/posts", routes.postRouter);
 
-app.get("/users", db.getUsers);
-app.get("/users/:id", db.getUserById);
-app.post("/users", db.createUser);
+//app.use("/api", () => 'alalal');
+/*app.get("/users/:id", db.getUserById)
 app.put("/users/:id", db.updateUser);
-app.delete("/users/:id", db.deleteUser);
+app.delete("/users/:id", db.deleteUser); */
 
 app.get("/", (request, response) => {
   response.json({ info: "Node.js, Express, and Postgres API" });

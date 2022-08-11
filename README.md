@@ -17,6 +17,8 @@ Using packages:
 
 - Express 4+
 - PostgreSQL
+- TypeScript
+- SequelizeORM 6+
 
 
 

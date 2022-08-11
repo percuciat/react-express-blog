@@ -6,7 +6,7 @@ import app from './appRouter'
 const routes = {
     authRouter,
     postRouter,
-    categoryRouter,
+   /*  categoryRouter, */
     app,
 };
 

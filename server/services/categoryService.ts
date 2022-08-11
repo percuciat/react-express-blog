@@ -1,4 +1,4 @@
-import {model} from 'mongoose';
+/* import {model} from 'mongoose';
 import categoryModel from '../models/categoryModel';
 import {IResponse} from './types';
 
@@ -14,7 +14,7 @@ interface IcategoryService {
 
 const CategoryModel = model('Category', categoryModel);
 const categoryService: IcategoryService =  {
-    async categories(/*count, filter*/) {
+    async categories() {
         try {
             const categoriesAll = await CategoryModel.find();
             return {
@@ -75,4 +75,5 @@ const categoryService: IcategoryService =  {
     },
 };
 
-export default categoryService;
+export default categoryService; */
+export default {};

@@ -1,15 +1,15 @@
-import express from 'express';
-import multer from 'multer';
-import postController from '../controllers/postController';
-import postSchema from '../schemas/post/postSchema';
-import { validatorSchema } from '../middlewares/validator';
+import express from "express";
+import multer from "multer";
+import PostController from "../controllers/postController";
+import { postSchema } from "../helpers/validationSchema";
+import { validatorMiddleware } from "../middlewares/validator";
 const postRouter = express.Router();
 
 /**
  * ROUTES
  */
 
- const storage = multer.diskStorage({
+/*  const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, './assets/uploads/')
     },
@@ -21,21 +21,20 @@ const postRouter = express.Router();
 
 const upload = multer({ storage: storage, limits: {
     fileSize: 1024 * 1024 * 5,
-}, });
+}, }); */
 
-postRouter.get('/', postController.index);
+postRouter.get("/", PostController.getPosts);
 
-postRouter.post('/create',
-    postSchema,
-    validatorSchema,
-    upload.single('image'),
-    postController.create);
+postRouter.post(
+  "/",
+  postSchema,
+  validatorMiddleware,
+  /*  upload.single('image'), */
+  PostController.createPost
+);
 
-postRouter.put('/update',
-    postSchema,
-    validatorSchema,
-    postController.update);
+postRouter.put("/", postSchema, validatorMiddleware, PostController.updatePost);
 
-postRouter.delete('/delete', postController.delete);
+postRouter.delete("/:uid", PostController.deletePost);
 
 export default postRouter;

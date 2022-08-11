@@ -1,107 +1,52 @@
-import {Request, Response} from 'express'
-import postService from '../services/postService';
+import { Request, Response } from "express";
+import PostService from "../services/postService";
 
 const postController = {
-    async create(req: Request, res: Response) {
-        try {
-            const {title, content, category} = req.body;
-            const {status, message, payload} = await postService.create(title, content, category);
-            if(status === 'Error') {
-                return res.status(400).json({
-                    status: status,
-                    errorData: [{
-                        message: message
-                    }]
-                })
-            } else {
-                res.status(200).json({
-                    status: status,
-                    message: message,
-                    data: payload
-                })
-            }
-        } catch (error: any) {
-            return res.status(500).json({
-                status: 'Error',
-                errorData: [{
-                    message: error.message
-                }]
-            })
-        }
+  async getPosts(req: Request, res: Response) {
+    try {
+      const posts = await PostService.getPosts();
 
-    },
-    async index(req: Request, res: Response) {
-        try {
-           /*  const {count, filter, category, page} = ; */
-            const {status, message, payload} = await postService.posts(req.query);
-            return res.status(200).json({
-                status,
-                message,
-                data: payload
-            })
-        } catch (error: any) {
-            return res.status(500).json({
-                status: 'Error',
-                errorData: [{
-                    message: error.message
-                }]
-            })
-        }
-    },
-    async update(req: Request, res: Response) {
-        try {
-            const {_id, title, content, category } = req.body;
-            const {status, message, payload} = await postService.update(_id, title, content, category);
-
-            if(status === 'Error') {
-                return res.status(400).json({
-                    status: status,
-                    errorData: [{
-                        message: message
-                    }]
-                })
-            } else {
-                res.status(200).json({
-                    status: status,
-                    message: message,
-                    data: payload
-                })
-            }
-        } catch (error: any) {
-            return res.status(500).json({
-                status: 'Error',
-                errorData: [{
-                    message: error.message
-                }]
-            })
-        }
-    },
-    async delete(req: Request, res: Response) {
-        try {
-            const { _id } = req.body;
-            const {status, message, payload} = await postService.delete(_id);
-            if (status === 'Error') {
-                return res.status(400).json({
-                    status: status,
-                    errorData: [{
-                        message: message
-                    }]
-                })
-            }
-            return res.status(200).json({
-                status,
-                message,
-                data: payload
-            })
-        } catch (error: any) {
-            return res.status(500).json({
-                status: 'Error',
-                errorData: [{
-                    message: error.message
-                }]
-            })
-        }
+      return res.status(200).json({ data: posts });
+    } catch (error: any) {
+      //throw new BadRequestError(error);
+      console.log("errr--", error);
+      /* return res.status(400).json({
+            status: 'Error',
+            errorData: [{
+                message: error.message
+            }]
+        }) */
     }
-};
+  },
 
-export default postController
+  async createPost(req: Request, res: Response) {
+    const post = req.body;
+    try {
+      const resCreate = await PostService.createPost(post);
+      return res.status(200).json({ data: resCreate });
+    } catch (error: any) {
+      console.log("errr--", error);
+    }
+  },
+
+  async updatePost(req: Request, res: Response) {
+    const newPost = req.body;
+    try {
+      const resPost = await PostService.updatePost(newPost);
+      return res.status(200).json({ data: resPost });
+    } catch (error: any) {
+      console.log("errr--", error);
+    }
+  },
+
+  async deletePost(req: Request, res: Response) {
+    const postId = req.params.uid;
+    try {
+      const resDelete = await PostService.deletePost(postId);
+      return res.status(200).json({ data: resDelete });
+    } catch (error: any) {
+      console.log("errr--", error);
+    }
+  },
+};
+export default postController;

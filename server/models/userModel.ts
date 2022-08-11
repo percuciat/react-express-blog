@@ -1,7 +1,6 @@
-import {Schema} from 'mongoose';
+/* import {Schema} from 'mongoose'; */
 
-
-const userSchema = new Schema({
+/* const userSchema = new Schema({
     name: {
         type: String,
         required: [true, 'please add your name'],
@@ -38,8 +37,6 @@ const userSchema = new Schema({
 export interface SavedUserDocument extends Document {
     account: string;
     password: string;
-}
+} */
 
-
-export default userSchema;
-
+export default {};
