@@ -1,5 +1,4 @@
 import PostModel from "../models/sequelize/post";
-import { v4 } from "uuid";
 
 type TMethods<T> = {
   (...args: Array<T>): Promise<any>;
@@ -39,16 +38,24 @@ class PostService {
   }
 
   async createPost(post) {
-    const _uniqId = v4();
-    post.uid = _uniqId;
+    /* if (!post) {
+      throw new BadRequestError("name is required field");
+    } */
     return await PostRepository.createPost(post);
   }
 
   async updatePost(post) {
+    /* const { uid, ...rest } = post; */
+    /* if (!uid) {
+        throw new BadRequestError("uid is required field");
+      } */
     return await PostRepository.updatePost(post);
   }
 
   async deletePost(postId) {
+   /*  if (!postId) {
+      throw new BadRequestError("uid required field");
+    } */
     return await PostRepository.deletePost(postId);
   }
 }

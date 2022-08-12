@@ -1,6 +1,6 @@
-import { body } from "express-validator";
+import { body, check } from "express-validator";
 
-export const postSchema = [
+export const postSchemaCreate = [
   body("title")
     /*.isAlphanumeric()
         .withMessage('Title should be alphanumeric')*/
@@ -14,4 +14,22 @@ export const postSchema = [
   /* body('category')
         .notEmpty()
         .withMessage("Enter the post's category."), */
+];
+
+export const postSchemaUpdate = [
+  body("uid")
+    .notEmpty()
+    .withMessage("uid must be completed"),
+  body("title")
+    .isLength({ min: 3 })
+    .withMessage("Title must contains more than 3 letters"),
+  body("content")
+    .isLength({ min: 5 })
+    .withMessage("Content must contains more than 5 letters"),
+];
+
+export const postSchemaDelete = [
+  check("uid")
+    .notEmpty()
+    .withMessage("uid must be completed in request"),
 ];

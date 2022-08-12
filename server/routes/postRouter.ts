@@ -1,7 +1,11 @@
 import express from "express";
 import multer from "multer";
 import PostController from "../controllers/postController";
-import { postSchema } from "../helpers/validationSchema";
+import {
+  postSchemaCreate,
+  postSchemaUpdate,
+  postSchemaDelete,
+} from "../helpers/validationSchema";
 import { validatorMiddleware } from "../middlewares/validator";
 const postRouter = express.Router();
 
@@ -27,14 +31,23 @@ postRouter.get("/", PostController.getPosts);
 
 postRouter.post(
   "/",
-  postSchema,
+  postSchemaCreate,
   validatorMiddleware,
-  /*  upload.single('image'), */
   PostController.createPost
 );
 
-postRouter.put("/", postSchema, validatorMiddleware, PostController.updatePost);
+postRouter.put(
+  "/",
+  postSchemaUpdate,
+  validatorMiddleware,
+  PostController.updatePost
+);
 
-postRouter.delete("/:uid", PostController.deletePost);
+postRouter.delete(
+  "/:uid",
+  postSchemaDelete,
+  validatorMiddleware,
+  PostController.deletePost
+);
 
 export default postRouter;

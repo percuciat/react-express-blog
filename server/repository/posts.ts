@@ -1,11 +1,12 @@
 import { connect } from "../db";
-/* const logger = require("../logger/api.logger"); */
+import { v4 } from "uuid";
 
 class PostRepository {
   db: any = {};
 
   constructor() {
     this.db = connect();
+    // this.redisDB = connectRedis();
     // For Development
     /*  this.db.sequelize.sync({ force: true }).then(() => {
       console.log("----Drop and re-sync db.----");
@@ -13,52 +14,41 @@ class PostRepository {
   }
 
   async getPosts() {
-    try {
-      const posts = await this.db.posts.findAll();
-      return posts;
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
+    const posts = await this.db.posts.findAll();
+    return posts;
   }
 
   async createPost(post) {
-    try {
-      const data = await this.db.posts.create(post);
-      return data;
-    } catch (err) {
-      console.log("eror CREATE--", err);
-    }
+    const _uniqId = v4();
+    post.uid = _uniqId;
+
+    const data = await this.db.posts.create(post);
+    return data;
   }
 
   async updatePost(post) {
-    try {
-      const data = await this.db.posts.update(
-        { ...post },
-        {
-          where: {
-            uid: post.uid,
-          },
-        }
-      );
-      return data;
-    } catch (err) {
-      console.log("eror UPDATE--", err);
-    }
+    const data = await this.db.posts.update(
+      { ...post },
+      {
+        where: {
+          uid: post.uid,
+        },
+      }
+    );
+    return data;
   }
 
   async deletePost(postId) {
-    console.log("postId DELETE--", postId);
-    try {
-      const data = await this.db.posts.destroy({
-        where: {
-          uid: postId,
-        },
-      });
-      return data;
-    } catch (err) {
-      console.log("eror DELETE--", err);
-    }
+    const data = await this.db.posts.destroy({
+      where: {
+        uid: postId,
+      },
+    });
+    console.log('DELETE data--', data);
+    /*  if (!postId) {
+      throw new BadRequestError("uid required field");
+    } */
+    return data;
   }
 }
 

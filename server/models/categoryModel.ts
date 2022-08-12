@@ -1,4 +1,4 @@
-import {Schema} from 'mongoose';
+/* import {Schema} from 'mongoose';
 
 const categorySchema = new Schema({
     name: {
@@ -8,6 +8,6 @@ const categorySchema = new Schema({
     }
 },{
     timestamps: false
-});
+}); */
 
-export default categorySchema;
+export default {};
