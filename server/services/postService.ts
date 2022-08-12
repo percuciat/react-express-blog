@@ -1,4 +1,4 @@
-import PostModel from "../models/sequelize/post";
+import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
 
 type TMethods<T> = {
   (...args: Array<T>): Promise<any>;
@@ -34,29 +34,55 @@ class PostService {
   constructor() {}
 
   async getPosts() {
-    return await PostRepository.getPosts();
+    try {
+      const res = await PostRepository.getPosts();
+      return res;
+    } catch (error: any) {
+      throw new ServerError("Server error");
+    }
   }
 
   async createPost(post) {
-    /* if (!post) {
-      throw new BadRequestError("name is required field");
-    } */
-    return await PostRepository.createPost(post);
+    try {
+      const res = await PostRepository.createPost(post);
+      return res;
+    } catch (error: any) {
+      if (error.message) {
+        throw error;
+      }
+      throw new ServerError("Server error");
+    }
   }
 
   async updatePost(post) {
-    /* const { uid, ...rest } = post; */
-    /* if (!uid) {
-        throw new BadRequestError("uid is required field");
-      } */
-    return await PostRepository.updatePost(post);
+    try {
+      const res = await PostRepository.updatePost(post);
+      // TODO: routesByUid
+      if (!res[0]) {
+        throw new NotFoundError("Cannot update post");
+      }
+      return res[0];
+    } catch (error: any) {
+      if (error.message) {
+        throw error;
+      }
+      throw new ServerError("Server error");
+    }
   }
 
   async deletePost(postId) {
-   /*  if (!postId) {
-      throw new BadRequestError("uid required field");
-    } */
-    return await PostRepository.deletePost(postId);
+    try {
+      const res = await PostRepository.deletePost(postId);
+      if (!res) {
+        throw new NotFoundError("Cannot delete post");
+      }
+      return res;
+    } catch (error: any) {
+      if (error.message) {
+        throw error;
+      }
+      throw new ServerError("Server error");
+    }
   }
 }
 

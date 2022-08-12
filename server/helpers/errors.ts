@@ -16,7 +16,7 @@ function convert(message) {
   return textMsg;
 }
 
-class NotFoundError extends Error {
+export class NotFoundError extends Error {
   constructor(message) {
     const textMsg = `Error: Not Found\n${convert(message)}`;
     super(textMsg);
@@ -27,7 +27,7 @@ class NotFoundError extends Error {
   expose: boolean;
 }
 
-class ServerError extends Error {
+export class ServerError extends Error {
   constructor(message) {
     const textMsg = `Error: Not Found\n${convert(message)}`;
     super(textMsg);
@@ -49,21 +49,11 @@ class LogicError extends Error {
   expose: boolean;
 }
 
-class BadRequestError extends Error {
+export class BadRequestError extends Error {
   constructor(message) {
     const textMsg = `Error: BadRequestError\n${convert(message)}`;
     super(textMsg);
     this.status = 400;
-    this.expose = true;
   }
   status: number;
-  expose: boolean;
 }
-
-export default {
-  MYSQL_ERRORS,
-  NotFoundError,
-  BadRequestError,
-  LogicError,
-  ServerError,
-};

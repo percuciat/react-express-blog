@@ -39,16 +39,11 @@ class PostRepository {
   }
 
   async deletePost(postId) {
-    const data = await this.db.posts.destroy({
+    return await this.db.posts.destroy({
       where: {
         uid: postId,
       },
     });
-    console.log('DELETE data--', data);
-    /*  if (!postId) {
-      throw new BadRequestError("uid required field");
-    } */
-    return data;
   }
 }
 

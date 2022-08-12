@@ -1,21 +1,14 @@
 import { Request, Response } from "express";
 import PostService from "../services/postService";
+import { responseSuccess, responseError } from "../helpers/responses";
 
 const postController = {
   async getPosts(req: Request, res: Response) {
     try {
       const posts = await PostService.getPosts();
-
-      return res.status(200).json({ data: posts });
+      return responseSuccess(res, posts);
     } catch (error: any) {
-      //throw new BadRequestError(error);
-      console.log("errr--", error);
-      /* return res.status(400).json({
-            status: 'Error',
-            errorData: [{
-                message: error.message
-            }]
-        }) */
+      return responseError(res, error.status, error.message);
     }
   },
 
@@ -23,9 +16,9 @@ const postController = {
     const post = req.body;
     try {
       const resCreate = await PostService.createPost(post);
-      return res.status(200).json({ data: resCreate });
+      return responseSuccess(res, resCreate);
     } catch (error: any) {
-      console.log("errr--", error);
+      return responseError(res, error.status, error.message);
     }
   },
 
@@ -33,9 +26,9 @@ const postController = {
     const newPost = req.body;
     try {
       const resPost = await PostService.updatePost(newPost);
-      return res.status(200).json({ data: resPost });
+      return responseSuccess(res, resPost);
     } catch (error: any) {
-      console.log("errr--", error);
+      return responseError(res, error.status, error.message);
     }
   },
 
@@ -43,9 +36,9 @@ const postController = {
     const postId = req.params.uid;
     try {
       const resDelete = await PostService.deletePost(postId);
-      return res.status(200).json({ data: resDelete });
+      return responseSuccess(res, resDelete);
     } catch (error: any) {
-      console.log("errr--", error);
+      return responseError(res, error.status, error.message);
     }
   },
 };
