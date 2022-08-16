@@ -37,7 +37,7 @@ postRouter.post(
 );
 
 postRouter.put(
-  "/",
+  "/:uid",
   postSchemaUpdate,
   validatorMiddleware,
   PostController.updatePost

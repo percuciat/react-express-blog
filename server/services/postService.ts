@@ -38,7 +38,7 @@ class PostService {
       const res = await PostRepository.getPosts();
       return res;
     } catch (error: any) {
-      throw new ServerError("Server error");
+      throw error;
     }
   }
 
@@ -47,26 +47,19 @@ class PostService {
       const res = await PostRepository.createPost(post);
       return res;
     } catch (error: any) {
-      if (error.message) {
-        throw error;
-      }
-      throw new ServerError("Server error");
+      throw error;
     }
   }
 
-  async updatePost(post) {
+  async updatePost(post, postId) {
     try {
-      const res = await PostRepository.updatePost(post);
-      // TODO: routesByUid
+      const res = await PostRepository.updatePost(post, postId);
       if (!res[0]) {
         throw new NotFoundError("Cannot update post");
       }
       return res[0];
     } catch (error: any) {
-      if (error.message) {
-        throw error;
-      }
-      throw new ServerError("Server error");
+      throw error;
     }
   }
 
@@ -78,10 +71,7 @@ class PostService {
       }
       return res;
     } catch (error: any) {
-      if (error.message) {
-        throw error;
-      }
-      throw new ServerError("Server error");
+      throw error;
     }
   }
 }

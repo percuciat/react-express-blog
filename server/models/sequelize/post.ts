@@ -1,11 +1,15 @@
 import { DataTypes, Model } from "sequelize";
+import Category from "./category";
+import { v4 as uuidv4 } from "uuid";
 
-const Post = (sequelize) => {
+// Sequelize
+const Post = async (sequelize) => {
   sequelize.define(
     "posts",
     {
       uid: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: () => uuidv4(),
         unique: true,
         allowNull: false,
       },
@@ -17,7 +21,6 @@ const Post = (sequelize) => {
       content: {
         type: DataTypes.TEXT,
         allowNull: false,
-        // allowNull defaults to true
       },
       createdby: {
         type: DataTypes.STRING,
@@ -26,8 +29,16 @@ const Post = (sequelize) => {
       updatedby: {
         type: DataTypes.STRING,
       },
+      /*  category_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "category",
+          key: "category_id",
+        },
+      },  */
     },
     {
+      /*  include: [ Category(sequelize) ], */
       tableName: "posts",
       paranoid: true, // soft delete
       sequelize, // We need to pass the connection instance
@@ -36,21 +47,10 @@ const Post = (sequelize) => {
     }
   );
 
-  sequelize.sync();
+  await sequelize.sync({ force: true });
+  //await sequelize.models.posts.belongsTo(sequelize.models.category);
+
   return sequelize.models.posts;
 };
 
 export default Post;
-/* import { Table, Column, Model, HasMany } from 'sequelize-typescript'
-
-@Table
-class Person extends Model {
-  @Column
-  name: string
-
-  @Column
-  birthday: Date
-
-  @HasMany(() => Hobby)
-  hobbies: Hobby[]
-} */

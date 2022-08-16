@@ -11,7 +11,7 @@ import { Sequelize, Model, DataTypes } from "sequelize";
 import Post from "../models/sequelize/post";
 /* const logger = require("../logger/api.logger"); */
 
-export const connect = () => {
+export const connect = async () => {
   // TODO: разобраться с .env
   const user = "postgres";
   const host = process.env.DB_HOST;
@@ -32,23 +32,19 @@ export const connect = () => {
       idle: 5000,
     },
   });
-
+  /* try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  } */
   const db: any = {};
   db.Sequelize = Sequelize;
   db.sequelize = sequelize;
+  // todo: только в 1 месте force
+  // await sequelize.sync({ force: true });
   // добавляем в модель конфиг
-  db.posts = Post(sequelize);
+  //db.posts = Post(sequelize);
 
   return db;
 };
-
-/*  default {
-  connect,
-}; */
-/* module.exports = {
-  connect,
-}; */
-
-/* export default {
-  query: (text, params) => pool.query(text, params),
-}; */

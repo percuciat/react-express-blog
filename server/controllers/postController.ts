@@ -23,9 +23,10 @@ const postController = {
   },
 
   async updatePost(req: Request, res: Response) {
+    const postId = req.params.uid;
     const newPost = req.body;
     try {
-      const resPost = await PostService.updatePost(newPost);
+      const resPost = await PostService.updatePost(newPost, postId);
       return responseSuccess(res, resPost);
     } catch (error: any) {
       return responseError(res, error.status, error.message);

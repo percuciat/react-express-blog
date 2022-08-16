@@ -20,7 +20,7 @@ export const postSchemaCreate = [
 ];
 
 export const postSchemaUpdate = [
-  body("uid").notEmpty().withMessage("uid must be completed"),
+  /* body("uid").notEmpty().withMessage("uid must be completed"), */
   body("title")
     .isLength({ min: 3 })
     .withMessage("Title must contains more than 3 letters"),

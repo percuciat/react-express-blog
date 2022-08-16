@@ -105,4 +105,4 @@ class PostRepository {
   }
 }
 
-export default new PostRepository();
+export default {};

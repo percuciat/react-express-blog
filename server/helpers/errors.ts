@@ -18,7 +18,7 @@ function convert(message) {
 
 export class NotFoundError extends Error {
   constructor(message) {
-    const textMsg = `Error: Not Found\n${convert(message)}`;
+    const textMsg = `Not Found\n${convert(message)}`;
     super(textMsg);
     this.status = 404;
     this.expose = true;
@@ -29,7 +29,7 @@ export class NotFoundError extends Error {
 
 export class ServerError extends Error {
   constructor(message) {
-    const textMsg = `Error: Not Found\n${convert(message)}`;
+    const textMsg = `${convert(message)}`;
     super(textMsg);
     this.status = 500;
     this.expose = true;
@@ -40,7 +40,7 @@ export class ServerError extends Error {
 
 class LogicError extends Error {
   constructor(message) {
-    const textMsg = `Error: LogicError\n${convert(message)}`;
+    const textMsg = `LogicError\n${convert(message)}`;
     super(textMsg);
     this.status = 400;
     this.expose = true;
@@ -51,7 +51,7 @@ class LogicError extends Error {
 
 export class BadRequestError extends Error {
   constructor(message) {
-    const textMsg = `Error: BadRequestError\n${convert(message)}`;
+    const textMsg = `BadRequestError\n${convert(message)}`;
     super(textMsg);
     this.status = 400;
   }
