@@ -1,4 +1,4 @@
-import { connect } from "../db";
+import { connect } from "../config";
 /* import { v4 } from "uuid"; */
 import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
 import type { Error } from "sequelize";
@@ -105,4 +105,4 @@ class PostRepository {
   }
 }
 
-export default new PostRepository();
+export default {};

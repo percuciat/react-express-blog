@@ -1,43 +1,43 @@
-import { DataTypes, Model } from "sequelize";
-import Post from "./post";
-import { v4 as uuidv4 } from "uuid";
-
-const Category = async (sequelize) => {
-  sequelize.define(
-    "category",
+const Category = (sequelize, DataTypes) => {
+  const categoryModel = sequelize.define(
+    "Category",
     {
-      uid: {
-        type: DataTypes.UUID,
-        defaultValue: () => uuidv4(),
-        unique: true,
-        allowNull: false,
-      },
       category_name: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
-      category_id: {
+      /* category_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         unique: true,
         allowNull: false,
-      },
+      }, */
     },
     {
-      tableName: "post_category",
+      tableName: "article_category",
       paranoid: true, // soft delete
       sequelize, // We need to pass the connection instance
       timestamps: false,
     }
   );
 
-  await sequelize.sync();
-  await sequelize.models.category.hasMany(sequelize.models.posts, {
+  // await sequelize.sync();
+  /*  await sequelize.models.category.hasMany(sequelize.models.posts, {
     foreignKey: "category_id",
-  });
+  }); */
 
-  return sequelize.models.category;
+  categoryModel.associate = (models) => {
+    categoryModel.hasMany(models.Category, {
+      foreignKey: "categoryId",
+      as: "articles",
+    });
+  };
+
+  return categoryModel;
 };
 
 export default Category;

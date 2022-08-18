@@ -33,6 +33,13 @@ export const postSchemaDelete = [
   check("uid").notEmpty().withMessage("uid must be completed in request"),
 ];
 
+export const categorySchemaCreate = [
+  body("title")
+    /*.isAlphanumeric()
+        .withMessage('Title should be alphanumeric')*/
+    .isLength({ min: 3 })
+    .withMessage("Title must contains more than 3 letters"),
+];
 
 /* body('category')
 .isLength({ min: 3 })
