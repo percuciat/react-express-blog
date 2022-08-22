@@ -1,9 +1,11 @@
-import { connect } from "../config";
 /* import { v4 } from "uuid"; */
+
+/* import { connect } from "../config";
+
 import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
 import type { Error } from "sequelize";
-import Post from "../models/sequelize/post";
-import Category from "../models/sequelize/category";
+import Post from "../models/post";
+import Category from "../models/category";
 
 class PostRepository {
   db: any;
@@ -13,9 +15,6 @@ class PostRepository {
     connect()
       .then((res) => {
         this.db = res;
-        // init models
-        /* this.db.posts = Post(this.db.sequelize);
-        this.db.category = Category(this.db.sequelize); */
         Promise.all([
           Post(this.db.sequelize),
           Category(this.db.sequelize),
@@ -28,26 +27,6 @@ class PostRepository {
         return res;
       })
       .catch((e) => console.log("eror CATCH connects:", e));
-
-    // this.redisDB = connectRedis();
-    // For Development
-    /*
-    
-    if (process.env.NODE_ENV === "production") {
-  db.sequelize.sync().then(() => {
-    useRoutes()
-  })
-} else {
-  db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.")
-    useRoutes()
-  })
-}
-
-    */
-    /*  this.db.sequelize.sync({ force: true }).then(() => {
-      console.log("----Drop and re-sync db.----");
-    }); */
   }
 
   async getPosts() {
@@ -103,6 +82,6 @@ class PostRepository {
       throw new ServerError(`${errorDB.name}`);
     }
   }
-}
+} */
 
 export default {};

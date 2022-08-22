@@ -1,17 +1,27 @@
 import { v4 as uuidv4 } from "uuid";
 
+/*
+uid: {
+          type: Sequelize.UUID,
+          defaultValue: () => uuidv4(),
+          unique: true,
+          allowNull: false,
+          validate: {
+            notEmpty: true,
+          },
+        },
+*/
+
 const Post = (sequelize, DataTypes) => {
   const postModel = sequelize.define(
     "Post",
     {
-      uid: {
+      id: {
         type: DataTypes.UUID,
-        defaultValue: () => uuidv4(),
-        unique: true,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
+        autoIncrement: false,
       },
       title: {
         type: DataTypes.STRING,
@@ -28,6 +38,21 @@ const Post = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
+      status: DataTypes.STRING,
+      author: {
+        type: DataTypes.STRING,
+        references: {
+          model: "Authors",
+          key: "author_name",
+        },
+      },
+      category: {
+        type: DataTypes.STRING,
+        references: {
+          model: "Categories",
+          key: "category_name",
+        },
+      },
       createdby: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -40,26 +65,12 @@ const Post = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "articles",
-      paranoid: true, // soft delete
-      sequelize, // We need to pass the connection instance
+      paranoid: true,
+      tableName: "Posts",
+      sequelize,
       timestamps: true,
     }
   );
-
-  postModel.associate = (models) => {
-    postModel.belongsTo(models.Post, {
-      foreignKey: "categoryId",
-      as: "article_category",
-    });
-    postModel.belongsTo(models.Author, {
-      foreignKey: "authorId",
-      as: "article_author",
-    });
-  };
-
-  // await sequelize.sync({ force: true });
-  //await sequelize.models.posts.belongsTo(sequelize.models.category);
 
   return postModel;
 };

@@ -2,55 +2,50 @@ const Category = (sequelize, DataTypes) => {
   const categoryModel = sequelize.define(
     "Category",
     {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        autoIncrement: false,
+      },
       category_name: {
         type: DataTypes.STRING,
         unique: true,
+        primaryKey: true,
         allowNull: false,
         validate: {
           notEmpty: true,
         },
       },
-      /* category_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        unique: true,
-        allowNull: false,
-      }, */
+      author: {
+        type: DataTypes.STRING,
+        references: {
+          model: "Authors",
+          key: "author_name",
+        },
+      },
     },
     {
-      tableName: "article_category",
-      paranoid: true, // soft delete
-      sequelize, // We need to pass the connection instance
+      tableName: "Categories",
+      paranoid: true,
+      sequelize,
       timestamps: false,
     }
   );
 
-  // await sequelize.sync();
-  /*  await sequelize.models.category.hasMany(sequelize.models.posts, {
-    foreignKey: "category_id",
-  }); */
-
-  categoryModel.associate = (models) => {
-    categoryModel.hasMany(models.Category, {
-      foreignKey: "categoryId",
-      as: "articles",
+  /* categoryModel.associate = (models) => {
+   categoryModel.belongsTo(models.Author, {
+      foreignKey: "author",
+      as: "author_name",
     });
-  };
+    categoryModel.hasMany(models.Post, {
+      foreignKey: "category_name",
+      as: "category",
+    }); 
+  };*/
 
   return categoryModel;
 };
 
 export default Category;
-/* import { Table, Column, Model, HasMany } from 'sequelize-typescript'
-
-@Table
-class Person extends Model {
-  @Column
-  name: string
-
-  @Column
-  birthday: Date
-
-  @HasMany(() => Hobby)
-  hobbies: Hobby[]
-} */
