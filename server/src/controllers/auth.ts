@@ -1,36 +1,37 @@
-/*import { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   generateAccessToken,
   generateActiveToken,
   generateRefreshToken,
-} from "../config/generateToken";
-import { model } from "mongoose";
-import userModel from "../models/userModel";
+} from "../helpers/generateToken";
+
+import { responseSuccess, responseError } from "../helpers/responses";
+import authService from "../services/authService";
 
 const CLIENT_URL = `${process.env.BASE_URL}`;
 
-const Users = model("User", userModel);
 const authController = {
-  register: async (req: Request, res: Response) => {
+  async register(req: Request, res: Response) {
     try {
-      const userInDB = await userSchemaModel.findOne({account})
-            if (userInDB) res.status(400).json({msg: 'Email or Phone already exists'})
+      const userInfo = req.body;
+      const newUser = await authService.register(userInfo);
+      return responseSuccess(res, newUser) 
+     
 
-            const passwordHash = await bcrypt.hash(password, 12)
+      return res.json({
+        status: "OK",
+        msg: "Register successfully!",
+        /* data: newUser,
+        activeToken, */
+      });
+    } catch (error: any) {
+      return responseError(res, error.status, error.message);
+    }
+  },
+};
 
-            const newUser = await userSchemaModel.create({
-                name, account, password: passwordHash
-            });
-            const activeToken = generateActiveToken({newUser});
-
-            return res.json({
-                status: 'OK',
-                msg: 'Register successfully!',
-                data: newUser,
-                activeToken
-            })*/
 /*const url = `${CLIENT_URL}/active/${activeToken}`;
 
             sendEmail(account, url, 'Verify your email address.');
@@ -73,6 +74,6 @@ const authController = {
     }
      Our register logic ends here
   },
-};
+};*/
 
-export default authController; */
+export default authController; 

@@ -12,17 +12,9 @@ const Category = (sequelize, DataTypes) => {
       category_name: {
         type: DataTypes.STRING,
         unique: true,
-        primaryKey: true,
         allowNull: false,
         validate: {
           notEmpty: true,
-        },
-      },
-      author: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Authors",
-          key: "author_name",
         },
       },
     },
@@ -34,16 +26,16 @@ const Category = (sequelize, DataTypes) => {
     }
   );
 
-  /* categoryModel.associate = (models) => {
-   categoryModel.belongsTo(models.Author, {
-      foreignKey: "author",
-      as: "author_name",
+  categoryModel.associate = (models) => {
+    categoryModel.belongsTo(models.Author, {
+      foreignKey: "authorId",
+      as: "author_category",
     });
     categoryModel.hasMany(models.Post, {
-      foreignKey: "category_name",
+      foreignKey: "categoryId",
       as: "category",
-    }); 
-  };*/
+    });
+  };
 
   return categoryModel;
 };

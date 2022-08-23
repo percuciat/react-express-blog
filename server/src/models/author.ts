@@ -1,9 +1,3 @@
-/*
-
-No. Sequelize sync will create tables that do not exists. If you already have all the tables, it will not do anything. However if you use force: true, it will drop the table that exists and recreate them from the model definition.
-
-*/
-
 const Author = (sequelize, DataTypes) => {
   const authorModel = sequelize.define(
     "Author",
@@ -24,13 +18,13 @@ const Author = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      user_name: {
+      /* user_name: {
         type: DataTypes.STRING,
         references: {
           model: "Users",
           key: "user_name",
         },
-      },
+      }, */
     },
     {
       paranoid: true,
@@ -39,6 +33,17 @@ const Author = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+ authorModel.associate = (models) => {
+    authorModel.hasMany(models.Category, {
+      foreignKey: "authorId",
+      as: "author_category",
+    });
+    authorModel.hasMany(models.Post, {
+      foreignKey: "authorId",
+      as: "author",
+    });
+  };
 
   return authorModel;
 };

@@ -2,52 +2,67 @@ import express from "express";
 import multer from "multer";
 import PostController from "../controllers/post";
 import {
-  postSchemaCreate,
-  postSchemaUpdate,
-  postSchemaDelete,
+  checkCreatePost,
+  checkUpdatePost,
+  checkCreateCategory,
+  checkGetById,
 } from "../helpers/validationSchema";
-import { validatorMiddleware } from "../middlewares/validator";
+import { validatorMiddleware, validation } from "../middlewares/validator";
 const router = express.Router();
-
-/**
- * ROUTES
- */
-
-/*  const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './assets/uploads/')
-    },
-    filename: function (req, file, callback) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      callback(null, file.fieldname + '-' + uniqueSuffix)
-    }
-});
-
-const upload = multer({ storage: storage, limits: {
-    fileSize: 1024 * 1024 * 5,
-}, }); */
 
 router.get("/", PostController.getPosts);
 
+router.get(
+  "/id/:id",
+  checkGetById,
+  validatorMiddleware,
+  PostController.getPostById
+);
+
 router.post(
   "/",
-  postSchemaCreate,
+  checkCreatePost,
   validatorMiddleware,
   PostController.createPost
 );
 
+router.get(
+  "/restore/id/:id",
+  checkGetById,
+  validatorMiddleware,
+  PostController.restorePost
+);
+
 router.put(
-  "/:uid",
-  postSchemaUpdate,
+  "/id/:id",
+  checkUpdatePost,
   validatorMiddleware,
   PostController.updatePost
 );
 
-router.delete(
-  "/:uid",
-  postSchemaDelete,
+router.delete("/id/:id", checkGetById, PostController.deletePost);
+
+router.get("/category", PostController.getPostCategories);
+
+router.get(
+  "/category/id/:id",
+  checkGetById,
   validatorMiddleware,
-  PostController.deletePost
+  PostController.getPostCategoryById
+);
+
+router.post(
+  "/category",
+  checkCreateCategory,
+  validatorMiddleware,
+  PostController.createPostCategory
+);
+
+router.delete(
+  "/category/id/:id",
+  checkGetById,
+  validatorMiddleware,
+  PostController.deletePostCategory
 );
 
 export default router;

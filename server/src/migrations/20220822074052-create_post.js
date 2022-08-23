@@ -28,13 +28,6 @@ module.exports = {
           },
         },
         status: Sequelize.STRING,
-        createdby: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          validate: {
-            notEmpty: true,
-          },
-        },
         updatedby: {
           type: Sequelize.STRING,
         },

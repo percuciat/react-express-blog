@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.STRING,
         references: {
           model: "Categories",
-          key: "category_name",
+          key: "categoryId",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING,
         references: {
           model: "Authors",
-          key: "author_name",
+          key: "authorId",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",

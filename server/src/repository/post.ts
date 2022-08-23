@@ -1,6 +1,11 @@
 import { connect } from "../config";
 /* import { v4 } from "uuid"; */
-import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
+import {
+  BadRequestError,
+  ServerError,
+  NotFoundError,
+  DataBaseError,
+} from "../helpers/errors";
 import type { Error } from "sequelize";
 
 /*
@@ -11,7 +16,6 @@ Node.JS действительно построен для потока собы
 
 */
 
-// Article
 class PostRepository {
   repo: any;
 
@@ -19,40 +23,78 @@ class PostRepository {
     this.repo = {};
     connect()
       .then((res) => {
-        console.log("--connection repo--");
         this.repo = res.Post;
         return res;
       })
-      .catch((e) => console.log("error CATCH connects:", e));
-
-    // this.redisDB = connectRedis();
-    // For Development
+      .catch((error) => {
+        console.log("error CATCH Post connects:", error);
+        let errorDB = error as Error;
+        throw new DataBaseError(`bad connection - ${errorDB.name}`);
+      });
   }
 
   async getPosts() {
     try {
       const posts = await this.repo.findAll({
-        attributes: ['title', 'content', 'createdby'],
-        include: { association: 'article_category' }
+        attributes: ["id", "title", "content", "status"],
+        include: ["category", "author"],
+      });
+      return posts;
+    } catch (error: unknown) {
+      let errorDB = error as Error;
+      throw new DataBaseError(`${errorDB.name}`);
+    }
+  }
+
+  async getPostById(postId) {
+    try {
+      const posts = await this.repo.findByPk(postId, {
+        attributes: ["id", "title", "content", "status"],
+        include: ["category", "author"],
       });
       return posts;
     } catch (error: unknown) {
       console.log("error--", error);
 
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
   async createPost(post) {
     try {
-      const data = await this.repo.create(post);
-      return data;
+      /* let dataPost = await this.repo.findOne({
+        where: {
+          title: post.title,
+        },
+        paranoid: false,
+      });
+
+      if (dataPost) {
+        dataPost = await this.repo.restore({
+          where: {
+            title: post.title,
+          },
+        });
+        return dataPost;
+      } */
+      // TODO: middleWare for checking
+      let fadedPost = await this.repo.findOne({
+        where: {
+          title: post.title,
+        },
+        paranoid: false,
+      });
+      if (fadedPost) {
+        throw new DataBaseError("Cannot create post");
+      }
+      const dataPost = await this.repo.create(post);
+      return dataPost;
     } catch (error: unknown) {
       console.log("error-", error);
 
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
@@ -62,27 +104,41 @@ class PostRepository {
         { ...post },
         {
           where: {
-            uid: postId,
+            id: postId,
           },
         }
       );
       return data;
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
-  async deletePost(postId) {
+  async restorePost(postId) {
     try {
-      return await this.repo.destroy({
+      return await this.repo.restore({
         where: {
-          uid: postId,
+          id: postId,
         },
       });
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
+    }
+  }
+
+  async deletePost(postId, isForce = false) {
+    try {
+      return await this.repo.destroy({
+        where: {
+          id: postId,
+        },
+        force: isForce,
+      });
+    } catch (error: unknown) {
+      let errorDB = error as Error;
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 }

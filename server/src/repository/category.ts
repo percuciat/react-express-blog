@@ -1,87 +1,74 @@
-/* import { v4 } from "uuid"; */
+import { connect } from "../config";
 
-/* import { connect } from "../config";
-
-import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
+import { BadRequestError, DataBaseError, NotFoundError } from "../helpers/errors";
 import type { Error } from "sequelize";
-import Post from "../models/post";
-import Category from "../models/category";
 
-class PostRepository {
-  db: any;
+class CategoryRepository {
+  repo: any;
 
   constructor() {
-    this.db = {};
+    this.repo = {};
     connect()
       .then((res) => {
-        this.db = res;
-        Promise.all([
-          Post(this.db.sequelize),
-          Category(this.db.sequelize),
-        ]).then((resSum) => {
-          // TODO: вынести отдельно
-
-          this.db.posts = resSum[0];
-          this.db.category = resSum[1];
-        });
+        console.log("--connection Category repo--");
+        this.repo = res.Category;
         return res;
       })
-      .catch((e) => console.log("eror CATCH connects:", e));
+      .catch((error) => {
+        console.log("error CATCH Category connects:", error);
+        let errorDB = error as Error;
+        throw new DataBaseError(`bad connection - ${errorDB.name}`);
+      });
   }
 
-  async getPosts() {
+  async getCategories() {
     try {
-      const posts = await this.db.posts.findAll();
-      return posts;
+      const categories = await this.repo.findAll({
+        attributes: ["id", "category_name"],
+        include: ["author_category"],
+      });
+      return categories;
     } catch (error: unknown) {
-      console.log("error--", error);
-
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
-  async createPost(post) {
+  async getCategoryById(categoryId) {
     try {
-      const data = await this.db.posts.create(post);
-      return data;
+      const category = await this.repo.findByPk(categoryId, {
+        attributes: ["id", "category_name"],
+        include: ["author_category"],
+      });
+      return category;
     } catch (error: unknown) {
-      console.log("error-", error);
-
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
-  async updatePost(post, postId) {
+  async createCategory(categoryInfo) {
     try {
-      const data = await this.db.posts.update(
-        { ...post },
-        {
-          where: {
-            uid: postId,
-          },
-        }
-      );
-      return data;
+      const newCategory = await this.repo.create(categoryInfo);
+      return newCategory;
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
 
-  async deletePost(postId) {
+  async deleteCategory(categoryId) {
     try {
-      return await this.db.posts.destroy({
+      return await this.repo.destroy({
         where: {
-          uid: postId,
+          id: categoryId,
         },
       });
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new ServerError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.name}`);
     }
   }
-} */
+}
 
-export default {};
+export default new CategoryRepository();

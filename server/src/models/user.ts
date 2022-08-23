@@ -36,14 +36,6 @@ const User = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      user_role: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
     },
     {
       paranoid: true,
@@ -57,6 +49,13 @@ const User = (sequelize, DataTypes) => {
       },
     }
   );
+
+  userModel.associate = (models) => {
+    userModel.belongsTo(models.Role, {
+      foreignKey: "role_name",
+      as: "role",
+    });
+  };
 
   return userModel;
 };

@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult, body } from "express-validator";
+import { validationResult } from "express-validator";
 import { responseError } from "../helpers/responses";
+
+export async function validation(schema, req, res, next) {
+  req["express-validator#contexts"] = schema;
+  next();
+}
 
 export const validatorMiddleware = async (
   req: Request,

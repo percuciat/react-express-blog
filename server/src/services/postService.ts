@@ -13,22 +13,8 @@ interface IpostService {
   posts: TMethods<{ [key: string]: any }>; */
 }
 
-/* class PostService implements IpostService {
-  client: any;
-  models: any;
-  constructor(sequelize) {
-    PostModel(sequelize);
-    this.client = sequelize;
-    this.models = sequelize.models;
-  }
-  async getPosts(query) {
-    return "Worked!!!";
-  }
-}
-
-export default PostService; */
-
-import PostRepository from "../repository/posts";
+import PostRepository from "../repository/post";
+import CategoryRepository from "../repository/category";
 
 class PostService {
   constructor() {}
@@ -42,9 +28,45 @@ class PostService {
     }
   }
 
+  async getPostCategories() {
+    try {
+      const res = await CategoryRepository.getCategories();
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async getPostCategoryById(categoryId) {
+    try {
+      const res = await CategoryRepository.getCategoryById(categoryId);
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async getPostById(postId) {
+    try {
+      const res = await PostRepository.getPostById(postId);
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   async createPost(post) {
     try {
       const res = await PostRepository.createPost(post);
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async createPostCategory(categoryInfo) {
+    try {
+      const res = await CategoryRepository.createCategory(categoryInfo);
       return res;
     } catch (error: any) {
       throw error;
@@ -63,9 +85,33 @@ class PostService {
     }
   }
 
-  async deletePost(postId) {
+  async deletePostCategory(categoryId) {
     try {
-      const res = await PostRepository.deletePost(postId);
+      const res = await CategoryRepository.deleteCategory(categoryId);
+      if (!res) {
+        throw new NotFoundError("Cannot delete category");
+      }
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async restorePost(postId) {
+    try {
+      const res = await PostRepository.restorePost(postId);
+      if (!res) {
+        throw new NotFoundError("Cannot restore post");
+      }
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async deletePost(postId, isForce) {
+    try {
+      const res = await PostRepository.deletePost(postId, isForce);
       if (!res) {
         throw new NotFoundError("Cannot delete post");
       }
@@ -77,111 +123,3 @@ class PostService {
 }
 
 export default new PostService();
-
-/* import PostModel from '../models/postModel';
-import {v4} from 'uuid';
-import {IResponse} from './types';
-
-type TMethods<T> = {
-    (...args: Array<T>): Promise<IResponse>
-}
-
-interface IpostService {
-    create: TMethods<string>
-    update: TMethods<string>
-    delete: TMethods<string>
-    posts: TMethods<{[key:string]: any}>
-}
-
-const postService: IpostService =  {
-    async create(title, content, category) {
-        try {
-            const _uniqId = v4();
-            const post = await PostModel.findOne({title});
-            if (post) {
-                return {
-                    status: 'Error',
-                    message: 'Post already exist.',
-                    payload: []
-                }
-            } else {
-                const newPost = await PostModel.create({_uniqId, title, content, category: category});
-                return {
-                    status: 'OK',
-                    message: 'Post has created.',
-                    payload: newPost
-                }
-            }
-        } catch (e) {
-            return {
-                status: 'Error',
-                message: `Server Error ${e}`,
-                payload: []
-            }
-        }
-    },
-
-    async update(_id, title, content, category) {
-        try {
-            const newPost = await PostModel.findByIdAndUpdate({_id}, {title, content, category}, {new: true});
-            return {
-                status: 'OK',
-                message: 'Post has updated.',
-                payload: newPost
-            }
-        } catch (e) {
-            return {
-                status: 'Error',
-                message: `Post not found for updating operation. ${e}`,
-                payload: []
-            }
-        }
-    },
-
-    async delete(_id) {
-        const post = await PostModel.findByIdAndDelete({_id});
-        if(!post) {
-            return {
-                status: 'Error',
-                message: 'Post not found for deleting operation.',
-                payload: []
-            }
-        } else {
-            return {
-                status: 'OK',
-                message: 'Post has deleted.',
-                payload: post
-            }
-        }
-    },
-
-    async posts(query) {
-        const {count = 25, filterSort, category, page} = query;
-        const mapFilterSort = {
-            date: {createdAt: -1},
-            title: {title: ''}
-        };
-        const setCategory = category ? {category: category} : {}
-        
-        try {
-            const postsAll = await PostModel
-                .find(setCategory)
-                .sort(mapFilterSort[filterSort])
-                .limit(+count);
-                
-            return {
-                status: 'OK',
-                message: 'Success',
-                payload: postsAll
-            }
-        } catch (e) {
-            return {
-                status: 'Error',
-                message: `Server Error ${e}`,
-                payload: []
-            }
-        }
-    }
-};
-
-export default postService; */

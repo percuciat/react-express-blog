@@ -1,6 +1,4 @@
-const MYSQL_ERRORS = {
-  ER_DUP_ENTRY: "ER_DUP_ENTRY",
-};
+import { BaseError } from "sequelize";
 
 function convert(message) {
   let textMsg = "";
@@ -16,9 +14,9 @@ function convert(message) {
   return textMsg;
 }
 
-export class NotFoundError extends Error {
+export class NotFoundError extends BaseError {
   constructor(message) {
-    const textMsg = `Not Found\n${convert(message)}`;
+    const textMsg = `Not Found: ${convert(message)}`;
     super(textMsg);
     this.status = 404;
     this.expose = true;
@@ -27,7 +25,7 @@ export class NotFoundError extends Error {
   expose: boolean;
 }
 
-export class ServerError extends Error {
+export class ServerError extends BaseError {
   constructor(message) {
     const textMsg = `${convert(message)}`;
     super(textMsg);
@@ -38,9 +36,20 @@ export class ServerError extends Error {
   expose: boolean;
 }
 
-class LogicError extends Error {
+export class DataBaseError extends BaseError {
   constructor(message) {
-    const textMsg = `LogicError\n${convert(message)}`;
+    const textMsgs = `Database: ${convert(message)}`;
+    super(textMsgs);
+    this.status = 500;
+    this.expose = true;
+  }
+  status: number;
+  expose: boolean;
+}
+
+export class LogicError extends BaseError {
+  constructor(message) {
+    const textMsg = `LogicError: ${convert(message)}`;
     super(textMsg);
     this.status = 400;
     this.expose = true;
@@ -49,7 +58,7 @@ class LogicError extends Error {
   expose: boolean;
 }
 
-export class BadRequestError extends Error {
+export class BadRequestError extends BaseError {
   constructor(message) {
     const textMsg = `BadRequestError\n${convert(message)}`;
     super(textMsg);
