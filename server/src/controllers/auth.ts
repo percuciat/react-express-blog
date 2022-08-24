@@ -1,12 +1,4 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import {
-  generateAccessToken,
-  generateActiveToken,
-  generateRefreshToken,
-} from "../helpers/generateToken";
-
 import { responseSuccess, responseError } from "../helpers/responses";
 import AuthService from "../services/auth";
 import AuthRepository from "../repository/auth";
@@ -17,15 +9,8 @@ const authController = {
   async registration(req: Request, res: Response) {
     try {
       const userInfo = req.body;
-      const newUser = await service.registration(userInfo);
-      return responseSuccess(res, newUser);
-
-      return res.json({
-        status: "OK",
-        msg: "Register successfully!",
-        /* data: newUser,
-        activeToken, */
-      });
+      await service.registration(userInfo);
+      return responseSuccess(res, "Registration has successfully completed!");
     } catch (error: any) {
       return responseError(res, error.status, error.message);
     }
@@ -33,8 +18,41 @@ const authController = {
   async login(req: Request, res: Response) {
     try {
       const userInfo = req.body;
-      const newUser = await service.login(userInfo);
-      return responseSuccess(res, newUser);
+      const { access_token, refresh_token } = await service.login(userInfo);
+      return responseSuccess(res, {
+        info: "Authorization has successfully completed!",
+        access_token: access_token,
+        refresh_token: refresh_token,
+      });
+    } catch (error: any) {
+      return responseError(res, error.status, error.message);
+    }
+  },
+
+  async refreshToken(req: Request, res: Response) {
+    try {
+      const token = req.body;
+      const { access_token, refresh_token } = await service.refresh(
+        token.refresh_token
+      );
+      return responseSuccess(res, {
+        info: "New pair of tokens has successfully generated!",
+        access_token: access_token,
+        refresh_token: refresh_token,
+      });
+    } catch (error: any) {
+      return responseError(res, error.status, error.message);
+    }
+  },
+
+  async logout(req: Request, res: Response) {
+    try {
+      const { user_id } = req.body;
+      await service.logout(user_id);
+      return responseSuccess(res, {
+        info: "Success!",
+        success: true,
+      });
     } catch (error: any) {
       return responseError(res, error.status, error.message);
     }

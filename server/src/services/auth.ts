@@ -3,11 +3,6 @@ import {
   ServerError,
   AuthenticationError,
 } from "../helpers/errors";
-import { generateActiveToken } from "../helpers/generateToken";
-import bcrypt from "bcrypt";
-
-import { compareSync } from "bcrypt";
-
 
 /* 
 
@@ -30,9 +25,7 @@ class AuthService {
 
   async registration(userInfo) {
     try {
-      const res = await this.authRepo.registrationUser(userInfo);
-      //const userWithToken = generateActiveToken(res.user_name);
-      return res;
+      await this.authRepo.registrationUser(userInfo);
     } catch (error: any) {
       throw error;
     }
@@ -40,12 +33,30 @@ class AuthService {
 
   async login(userInfo) {
     try {
-     // const { user_name, user_password } = userInfo;
-      const userInDB = await this.authRepo.loginUser(userInfo);
-      
-      /* const userWithToken = generateActiveToken(res.user_name);
-      return { token: `Bearer ${userWithToken}` }; */
-      return userInDB;
+      const user = await this.authRepo.authenticationUser(userInfo);
+      const pairOfTokens = await this.authRepo.generateTokens(user.id);
+      return pairOfTokens;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async refresh(token) {
+    try {
+      const userId = await this.authRepo.refreshToken(token);
+      const pairOfTokens = await this.authRepo.generateTokens(userId);
+      return pairOfTokens;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async logout(userId) {
+    try {
+      const result = await this.authRepo.logout(userId);
+      /* const userId = await this.authRepo.refreshToken(token);
+      const pairOfTokens = await this.authRepo.generateTokens(userId);
+      return pairOfTokens; */
     } catch (error: any) {
       throw error;
     }

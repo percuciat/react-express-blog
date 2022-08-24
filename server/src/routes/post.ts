@@ -8,9 +8,10 @@ import {
   checkGetById,
 } from "../helpers/schemas/postValidation";
 import { validatorMiddleware } from "../middlewares/validator";
+import { verifyToken } from "../middlewares/auth";
 const router = express.Router();
 
-router.get("/", PostController.getPosts);
+router.get("/", verifyToken, PostController.getPosts);
 
 router.get(
   "/id/:id",

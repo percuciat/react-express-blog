@@ -10,13 +10,12 @@ export const checkRegistration = [
   body("user_password")
     .isLength({ min: 5 })
     .withMessage("Password must contains more than 5 letters"),
-  body("password_confirm")
-    .custom(async (confirmPassword, { req }) => {
-      const password = req.body.user_password;
-      if (password !== confirmPassword) {
-        throw new Error("Passwords must be the same");
-      }
-    })
+  body("password_confirm").custom(async (confirmPassword, { req }) => {
+    const password = req.body.user_password;
+    if (password !== confirmPassword) {
+      throw new Error("Passwords must be the same");
+    }
+  }),
 ];
 
 export const checkLogin = [
@@ -26,4 +25,12 @@ export const checkLogin = [
   body("user_password")
     .isLength({ min: 5 })
     .withMessage("Password must contains more than 5 letters"),
+];
+
+export const checkRefreshToken = [
+  body("refresh_token").notEmpty().withMessage("Invalid refresh token field"),
+];
+
+export const checkLogout = [
+  body("user_id").isUUID().withMessage("Invalid userId"),
 ];
