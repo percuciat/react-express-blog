@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
-import PostService from "../services/postService";
+import PostService from "../services/post";
+import PostRepository from "../repository/post";
+import CategoryRepository from "../repository/category";
 import { responseSuccess, responseError } from "../helpers/responses";
 
+const service = new PostService(PostRepository, CategoryRepository);
+
+// TODO: make class
 const postController = {
   async getPosts(req: Request, res: Response) {
     try {
-      const posts = await PostService.getPosts();
+      const posts = await service.getPosts();
       return responseSuccess(res, posts);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -14,7 +19,7 @@ const postController = {
 
   async getPostCategories(req: Request, res: Response) {
     try {
-      const categories = await PostService.getPostCategories();
+      const categories = await service.getPostCategories();
       return responseSuccess(res, categories);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -24,7 +29,7 @@ const postController = {
   async getPostById(req: Request, res: Response) {
     const postId = req.params.id;
     try {
-      const posts = await PostService.getPostById(postId);
+      const posts = await service.getPostById(postId);
       return responseSuccess(res, posts);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -34,7 +39,7 @@ const postController = {
   async getPostCategoryById(req: Request, res: Response) {
     try {
       const categoryId = req.params.id;
-      const category = await PostService.getPostCategoryById(categoryId);
+      const category = await service.getPostCategoryById(categoryId);
       return responseSuccess(res, category);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -44,7 +49,7 @@ const postController = {
   async createPost(req: Request, res: Response) {
     try {
       const post = req.body;
-      const resCreate = await PostService.createPost(post);
+      const resCreate = await service.createPost(post);
       return responseSuccess(res, resCreate);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -54,7 +59,7 @@ const postController = {
   async createPostCategory(req: Request, res: Response) {
     try {
       const categoryInfo = req.body;
-      const resCreate = await PostService.createPostCategory(categoryInfo);
+      const resCreate = await service.createPostCategory(categoryInfo);
       return responseSuccess(res, resCreate);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -65,7 +70,7 @@ const postController = {
     try {
       const postId = req.params.id;
       const newPost = req.body;
-      const resPost = await PostService.updatePost(newPost, postId);
+      const resPost = await service.updatePost(newPost, postId);
       return responseSuccess(res, resPost);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -76,7 +81,7 @@ const postController = {
     try {
       const postId = req.params.id;
       const isForce = req.params.flag;
-      const resDelete = await PostService.deletePost(postId, isForce);
+      const resDelete = await service.deletePost(postId, isForce);
       return responseSuccess(res, resDelete);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -86,7 +91,7 @@ const postController = {
   async restorePost(req: Request, res: Response) {
     try {
       const postId = req.params.id;
-      const resRestore = await PostService.restorePost(postId);
+      const resRestore = await service.restorePost(postId);
       return responseSuccess(res, resRestore);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
@@ -96,7 +101,7 @@ const postController = {
   async deletePostCategory(req: Request, res: Response) {
     try {
       const categoryId = req.params.id;
-      const resDelete = await PostService.deletePostCategory(categoryId);
+      const resDelete = await service.deletePostCategory(categoryId);
       return responseSuccess(res, resDelete);
     } catch (error: any) {
       return responseError(res, error.status, error.message);

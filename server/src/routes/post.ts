@@ -4,64 +4,61 @@ import PostController from "../controllers/post";
 import {
   checkCreatePost,
   checkUpdatePost,
-  checkCreateCategory,
+  checkCreatePostCategory,
   checkGetById,
-} from "../helpers/validationSchema";
-import { validatorMiddleware, validation } from "../middlewares/validator";
+} from "../helpers/schemas/postValidation";
+import { validatorMiddleware } from "../middlewares/validator";
 const router = express.Router();
 
 router.get("/", PostController.getPosts);
 
 router.get(
   "/id/:id",
-  checkGetById,
-  validatorMiddleware,
+  validatorMiddleware(checkGetById),
   PostController.getPostById
 );
 
 router.post(
   "/",
-  checkCreatePost,
-  validatorMiddleware,
+  validatorMiddleware(checkCreatePost),
   PostController.createPost
 );
 
 router.get(
   "/restore/id/:id",
-  checkGetById,
-  validatorMiddleware,
+  validatorMiddleware(checkGetById),
   PostController.restorePost
 );
 
 router.put(
   "/id/:id",
-  checkUpdatePost,
-  validatorMiddleware,
+  validatorMiddleware(checkUpdatePost),
   PostController.updatePost
 );
 
-router.delete("/id/:id", checkGetById, PostController.deletePost);
+router.delete(
+  "/id/:id",
+  validatorMiddleware(checkGetById),
+  PostController.deletePost
+);
 
 router.get("/category", PostController.getPostCategories);
 
 router.get(
   "/category/id/:id",
-  checkGetById,
-  validatorMiddleware,
+  validatorMiddleware(checkGetById),
   PostController.getPostCategoryById
 );
 
 router.post(
   "/category",
-  checkCreateCategory,
-  validatorMiddleware,
+  validatorMiddleware(checkCreatePostCategory),
   PostController.createPostCategory
 );
 
 router.delete(
   "/category/id/:id",
-  checkGetById,
-  validatorMiddleware,
+  validatorMiddleware(checkGetById),
   PostController.deletePostCategory
 );
 

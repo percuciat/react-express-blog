@@ -1,12 +1,19 @@
 import express, { json } from "express";
-/* import authController from '../controllers/authController'; */
+import authController from "../controllers/auth";
+import { validatorMiddleware } from "../middlewares/validator";
+import {
+  checkRegistration,
+  checkLogin,
+} from "../helpers/schemas/authValidation";
 const router = express.Router();
 
-/* router.post('/register', validRegister, authController.register); */
+router.post("/login", validatorMiddleware(checkLogin), authController.login);
 
-router.get("/auth/signup", async function (r, res) {
-  return res.json({ key: "value" });
-});
+router.post(
+  "/registration",
+  validatorMiddleware(checkRegistration),
+  authController.registration
+);
 
 /*router.post('/welcome', verifyToken, (req, res, ) => {
     res.status(200).send("Welcome 🙌 ");

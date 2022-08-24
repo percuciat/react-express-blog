@@ -1,4 +1,4 @@
-import { connect } from "../config";
+import db from "../config";
 
 import { BadRequestError, DataBaseError, NotFoundError } from "../helpers/errors";
 import type { Error } from "sequelize";
@@ -7,18 +7,7 @@ class CategoryRepository {
   repo: any;
 
   constructor() {
-    this.repo = {};
-    connect()
-      .then((res) => {
-        console.log("--connection Category repo--");
-        this.repo = res.Category;
-        return res;
-      })
-      .catch((error) => {
-        console.log("error CATCH Category connects:", error);
-        let errorDB = error as Error;
-        throw new DataBaseError(`bad connection - ${errorDB.name}`);
-      });
+    this.repo = db.Category;
   }
 
   async getCategories() {

@@ -43,8 +43,8 @@ const User = (sequelize, DataTypes) => {
       timestamps: false,
       hooks: {
         beforeCreate: (user) => {
-          const salt = bcrypt.genSaltSync();
-          user.user_name = bcrypt.hashSync(user.user_name, salt);
+         // const salt = bcrypt.genSaltSync();
+          user.user_password = bcrypt.hashSync(user.user_password, 6);
         },
       },
     }

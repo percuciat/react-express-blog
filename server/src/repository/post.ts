@@ -1,4 +1,4 @@
-import { connect } from "../config";
+import db from "../config";
 /* import { v4 } from "uuid"; */
 import {
   BadRequestError,
@@ -20,17 +20,7 @@ class PostRepository {
   repo: any;
 
   constructor() {
-    this.repo = {};
-    connect()
-      .then((res) => {
-        this.repo = res.Post;
-        return res;
-      })
-      .catch((error) => {
-        console.log("error CATCH Post connects:", error);
-        let errorDB = error as Error;
-        throw new DataBaseError(`bad connection - ${errorDB.name}`);
-      });
+    this.repo = db.Post;
   }
 
   async getPosts() {

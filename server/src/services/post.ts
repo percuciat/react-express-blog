@@ -13,15 +13,17 @@ interface IpostService {
   posts: TMethods<{ [key: string]: any }>; */
 }
 
-import PostRepository from "../repository/post";
-import CategoryRepository from "../repository/category";
-
 class PostService {
-  constructor() {}
+  postRepo: any;
+  categoryPostRepo: any;
+  constructor(postRepo, categoryPostRepo) {
+    this.postRepo = postRepo;
+    this.categoryPostRepo = categoryPostRepo;
+  }
 
   async getPosts() {
     try {
-      const res = await PostRepository.getPosts();
+      const res = await this.postRepo.getPosts();
       return res;
     } catch (error: any) {
       throw error;
@@ -30,7 +32,7 @@ class PostService {
 
   async getPostCategories() {
     try {
-      const res = await CategoryRepository.getCategories();
+      const res = await this.postRepo.getCategories();
       return res;
     } catch (error: any) {
       throw error;
@@ -39,7 +41,10 @@ class PostService {
 
   async getPostCategoryById(categoryId) {
     try {
-      const res = await CategoryRepository.getCategoryById(categoryId);
+      const res = await this.categoryPostRepo.getCategoryById(categoryId);
+      if (!res) {
+        throw new NotFoundError("Post category not found");
+      }
       return res;
     } catch (error: any) {
       throw error;
@@ -48,7 +53,10 @@ class PostService {
 
   async getPostById(postId) {
     try {
-      const res = await PostRepository.getPostById(postId);
+      const res = await this.postRepo.getPostById(postId);
+      if (!res) {
+        throw new NotFoundError("Post not found");
+      }
       return res;
     } catch (error: any) {
       throw error;
@@ -57,7 +65,7 @@ class PostService {
 
   async createPost(post) {
     try {
-      const res = await PostRepository.createPost(post);
+      const res = await this.postRepo.createPost(post);
       return res;
     } catch (error: any) {
       throw error;
@@ -66,7 +74,7 @@ class PostService {
 
   async createPostCategory(categoryInfo) {
     try {
-      const res = await CategoryRepository.createCategory(categoryInfo);
+      const res = await this.categoryPostRepo.createCategory(categoryInfo);
       return res;
     } catch (error: any) {
       throw error;
@@ -75,7 +83,7 @@ class PostService {
 
   async updatePost(post, postId) {
     try {
-      const res = await PostRepository.updatePost(post, postId);
+      const res = await this.postRepo.updatePost(post, postId);
       if (!res[0]) {
         throw new NotFoundError("Cannot update post");
       }
@@ -87,7 +95,7 @@ class PostService {
 
   async deletePostCategory(categoryId) {
     try {
-      const res = await CategoryRepository.deleteCategory(categoryId);
+      const res = await this.categoryPostRepo.deleteCategory(categoryId);
       if (!res) {
         throw new NotFoundError("Cannot delete category");
       }
@@ -99,7 +107,7 @@ class PostService {
 
   async restorePost(postId) {
     try {
-      const res = await PostRepository.restorePost(postId);
+      const res = await this.postRepo.restorePost(postId);
       if (!res) {
         throw new NotFoundError("Cannot restore post");
       }
@@ -111,7 +119,7 @@ class PostService {
 
   async deletePost(postId, isForce) {
     try {
-      const res = await PostRepository.deletePost(postId, isForce);
+      const res = await this.postRepo.deletePost(postId, isForce);
       if (!res) {
         throw new NotFoundError("Cannot delete post");
       }
@@ -122,4 +130,4 @@ class PostService {
   }
 }
 
-export default new PostService();
+export default PostService;

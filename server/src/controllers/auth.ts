@@ -8,17 +8,17 @@ import {
 } from "../helpers/generateToken";
 
 import { responseSuccess, responseError } from "../helpers/responses";
-import authService from "../services/authService";
+import AuthService from "../services/auth";
+import AuthRepository from "../repository/auth";
 
 const CLIENT_URL = `${process.env.BASE_URL}`;
-
+const service = new AuthService(AuthRepository);
 const authController = {
-  async register(req: Request, res: Response) {
+  async registration(req: Request, res: Response) {
     try {
       const userInfo = req.body;
-      const newUser = await authService.register(userInfo);
-      return responseSuccess(res, newUser) 
-     
+      const newUser = await service.registration(userInfo);
+      return responseSuccess(res, newUser);
 
       return res.json({
         status: "OK",
@@ -26,6 +26,15 @@ const authController = {
         /* data: newUser,
         activeToken, */
       });
+    } catch (error: any) {
+      return responseError(res, error.status, error.message);
+    }
+  },
+  async login(req: Request, res: Response) {
+    try {
+      const userInfo = req.body;
+      const newUser = await service.login(userInfo);
+      return responseSuccess(res, newUser);
     } catch (error: any) {
       return responseError(res, error.status, error.message);
     }
@@ -76,4 +85,4 @@ const authController = {
   },
 };*/
 
-export default authController; 
+export default authController;

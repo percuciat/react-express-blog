@@ -16,7 +16,7 @@ function convert(message) {
 
 export class NotFoundError extends BaseError {
   constructor(message) {
-    const textMsg = `Not Found: ${convert(message)}`;
+    const textMsg = `${convert(message)}`;
     super(textMsg);
     this.status = 404;
     this.expose = true;
@@ -38,7 +38,7 @@ export class ServerError extends BaseError {
 
 export class DataBaseError extends BaseError {
   constructor(message) {
-    const textMsgs = `Database: ${convert(message)}`;
+    const textMsgs = `${convert(message)}`;
     super(textMsgs);
     this.status = 500;
     this.expose = true;
@@ -47,11 +47,22 @@ export class DataBaseError extends BaseError {
   expose: boolean;
 }
 
-export class LogicError extends BaseError {
+export class AuthenticationError extends BaseError {
   constructor(message) {
-    const textMsg = `LogicError: ${convert(message)}`;
+    const textMsg = `${convert(message)}`;
     super(textMsg);
-    this.status = 400;
+    this.status = 403;
+    this.expose = true;
+  }
+  status: number;
+  expose: boolean;
+}
+
+export class AuthorizationError extends BaseError {
+  constructor(message) {
+    const textMsg = `${convert(message)}`;
+    super(textMsg);
+    this.status = 401;
     this.expose = true;
   }
   status: number;
