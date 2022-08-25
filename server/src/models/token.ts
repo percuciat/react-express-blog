@@ -14,7 +14,6 @@ const Token = (sequelize, DataTypes) => {
       },
     },
     {
-      sequelize,
       timestamps: false,
     }
   );

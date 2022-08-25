@@ -39,12 +39,11 @@ const User = (sequelize, DataTypes) => {
     },
     {
       paranoid: true,
-      sequelize,
       timestamps: false,
       hooks: {
         beforeCreate: (user) => {
-          // const salt = bcrypt.genSaltSync();
-          user.user_password = bcrypt.hashSync(user.user_password, 6);
+          const salt = 6;
+          user.user_password = bcrypt.hashSync(user.user_password, salt);
         },
       },
     }
@@ -52,7 +51,7 @@ const User = (sequelize, DataTypes) => {
 
   userModel.associate = (models) => {
     userModel.belongsTo(models.Role, {
-      foreignKey: "role_name",
+      foreignKey: { name: "role_id", defaultValue: "3" },
       as: "role",
     });
     userModel.hasOne(models.Token, {

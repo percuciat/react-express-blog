@@ -1,5 +1,38 @@
-const Author = (sequelize, DataTypes) => {
-  const authorModel = sequelize.define(
+import { InstanceSequelize } from "./../config/sequelize";
+import {
+  Sequelize,
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  ModelStatic,
+  Association,
+  ModelCtor,
+  BuildOptions,
+} from "sequelize";
+
+type DataTypes = typeof DataTypes;
+
+interface AuthorModel
+  extends Model<
+    InferAttributes<AuthorModel>,
+    InferCreationAttributes<AuthorModel>
+  > {
+  id: CreationOptional<string>;
+  author_name: string;
+  associate: (models: any) => void;
+}
+
+type Auth = ModelStatic<AuthorModel> & {
+  associate: (models: any) => void;
+};
+/* type UserStatic = AuthorModel & { associate: (models: any) => void } & {
+  new (values?: Record<string, unknown>, options?: BuildOptions): UserInstance;
+}; */
+
+const Author = (sequelize: InstanceSequelize, DataTypes: DataTypes) => {
+  const authorModel = sequelize.define<AuthorModel>(
     "Author",
     {
       id: {
@@ -29,12 +62,11 @@ const Author = (sequelize, DataTypes) => {
     {
       paranoid: true,
       tableName: "Authors",
-      sequelize,
       timestamps: false,
     }
-  );
+  ) as any;
 
- authorModel.associate = (models) => {
+  authorModel.associate = (models) => {
     authorModel.hasMany(models.Category, {
       foreignKey: "authorId",
       as: "author_category",
@@ -44,6 +76,15 @@ const Author = (sequelize, DataTypes) => {
       as: "author",
     });
   };
+
+  /* authorModel.hasMany(sequelize.Category, {
+    foreignKey: "authorId",
+    as: "author_category",
+  });
+  authorModel.hasMany(models.Post, {
+    foreignKey: "authorId",
+    as: "author",
+  }); */
 
   return authorModel;
 };

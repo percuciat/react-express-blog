@@ -1,17 +1,4 @@
-import { BadRequestError, ServerError, NotFoundError } from "../helpers/errors";
-
-type TMethods<T> = {
-  (...args: Array<T>): Promise<any>;
-};
-
-interface IpostService {
-  client: any;
-  models: any;
-  /* create: TMethods<string>;
-  update: TMethods<string>;
-  delete: TMethods<string>;
-  posts: TMethods<{ [key: string]: any }>; */
-}
+import { ServerError, NotFoundError } from "../helpers/errors";
 
 class PostService {
   postRepo: any;

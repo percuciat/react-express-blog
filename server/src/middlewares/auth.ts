@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { responseSuccess, responseError } from "../helpers/responses";
+import { responseError } from "../helpers/responses";
 // hack
 interface IUser extends Request {
   user?: any;
@@ -18,5 +18,18 @@ export const verifyToken = (req: IUser, res: Response, next: NextFunction) => {
     return next();
   } catch (err) {
     return responseError(res, 401, "Invalid Token");
+  }
+};
+
+export const checkRefreshCookie = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const cookie = req.cookies.refreshToken;
+  if (cookie) {
+    return responseError(res, 500, "You are already logined");
+  } else {
+    return next();
   }
 };

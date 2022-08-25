@@ -21,7 +21,6 @@ const Category = (sequelize, DataTypes) => {
     {
       tableName: "Categories",
       paranoid: true,
-      sequelize,
       timestamps: false,
     }
   );

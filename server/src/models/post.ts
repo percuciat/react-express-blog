@@ -37,7 +37,6 @@ const Post = (sequelize, DataTypes) => {
     {
       paranoid: true,
       tableName: "Posts",
-      sequelize,
       timestamps: true,
     }
   );

@@ -1,9 +1,3 @@
-import {
-  BadRequestError,
-  ServerError,
-  AuthenticationError,
-} from "../helpers/errors";
-
 /* 
 
 user_name": "Oleg",
@@ -53,10 +47,7 @@ class AuthService {
 
   async logout(userId) {
     try {
-      const result = await this.authRepo.logout(userId);
-      /* const userId = await this.authRepo.refreshToken(token);
-      const pairOfTokens = await this.authRepo.generateTokens(userId);
-      return pairOfTokens; */
+      await this.authRepo.logout(userId);
     } catch (error: any) {
       throw error;
     }

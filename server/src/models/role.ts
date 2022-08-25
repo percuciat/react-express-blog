@@ -6,6 +6,7 @@ const Role = (sequelize, DataTypes) => {
         type: DataTypes.ENUM,
         values: ["admin", "user", "viewer"],
         unique: true,
+        defaultValue: "viewer",
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -15,13 +16,12 @@ const Role = (sequelize, DataTypes) => {
     {
       paranoid: true,
       tableName: "Roles",
-      sequelize,
       timestamps: false,
     }
   );
   roleModel.associate = (models) => {
     roleModel.hasMany(models.User, {
-      foreignKey: "role_name",
+      foreignKey: { name: "role_id", defaultValue: "3" },
       as: "role",
     });
   };

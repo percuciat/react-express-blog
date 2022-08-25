@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import authController from "../controllers/auth";
 import { validatorMiddleware } from "../middlewares/validator";
 import {
@@ -7,10 +7,15 @@ import {
   checkRefreshToken,
   checkLogout,
 } from "../helpers/schemas/authValidation";
-import { verifyToken } from "../middlewares/auth";
+import { verifyToken, checkRefreshCookie } from "../middlewares/auth";
 const router = express.Router();
 
-router.post("/login", validatorMiddleware(checkLogin), authController.login);
+router.post(
+  "/login",
+  validatorMiddleware(checkLogin),
+  checkRefreshCookie,
+  authController.login
+);
 
 router.post(
   "/registration",
@@ -20,6 +25,7 @@ router.post(
 
 router.post(
   "/refresh",
+  verifyToken,
   validatorMiddleware(checkRefreshToken),
   authController.refreshToken
 );

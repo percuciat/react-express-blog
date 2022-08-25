@@ -1,75 +1,44 @@
 import db from "../config";
-/* import { v4 } from "uuid"; */
-import {
-  BadRequestError,
-  ServerError,
-  NotFoundError,
-  DataBaseError,
-} from "../helpers/errors";
+import { DataBaseError } from "../helpers/errors";
 import type { Error } from "sequelize";
 
-/*
-
- Если в Node.JS что-то сильно не изменилось, вы в значительной степени вынуждены использовать доступ к базе данных async для масштабирования, так как все ваши запросы пользователя будут выполняться в одном потоке и синхронно ожидают, что база данных действительно снизит вашу производительность. Если один пользователь выполняет медленную операцию, всем остальным пользователям придется подождать, пока это не будет сделано.
-
-Node.JS действительно построен для потока событий, зависящего от async, вы получите гораздо лучшую производительность, работая с ним, чем работая над ним.
-
-*/
-
 class PostRepository {
-  repo: any;
+  postModel: any;
 
   constructor() {
-    this.repo = db.Post;
+    this.postModel = db.Post;
   }
 
   async getPosts() {
     try {
-      const posts = await this.repo.findAll({
+      const posts = await this.postModel.findAll({
         attributes: ["id", "title", "content", "status"],
         include: ["category", "author"],
       });
       return posts;
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 
   async getPostById(postId) {
     try {
-      const posts = await this.repo.findByPk(postId, {
+      const posts = await this.postModel.findByPk(postId, {
         attributes: ["id", "title", "content", "status"],
         include: ["category", "author"],
       });
       return posts;
     } catch (error: unknown) {
-      console.log("error--", error);
-
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 
   async createPost(post) {
     try {
-      /* let dataPost = await this.repo.findOne({
-        where: {
-          title: post.title,
-        },
-        paranoid: false,
-      });
-
-      if (dataPost) {
-        dataPost = await this.repo.restore({
-          where: {
-            title: post.title,
-          },
-        });
-        return dataPost;
-      } */
       // TODO: middleWare for checking
-      let fadedPost = await this.repo.findOne({
+      let fadedPost = await this.postModel.findOne({
         where: {
           title: post.title,
         },
@@ -78,19 +47,17 @@ class PostRepository {
       if (fadedPost) {
         throw new DataBaseError("Cannot create post");
       }
-      const dataPost = await this.repo.create(post);
+      const dataPost = await this.postModel.create(post);
       return dataPost;
     } catch (error: unknown) {
-      console.log("error-", error);
-
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 
   async updatePost(post, postId) {
     try {
-      const data = await this.repo.update(
+      const data = await this.postModel.update(
         { ...post },
         {
           where: {
@@ -101,26 +68,26 @@ class PostRepository {
       return data;
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 
   async restorePost(postId) {
     try {
-      return await this.repo.restore({
+      return await this.postModel.restore({
         where: {
           id: postId,
         },
       });
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 
   async deletePost(postId, isForce = false) {
     try {
-      return await this.repo.destroy({
+      return await this.postModel.destroy({
         where: {
           id: postId,
         },
@@ -128,7 +95,7 @@ class PostRepository {
       });
     } catch (error: unknown) {
       let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.name}`);
+      throw new DataBaseError(`${errorDB.message}`);
     }
   }
 }
