@@ -1,8 +1,18 @@
 import { ServerError, NotFoundError } from "../helpers/errors";
+import { InterfaceCategoryRepository } from "../repository/category";
+import { InterfacePostRepository } from "../repository/post";
+
+/* interface RepoCreator<U> {
+  new (...args: ModelStatic<any>[]): U;
+}
+
+function createRepository<Y>(repo: RepoCreator<Y>, ...args: ModelStatic<any>[]): Y {
+  return new repo(...args);
+} */
 
 class PostService {
-  postRepo: any;
-  categoryPostRepo: any;
+  postRepo: InterfacePostRepository;
+  categoryPostRepo: InterfaceCategoryRepository;
   constructor(postRepo, categoryPostRepo) {
     this.postRepo = postRepo;
     this.categoryPostRepo = categoryPostRepo;
@@ -19,14 +29,14 @@ class PostService {
 
   async getPostCategories() {
     try {
-      const res = await this.postRepo.getCategories();
+      const res = await this.categoryPostRepo.getCategories();
       return res;
     } catch (error: any) {
       throw error;
     }
   }
 
-  async getPostCategoryById(categoryId) {
+  async getPostCategoryById(categoryId: string) {
     try {
       const res = await this.categoryPostRepo.getCategoryById(categoryId);
       if (!res) {
@@ -38,7 +48,7 @@ class PostService {
     }
   }
 
-  async getPostById(postId) {
+  async getPostById(postId: string) {
     try {
       const res = await this.postRepo.getPostById(postId);
       if (!res) {
@@ -68,7 +78,7 @@ class PostService {
     }
   }
 
-  async updatePost(post, postId) {
+  async updatePost(post, postId: string) {
     try {
       const res = await this.postRepo.updatePost(post, postId);
       if (!res[0]) {
@@ -80,7 +90,7 @@ class PostService {
     }
   }
 
-  async deletePostCategory(categoryId) {
+  async deletePostCategory(categoryId: string) {
     try {
       const res = await this.categoryPostRepo.deleteCategory(categoryId);
       if (!res) {
@@ -94,7 +104,8 @@ class PostService {
 
   async restorePost(postId) {
     try {
-      const res = await this.postRepo.restorePost(postId);
+      // TODO: check restore
+      const res = await this.postRepo.restorePost(postId) as any;
       if (!res) {
         throw new NotFoundError("Cannot restore post");
       }

@@ -1,25 +1,24 @@
-import { Sequelize, DataTypes } from "sequelize";
+import fs from "fs";
+import path from "path";
+import { DataTypes } from "sequelize";
 import sequelize from "./sequelize";
-import Post from "../models/post";
-import Author from "../models/author";
-import Category from "../models/category";
-import User from "../models/user";
-import Token from "../models/token";
-import Role from "../models/role";
 
-const db: any = {};
-db.Post = Post(sequelize, DataTypes);
-db.Category = Category(sequelize, DataTypes);
-db.Author = Author(sequelize, DataTypes);
-db.User = User(sequelize, DataTypes);
-db.Token = Token(sequelize, DataTypes);
-db.Role = Role(sequelize, DataTypes);
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+const modelCollection: any = {};
+const MODEL_PATH = path.join(process.cwd(), "src/models");
+
+/* fs.readdirSync(MODEL_PATH)
+  .forEach((file) => {
+    const modelFile = require(path.join(MODEL_PATH, file));
+    const modelInstance = modelFile.default
+    console.log('modelFile--', modelInstance);
+    
+    modelCollection[modelFile.name] = modelFile
+  });
+
+Object.keys(modelCollection).forEach((modelName) => {
+  if (modelCollection[modelName].associate) {
+    modelCollection[modelName].associate(modelCollection);
   }
-});
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+}); */
 
-export default db;
+/* export default modelCollection; */

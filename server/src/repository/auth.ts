@@ -1,20 +1,61 @@
-import db from "../config";
 import { compareSync } from "bcrypt";
-/* import { v4 } from "uuid"; */
 import { DataBaseError, ClientError } from "../helpers/errors";
 import { generateRefreshToken, generateAccessToken } from "../helpers/tokens";
 import type { Error } from "sequelize";
 
-class AuthRepository {
-  userModel: any;
-  tokenModel: any;
+import { User, UserType, UserModel } from "../models/user";
+import { Token, TokenType } from "../models/token";
+import { Role, RoleType } from "../models/role";
 
-  constructor() {
-    this.userModel = db.User;
-    this.tokenModel = db.Token;
+interface ConstructorAuthRepository {
+  new (
+    user: UserType,
+    token: TokenType,
+    role: RoleType
+  ): InterfaceAuthRepository;
+}
+
+export interface InterfaceAuthRepository {
+  registrationUser(userInfo: TypeUserInfo): Promise<void>;
+  authenticationUser(userInfo: TypeUserInfo): Promise<UserModel>;
+  generateTokens(userId: string): Promise<TypePairOfToken>;
+  refreshToken(token: string): Promise<string>;
+  logout(userId: string): Promise<number>;
+}
+
+type TypeUserInfo = {
+  user_name: string;
+  user_password: string;
+} & { user_name: string; user_email: string };
+
+type TypePairOfToken = {
+  access_token: string;
+  refresh_token: string;
+};
+
+export function createAuthRepository(
+  repo: ConstructorAuthRepository,
+  user: UserType,
+  token: TokenType,
+  role: RoleType
+): InterfaceAuthRepository {
+  return new repo(user, token, role);
+}
+
+// TODO: теория по разделению
+
+export class AuthRepository implements InterfaceAuthRepository {
+  userModel: UserType;
+  tokenModel: TokenType;
+  roleModel: RoleType;
+
+  constructor(user: UserType, token: TokenType, role: RoleType) {
+    this.userModel = user;
+    this.tokenModel = token;
+    this.roleModel = role;
   }
 
-  async registrationUser(userInfo) {
+  async registrationUser(userInfo: TypeUserInfo) {
     try {
       const { user_name, user_email } = userInfo;
       const user = await this.userModel.findOne({
@@ -35,7 +76,7 @@ class AuthRepository {
     }
   }
 
-  async authenticationUser(userInfo) {
+  async authenticationUser(userInfo: TypeUserInfo) {
     try {
       const { user_name, user_password } = userInfo;
       const userInDB = await this.userModel.findOne({
@@ -118,4 +159,7 @@ class AuthRepository {
   }
 }
 
-export default new AuthRepository();
+/* const u = createRepository<InterfaceAuthRepository>(AuthRepository);
+u.logout('dfdf') */
+// const i = createAuthRepository(AuthRepository)
+// export default AuthRepository;

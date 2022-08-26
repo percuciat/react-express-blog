@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { responseSuccess, responseError } from "../helpers/responses";
+import { ServerError } from "../helpers/errors";
 import AuthService from "../services/auth";
-import AuthRepository from "../repository/auth";
 import { cookieManager } from "../helpers/cookie";
 import { refreshTokenTime } from "../helpers/tokens";
 
 const CLIENT_URL = `${process.env.BASE_URL}`;
-const service = new AuthService(AuthRepository);
+const service = new AuthService();
+
 const authController = {
   async registration(req: Request, res: Response) {
     try {
@@ -19,6 +20,7 @@ const authController = {
       return responseError(res, error.status, error.message);
     }
   },
+
   async login(req: Request, res: Response) {
     try {
       const userInfo = req.body;
@@ -58,8 +60,11 @@ const authController = {
     try {
       const { user_id } = req.body;
       const cookie = cookieManager(res);
-      await service.logout(user_id);
+      const result = await service.logout(user_id);
       cookie.destroy("refreshToken");
+      if (!result) {
+        throw new ServerError("Cannot logout");
+      }
       return responseSuccess(res, {
         info: "Success!",
         success: true,

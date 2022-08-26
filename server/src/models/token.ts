@@ -1,30 +1,44 @@
-import bcrypt from "bcrypt";
+import {
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  ModelStatic,
+} from "sequelize";
+import sequelize from "../config/sequelize";
 
-const Token = (sequelize, DataTypes) => {
-  const tokenModel = sequelize.define(
-    "Token",
-    {
-      refresh_token: {
-        type: DataTypes.TEXT,
-        unique: true,
-        primaryKey: true,
-        validate: {
-          notEmpty: true,
-        },
+interface TokenModel
+  extends Model<
+    InferAttributes<TokenModel>,
+    InferCreationAttributes<TokenModel>
+  > {
+  refresh_token: string;
+  user_id: string;
+}
+
+export type TokenType = ModelStatic<TokenModel>;
+
+export const Token = sequelize.define<TokenModel>(
+  "Token",
+  {
+    refresh_token: {
+      type: DataTypes.TEXT,
+      unique: true,
+      primaryKey: true,
+      validate: {
+        notEmpty: true,
       },
     },
-    {
-      timestamps: false,
-    }
-  );
-
-  tokenModel.associate = (models) => {
-    tokenModel.belongsTo(models.User, {
-      foreignKey: { name: "user_id" },
-    });
-  };
-
-  return tokenModel;
-};
-
-export default Token;
+    user_id: {
+      type: DataTypes.STRING,
+      unique: true,
+      primaryKey: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+  },
+  {
+    timestamps: false,
+  }
+) as ModelStatic<TokenModel>;

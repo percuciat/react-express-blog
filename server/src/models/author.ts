@@ -1,18 +1,14 @@
-import { InstanceSequelize } from "./../config/sequelize";
 import {
-  Sequelize,
   Model,
   DataTypes,
   CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   ModelStatic,
-  Association,
-  ModelCtor,
-  BuildOptions,
 } from "sequelize";
-
-type DataTypes = typeof DataTypes;
+import sequelize from "../config/sequelize";
+import { Post } from "./post";
+import { Category } from "./category";
 
 interface AuthorModel
   extends Model<
@@ -21,72 +17,50 @@ interface AuthorModel
   > {
   id: CreationOptional<string>;
   author_name: string;
-  associate: (models: any) => void;
 }
 
-type Auth = ModelStatic<AuthorModel> & {
-  associate: (models: any) => void;
-};
-/* type UserStatic = AuthorModel & { associate: (models: any) => void } & {
-  new (values?: Record<string, unknown>, options?: BuildOptions): UserInstance;
-}; */
+export type AuthorType = ModelStatic<AuthorModel>;
 
-const Author = (sequelize: InstanceSequelize, DataTypes: DataTypes) => {
-  const authorModel = sequelize.define<AuthorModel>(
-    "Author",
-    {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        autoIncrement: false,
-      },
-      author_name: {
-        type: DataTypes.STRING,
-        unique: true,
-        primaryKey: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      /* user_name: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Users",
-          key: "user_name",
-        },
-      }, */
+export const Author = sequelize.define<AuthorModel>(
+  "Author",
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
     },
-    {
-      paranoid: true,
-      tableName: "Authors",
-      timestamps: false,
-    }
-  ) as any;
+    author_name: {
+      type: DataTypes.STRING,
+      unique: true,
+      primaryKey: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+  },
+  {
+    paranoid: true,
+    tableName: "Authors",
+    timestamps: false,
+  }
+) as ModelStatic<AuthorModel>;
 
-  authorModel.associate = (models) => {
-    authorModel.hasMany(models.Category, {
-      foreignKey: "authorId",
-      as: "author_category",
-    });
-    authorModel.hasMany(models.Post, {
-      foreignKey: "authorId",
-      as: "author",
-    });
-  };
-
-  /* authorModel.hasMany(sequelize.Category, {
-    foreignKey: "authorId",
-    as: "author_category",
-  });
-  authorModel.hasMany(models.Post, {
-    foreignKey: "authorId",
-    as: "author",
-  }); */
-
-  return authorModel;
-};
-
-export default Author;
+Author.hasMany(Category, {
+  foreignKey: "authorId",
+  as: "author_category",
+});
+Category.belongsTo(Author, {
+  foreignKey: "authorId",
+  as: "author_category",
+});
+Author.hasMany(Post, {
+  foreignKey: "authorId",
+  as: "author",
+});
+Post.belongsTo(Author, {
+  foreignKey: "authorId",
+  as: "author",
+});
