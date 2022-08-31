@@ -1,0 +1,288 @@
+swagger: 2.0
+info:
+  title: Express-postgreSQL api
+  description: This is a sample server for a home project.
+  contact:
+    name: Maksim
+    email: zerob.rob@yandex.ru
+  servers:
+    - url: https://localhost:5001/v1
+      description: Development server
+    - url: https://api.gigantic-server.com/v1
+      description: Production server
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        data:
+          type: array
+        error:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        data:
+          type: array
+        error:
+          type: array
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        content:
+          type: string
+        status:
+          type: string
+        updatedby:
+          type: string
+        category:
+          $ref: "#/components/schemas/Category"
+        author:
+          $ref: "#/components/schemas/Author"
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category_name:
+          type: string
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        author_name:
+          type: string
+        user_name:
+          $ref: "#/components/schemas/User"
+    Token:
+      type: object
+      properties:
+        id:
+          type: integer
+        refresh_token:
+          type: string
+        user_id:
+          $ref: "#/components/schemas/User"
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+        role_name:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_name:
+          type: string
+        user_email:
+          type: string
+        role_id:
+          $ref: "#/components/schemas/Role"
+paths:
+  /post:
+    get:
+      description: Returns all posts from the system
+      responses:
+        "200":
+          description: A list of posts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "404":
+          description: Method Not Allowed
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+          content:
+            "application/json": {}
+    post:
+      description: Create new post
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              properties:
+                  title: 
+                    description: title of the post
+                    type: string
+                  content:
+                    description: content of the post
+                    type: string
+                  status:
+                    description: content of the post
+                    type: string
+                  categoryId:
+                    description: category of the post
+                    type: string
+                  authorId:
+                    description: id author of the post
+                    type: string
+              required:
+                - title
+                - content
+                - status
+                - categoryId
+                - authorId
+  /post/id/{postId}:
+    get:
+      description: get post from the collection by Id
+      parameters:
+        - postId: string
+          in: path
+          description: ID of post to use
+          required: true
+          style: simple
+      responses:
+        "200":
+          description: Post with selected Id.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Post"
+        "404":
+          description: Post Not Found
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+          content:
+            "application/json": {}
+    put:
+      description: update post from the collection by Id
+      parameters:
+        - postId: string
+          in: body
+          description: post params in body
+      requestBody:
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              properties:
+                title:
+                  description: Updated title of the post
+                  type: string
+                content:
+                  description: Updated content of the post
+                  type: string
+                status:
+                  description: Updated status of the post
+                  type: string
+                updatedby: 
+                  description: Author of updated post
+                  type: string
+                categoryId: 
+                  description: Category of updated post
+                  type: string
+              required:
+                - title
+                - content
+                - status
+                - updatedby
+                - categoryId
+      responses:
+        "200":
+          description: A list of posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Post"
+        "403":
+          description: Not Auth Found
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+          content:
+            "application/json": {}
+    delete:
+      description: Delete post from the collection
+      parameters:
+        - postId: string
+          in: path
+          description: ID of post to use
+          required: true
+          style: simple
+  /post/category:
+    get:
+      description: Returns all posts category
+      responses:
+        "200":
+          description: A list of posts category.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      description: Create post category
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                category_name:
+                  description: New posts category name
+                  type: string
+                authorId:
+                  description: New posts category author
+                  type: string
+                  format: uuid
+              required:
+                - category_name
+                - authorId
+      responses:
+        "200":
+          description: A list of posts category.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+  /post/category/id/{categotyId}:
+      get:
+        description: get category from the collection by Id
+        parameters:
+          - categoryId: string
+            in: path
+            description: ID of category to use
+            required: true
+            style: simple
+        responses:
+          "200":
+            description: Category with selected Id.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  items:
+                    $ref: "#/components/schemas/Category"
+          "404":
+            description: Category Not Found
+            schema:
+              $ref: "#/components/schemas/GeneralError"
+            content:
+              "application/json": {}
+      delete:
+        description: delete category from the collection by Id
+        parameters:
+          - categoryId: string
+            in: path
+            description: ID of category to use
+            required: true
+            style: simple

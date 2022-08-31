@@ -85,7 +85,6 @@ class PostRepository {
 
   async createPost(postInfo) {
     try {
-      // TODO: middleWare for checking
       let fadedPost = await this.postModel.findOne({
         where: {
           title: postInfo.title,
