@@ -37,7 +37,4 @@ router.post(
   authController.logout
 );
 
-/*router.post('/welcome', verifyToken, (req, res, ) => {
-    res.status(200).send("Welcome 🙌 ");
-});*/
 export default router;

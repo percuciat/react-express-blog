@@ -2,19 +2,17 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Authors", {
+    await queryInterface.createTable("Tokens", {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        autoIncrement: true,
         allowNull: false,
-        autoIncrement: false,
       },
-      author_name: {
-        type: Sequelize.STRING,
+      refresh_token: {
+        type: Sequelize.TEXT,
         unique: true,
         primaryKey: true,
-        allowNull: false,
         validate: {
           notEmpty: true,
         },
@@ -23,6 +21,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Authors");
+    await queryInterface.dropTable("Tokens");
   },
 };

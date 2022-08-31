@@ -6,7 +6,6 @@ import { responseSuccess, responseError } from "../helpers/responses";
 
 const service = new PostService(PostRepository, CategoryRepository);
 
-// TODO: make class
 const postController = {
   async getPosts(req: Request, res: Response) {
     try {
@@ -27,8 +26,8 @@ const postController = {
   },
 
   async getPostById(req: Request, res: Response) {
-    const postId = req.params.id;
     try {
+      const postId = req.params.id;
       const posts = await service.getPostById(postId);
       return responseSuccess(res, posts);
     } catch (error: any) {

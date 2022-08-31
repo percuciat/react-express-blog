@@ -21,24 +21,28 @@ router.get(
 
 router.post(
   "/",
+  verifyToken,
   validatorMiddleware(checkCreatePost),
   PostController.createPost
 );
 
 router.get(
   "/restore/id/:id",
+  verifyToken,
   validatorMiddleware(checkGetById),
   PostController.restorePost
 );
 
 router.put(
   "/id/:id",
+  verifyToken,
   validatorMiddleware(checkUpdatePost),
   PostController.updatePost
 );
 
 router.delete(
   "/id/:id",
+  verifyToken,
   validatorMiddleware(checkGetById),
   PostController.deletePost
 );
@@ -53,12 +57,14 @@ router.get(
 
 router.post(
   "/category",
+  verifyToken,
   validatorMiddleware(checkCreatePostCategory),
   PostController.createPostCategory
 );
 
 router.delete(
   "/category/id/:id",
+  verifyToken,
   validatorMiddleware(checkGetById),
   PostController.deletePostCategory
 );

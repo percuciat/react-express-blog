@@ -2,18 +2,18 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Authors", {
+    await queryInterface.createTable("Roles", {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
-        autoIncrement: false,
       },
-      author_name: {
-        type: Sequelize.STRING,
+      role_name: {
+        type: Sequelize.ENUM,
+        values: ["admin", "user", "viewer"],
         unique: true,
-        primaryKey: true,
+        defaultValue: "viewer",
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -23,6 +23,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Authors");
+    await queryInterface.dropTable("Roles");
   },
 };

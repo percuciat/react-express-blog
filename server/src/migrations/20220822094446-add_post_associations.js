@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.STRING,
         references: {
           model: "Categories",
-          key: "categoryId",
+          key: "category_name",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING,
         references: {
           model: "Authors",
-          key: "authorId",
+          key: "author_name",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
@@ -38,8 +38,8 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.removeColumn(
-      "Posts", // name of Source model
-      "category" // key we want to remove
+      "Posts",
+      "category"
     );
     await queryInterface.removeColumn(
       "Posts", // name of Source model
