@@ -19,6 +19,5 @@ Using packages:
 - PostgreSQL
 - TypeScript
 - SequelizeORM 6+
-
-
-
+- JWT auth
+- Jest
