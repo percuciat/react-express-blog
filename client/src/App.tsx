@@ -4,13 +4,15 @@ import routes from './routes';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from 'styles/themes';
 
-function App() {
-  let components = useRoutes(routes);
+const App = () => {
+  const isAuth = false;
+  // const isAuth = localStorage.getItem('refreshToken');
+  let components = useRoutes(routes(isAuth));
   return (
     <div className="wrapperGlobal">
       <ThemeProvider theme={lightTheme}>{components}</ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;

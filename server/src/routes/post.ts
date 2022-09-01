@@ -2,52 +2,71 @@ import express from "express";
 import multer from "multer";
 import PostController from "../controllers/post";
 import {
-  postSchemaCreate,
-  postSchemaUpdate,
-  postSchemaDelete,
-} from "../helpers/validationSchema";
+  checkCreatePost,
+  checkUpdatePost,
+  checkCreatePostCategory,
+  checkGetById,
+} from "../helpers/schemas/postValidation";
 import { validatorMiddleware } from "../middlewares/validator";
+import { verifyToken } from "../middlewares/auth";
 const router = express.Router();
-
-/**
- * ROUTES
- */
-
-/*  const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './assets/uploads/')
-    },
-    filename: function (req, file, callback) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      callback(null, file.fieldname + '-' + uniqueSuffix)
-    }
-});
-
-const upload = multer({ storage: storage, limits: {
-    fileSize: 1024 * 1024 * 5,
-}, }); */
 
 router.get("/", PostController.getPosts);
 
+router.get(
+  "/id/:id",
+  validatorMiddleware(checkGetById),
+  PostController.getPostById
+);
+
 router.post(
   "/",
-  postSchemaCreate,
-  validatorMiddleware,
+  verifyToken,
+  validatorMiddleware(checkCreatePost),
   PostController.createPost
 );
 
+router.get(
+  "/restore/id/:id",
+  verifyToken,
+  validatorMiddleware(checkGetById),
+  PostController.restorePost
+);
+
 router.put(
-  "/:uid",
-  postSchemaUpdate,
-  validatorMiddleware,
+  "/id/:id",
+  verifyToken,
+  validatorMiddleware(checkUpdatePost),
   PostController.updatePost
 );
 
 router.delete(
-  "/:uid",
-  postSchemaDelete,
-  validatorMiddleware,
+  "/id/:id",
+  verifyToken,
+  validatorMiddleware(checkGetById),
   PostController.deletePost
+);
+
+router.get("/category", PostController.getPostCategories);
+
+router.get(
+  "/category/id/:id",
+  validatorMiddleware(checkGetById),
+  PostController.getPostCategoryById
+);
+
+router.post(
+  "/category",
+  verifyToken,
+  validatorMiddleware(checkCreatePostCategory),
+  PostController.createPostCategory
+);
+
+router.delete(
+  "/category/id/:id",
+  verifyToken,
+  validatorMiddleware(checkGetById),
+  PostController.deletePostCategory
 );
 
 export default router;

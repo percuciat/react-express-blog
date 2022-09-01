@@ -1,51 +1,56 @@
-const Category = (sequelize, DataTypes) => {
-  const categoryModel = sequelize.define(
-    "Category",
-    {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        autoIncrement: false,
-      },
-      category_name: {
-        type: DataTypes.STRING,
-        unique: true,
-        primaryKey: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      author: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Authors",
-          key: "author_name",
-        },
+import {
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  ModelStatic,
+} from "sequelize";
+import sequelize from "../config/sequelize";
+import { Post } from "./post";
+
+export interface CategoryModel
+  extends Model<
+    InferAttributes<CategoryModel>,
+    InferCreationAttributes<CategoryModel>
+  > {
+  id: CreationOptional<string>;
+  category_name: string;
+}
+
+export type CategoryType = ModelStatic<CategoryModel>;
+
+export const Category = sequelize.define<CategoryModel>(
+  "Category",
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
+    },
+    category_name: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
-    {
-      tableName: "Categories",
-      paranoid: true,
-      sequelize,
-      timestamps: false,
-    }
-  );
+  },
+  {
+    tableName: "Categories",
+    paranoid: true,
+    timestamps: false,
+  }
+) as ModelStatic<CategoryModel>;
 
-  /* categoryModel.associate = (models) => {
-   categoryModel.belongsTo(models.Author, {
-      foreignKey: "author",
-      as: "author_name",
-    });
-    categoryModel.hasMany(models.Post, {
-      foreignKey: "category_name",
-      as: "category",
-    }); 
-  };*/
-
-  return categoryModel;
-};
-
-export default Category;
+Category.hasMany(Post, {
+  foreignKey: "categoryId",
+  as: "category",
+});
+Post.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "category",
+});

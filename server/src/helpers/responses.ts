@@ -1,10 +1,6 @@
 import { Response } from "express";
 
-/* interface IResponse {
-  getResponse() => 
-} */
-
-export function responseSuccess(res: Response, message: string) {
+export function responseSuccess(res: Response, message: any) {
   return res.status(200).json({
     data: message,
     error: null,

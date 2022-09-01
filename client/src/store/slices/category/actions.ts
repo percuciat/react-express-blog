@@ -6,7 +6,7 @@ export const fetchCategories = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       //TODO: типизация
-      const categories = await makeRequestXHR('get', { url: '/category' });
+      const categories = await makeRequestXHR('get', { url: '/post/category' });
       return categories.data as any;
     } catch (e) {
       return rejectWithValue(e);
@@ -19,7 +19,7 @@ export const createCategory = createAsyncThunk(
   async (category: { category: string }, { rejectWithValue }) => {
     try {
       const categories = await makeRequestXHR('post', {
-        url: '/category/create',
+        url: '/post/category',
         data: {
           category,
         },
@@ -36,7 +36,7 @@ export const deleteCategory = createAsyncThunk(
   async (_id: number, { rejectWithValue }) => {
     try {
       const categories = await makeRequestXHR('delete', {
-        url: '/category/delete',
+        url: '/post/category/id/:id',
         data: {
           _id,
         },

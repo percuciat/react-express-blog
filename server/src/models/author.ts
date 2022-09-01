@@ -1,46 +1,66 @@
-/*
+import {
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  ModelStatic,
+} from "sequelize";
+import sequelize from "../config/sequelize";
+import { Post } from "./post";
+import { Category } from "./category";
 
-No. Sequelize sync will create tables that do not exists. If you already have all the tables, it will not do anything. However if you use force: true, it will drop the table that exists and recreate them from the model definition.
+interface AuthorModel
+  extends Model<
+    InferAttributes<AuthorModel>,
+    InferCreationAttributes<AuthorModel>
+  > {
+  id: CreationOptional<string>;
+  author_name: string;
+}
 
-*/
+export type AuthorType = ModelStatic<AuthorModel>;
 
-const Author = (sequelize, DataTypes) => {
-  const authorModel = sequelize.define(
-    "Author",
-    {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        autoIncrement: false,
-      },
-      author_name: {
-        type: DataTypes.STRING,
-        unique: true,
-        primaryKey: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      user_name: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Users",
-          key: "user_name",
-        },
+export const Author = sequelize.define<AuthorModel>(
+  "Author",
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
+    },
+    author_name: {
+      type: DataTypes.STRING,
+      unique: true,
+      primaryKey: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
-    {
-      paranoid: true,
-      tableName: "Authors",
-      sequelize,
-      timestamps: false,
-    }
-  );
+  },
+  {
+    paranoid: true,
+    tableName: "Authors",
+    timestamps: false,
+  }
+) as ModelStatic<AuthorModel>;
 
-  return authorModel;
-};
-
-export default Author;
+Author.hasMany(Category, {
+  foreignKey: "authorId",
+  as: "author_category",
+});
+Category.belongsTo(Author, {
+  foreignKey: "authorId",
+  as: "author_category",
+});
+Author.hasMany(Post, {
+  foreignKey: "authorId",
+  as: "author",
+});
+Post.belongsTo(Author, {
+  foreignKey: "authorId",
+  as: "author",
+});

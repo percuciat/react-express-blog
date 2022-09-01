@@ -1,78 +1,65 @@
-import { v4 as uuidv4 } from "uuid";
+import {
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  ModelStatic,
+} from "sequelize";
+import sequelize from "../config/sequelize";
 
-/*
-uid: {
-          type: Sequelize.UUID,
-          defaultValue: () => uuidv4(),
-          unique: true,
-          allowNull: false,
-          validate: {
-            notEmpty: true,
-          },
-        },
-*/
+export interface PostModel
+  extends Model<
+    InferAttributes<PostModel>,
+    InferCreationAttributes<PostModel>
+  > {
+  id: CreationOptional<string>;
+  title: string;
+  content: string;
+  status: string;
+  updatedby: string;
+}
 
-const Post = (sequelize, DataTypes) => {
-  const postModel = sequelize.define(
-    "Post",
-    {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        autoIncrement: false,
-      },
-      title: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      status: DataTypes.STRING,
-      author: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Authors",
-          key: "author_name",
-        },
-      },
-      category: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Categories",
-          key: "category_name",
-        },
-      },
-      createdby: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      updatedby: {
-        type: DataTypes.STRING,
+export type PostType = ModelStatic<PostModel>;
+
+export const Post = sequelize.define(
+  "Post",
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
+    },
+    title: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
-    {
-      paranoid: true,
-      tableName: "Posts",
-      sequelize,
-      timestamps: true,
-    }
-  );
-
-  return postModel;
-};
-
-export default Post;
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ["No published", "Published"],
+      allowNull: false,
+      defaultValue: "No published",
+    },
+    updatedby: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    paranoid: true,
+    tableName: "Posts",
+    timestamps: true,
+  }
+) as ModelStatic<PostModel>;

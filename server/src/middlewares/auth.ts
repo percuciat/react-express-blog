@@ -1,24 +1,35 @@
-import {Request, Response, NextFunction} from "express";
-import jwt from 'jsonwebtoken'
-
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { responseError } from "../helpers/responses";
 // hack
 interface IUser extends Request {
-    user?: any;
+  user?: any;
 }
 
 export const verifyToken = (req: IUser, res: Response, next: NextFunction) => {
-    const token =
-        req.body.token || req.query.token || req.headers["x-access-token"];
+  const token = req.headers["authorization"]?.split(" ")[1];
 
-    if (!token) {
-        return res.status(403).send("A token is required for authentication");
-    }
-    try {
-        const decoded = jwt.verify(token, `${process.env.ACTIVE_TOKEN_SECRET}`);
-        req.user = decoded;
-
-    } catch (err) {
-        return res.status(401).send("Invalid Token");
-    }
+  if (!token) {
+    return responseError(res, 403, "Authentication is required");
+  }
+  try {
+    const decoded = jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`);
+    req.user = decoded;
     return next();
+  } catch (err) {
+    return responseError(res, 401, "Invalid Token");
+  }
+};
+
+export const checkRefreshCookie = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const cookie = req.cookies.refreshToken;
+  if (cookie) {
+    return responseError(res, 500, "You are already logined");
+  } else {
+    return next();
+  }
 };

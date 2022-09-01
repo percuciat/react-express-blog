@@ -34,21 +34,13 @@ module.exports = {
             notEmpty: true,
           },
         },
-        user_role: {
-          type: Sequelize.STRING,
-          unique: true,
-          allowNull: false,
-          validate: {
-            notEmpty: true,
-          },
-        },
       },
       {
         paranoid: true,
         timestamps: true,
         hooks: {
           beforeCreate: (user) => {
-            const salt = bcrypt.genSaltSync();
+            const salt = 6;
             user.user_name = bcrypt.hashSync(user.user_name, salt);
           },
         },

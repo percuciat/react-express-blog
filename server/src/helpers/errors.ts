@@ -1,7 +1,7 @@
-const MYSQL_ERRORS = {
-  ER_DUP_ENTRY: "ER_DUP_ENTRY",
-};
+import { BaseError } from "sequelize";
 
+/* 
+TODO: delete in master
 function convert(message) {
   let textMsg = "";
   if (typeof message === "object") {
@@ -14,46 +14,46 @@ function convert(message) {
     textMsg += message;
   }
   return textMsg;
-}
+} */
 
-export class NotFoundError extends Error {
+export class NotFoundError extends BaseError {
+  status: number;
+  expose: boolean;
   constructor(message) {
-    const textMsg = `Not Found\n${convert(message)}`;
-    super(textMsg);
+    super(message);
     this.status = 404;
     this.expose = true;
   }
-  status: number;
-  expose: boolean;
 }
 
-export class ServerError extends Error {
+export class ServerError extends BaseError {
+  status: number;
+  expose: boolean;
   constructor(message) {
-    const textMsg = `${convert(message)}`;
+    const textMsg = message;
     super(textMsg);
     this.status = 500;
     this.expose = true;
   }
-  status: number;
-  expose: boolean;
 }
 
-class LogicError extends Error {
+export class DataBaseError extends BaseError {
+  status: number;
+  expose: boolean;
   constructor(message) {
-    const textMsg = `LogicError\n${convert(message)}`;
-    super(textMsg);
-    this.status = 400;
+    const textMsgs = message;
+    super(textMsgs);
+    this.status = 500;
     this.expose = true;
   }
-  status: number;
-  expose: boolean;
 }
 
-export class BadRequestError extends Error {
-  constructor(message) {
-    const textMsg = `BadRequestError\n${convert(message)}`;
-    super(textMsg);
-    this.status = 400;
-  }
+export class ClientError extends BaseError {
   status: number;
+  expose: boolean;
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+    this.expose = true;
+  }
 }

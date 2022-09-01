@@ -15,4 +15,6 @@ const sequelize = new Sequelize(database, username, password, {
   },
 });
 
+export type InstanceSequelize = typeof sequelize;
+
 export default sequelize;

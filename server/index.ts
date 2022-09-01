@@ -3,8 +3,13 @@ import sequelize from "./src/config/sequelize";
 
 const APP_PORT = process.env.APP_PORT || 5000;
 
-sequelize.sync().then(() => {
-  app.listen(APP_PORT, () => {
-    console.log(`App listening at http://localhost:${APP_PORT}`);
-  });
-});
+sequelize
+  .sync()
+  .then(() => {
+    app.listen(APP_PORT, () => {
+      console.log(`App listening at http://localhost:${APP_PORT}`);
+    });
+  })
+  .catch((error) =>
+    console.log("\x1b[31m", "---error connection---", error)
+  );
