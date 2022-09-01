@@ -28,7 +28,9 @@ class AuthService {
 
   async registration(userInfo) {
     try {
-      await this.authRepo.registrationUser(userInfo);
+      const user = await this.authRepo.registrationUser(userInfo);
+      const pairOfTokens = await this.authRepo.generateTokens(user.id);
+      return pairOfTokens
     } catch (error: any) {
       throw error;
     }

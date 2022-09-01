@@ -10,6 +10,7 @@ module.exports = {
         references: {
           model: "Roles",
           key: "id",
+          default: '3'
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",

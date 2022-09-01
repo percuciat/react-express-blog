@@ -16,7 +16,7 @@ interface ConstructorAuthRepository {
 }
 
 export interface InterfaceAuthRepository {
-  registrationUser(userInfo: TypeUserInfo): Promise<void>;
+  registrationUser(userInfo: TypeUserInfo): Promise<UserModel>;
   authenticationUser(userInfo: TypeUserInfo): Promise<UserModel>;
   generateTokens(userId: string): Promise<TypePairOfToken>;
   refreshToken(token: string): Promise<string>;
@@ -67,9 +67,10 @@ export class AuthRepository implements InterfaceAuthRepository {
       if (user) {
         throw new DataBaseError(`${"User already registred"}`);
       }
-      await this.userModel.create({
+      const newUser = await this.userModel.create({
         ...userInfo,
       });
+      return newUser
     } catch (error: unknown) {
       let errorDB = error as Error;
       throw new DataBaseError(`${errorDB.message}`);

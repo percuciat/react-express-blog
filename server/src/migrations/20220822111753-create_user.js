@@ -34,14 +34,6 @@ module.exports = {
             notEmpty: true,
           },
         },
-        user_role: {
-          type: Sequelize.STRING,
-          unique: true,
-          allowNull: false,
-          validate: {
-            notEmpty: true,
-          },
-        },
       },
       {
         paranoid: true,

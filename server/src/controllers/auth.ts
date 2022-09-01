@@ -12,9 +12,15 @@ const authController = {
   async registration(req: Request, res: Response) {
     try {
       const userInfo = req.body;
-      await service.registration(userInfo);
+      const cookie = cookieManager(res);
+      const { access_token, refresh_token } = await service.registration(
+        userInfo
+      );
+      cookie.set("refreshToken", refresh_token, refreshTokenTime);
       return responseSuccess(res, {
         info: "Registration has successfully completed!",
+        access_token: access_token,
+        refresh_token: refresh_token,
       });
     } catch (error: any) {
       return responseError(res, error.status, error.message);
