@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const linksAuth = [
   {
     name: 'Posts',
-    link: 'posts',
+    link: 'post',
   },
   {
     name: 'Categories',

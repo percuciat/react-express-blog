@@ -7,16 +7,15 @@ import {
 import axios from 'axios';
 import { storage } from '../storage';
 
-export const axiosCommon = axios.create({
-  baseURL: `http://localhost:5000`,
-  /* withCredentials: true,*/
+export const axiosConfig = axios.create({
+  baseURL: `${process.env.SERVER_ENDPOINT}`,
+  withCredentials: true,
   /* headers: {
         Authorization: storage.getItemStorage('token') || '',
     },*/
-  params: {},
 });
 
-axiosCommon.interceptors.request.use(
+axiosConfig.interceptors.request.use(
   (config) => {
     return config;
   },
@@ -26,7 +25,7 @@ axiosCommon.interceptors.request.use(
   }
 );
 
-axiosCommon.interceptors.response.use(
+axiosConfig.interceptors.response.use(
   async (response: AxiosResponse) => {
     return response;
   },
@@ -84,16 +83,14 @@ axiosCommon.interceptors.response.use(
 export function makeRequestXHR(
   method: TMethodApi,
   options: IOptionsApi
-): Promise<AxiosResponse<typeof options.data>> {
-  return axiosCommon
+): Promise<AxiosResponse<any>> {
+  return axiosConfig
     .request({ method, url: options.url, data: options.data, ...options })
     .then((res) => {
       if (res.data.status === 'error') {
         console.log(`Axios request failed with code: ${res.data.error_message}`);
         throw res.data;
       }
-      /*  console.log('Axios request fulfilled with data:', res.data); */
-
       return res.data;
     })
     .catch((errorAxios) => {

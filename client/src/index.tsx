@@ -9,14 +9,14 @@ import './index.css';
 import GlobalStyles from 'styles/global';
 
 ReactDOM.render(
-  /* <React.StrictMode>*/
+  <React.StrictMode>
   <Provider store={store()}>
     <BrowserRouter>
       <App />
       <GlobalStyles />
     </BrowserRouter>
   </Provider>,
-  /*</React.StrictMode>*/ document.getElementById('root')
+  </React.StrictMode>, document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

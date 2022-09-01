@@ -1,33 +1,44 @@
-import React, { useEffect } from 'react';
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import MainLayout from '../layouts';
 import { CategoryPage, HomePage, PostPage, Empty404, LoginPage } from '../pages';
 
-const routes: RouteObject[] = [
+interface IRouters {
+  name?: string;
+  children?: {
+    name?: string;
+  }[];
+}
+
+type TypeRoutes = IRouters & RouteObject;
+const routes = (isLogged: boolean): TypeRoutes[] => [
   {
-    element: <MainLayout />,
+    path: '/',
+    name: 'Main',
+    element: isLogged ? <MainLayout /> : <Navigate to="/login" />,
     children: [
       {
-        path: '/',
+        index: true,
         element: <HomePage />,
       },
       {
-        path: 'posts',
+        path: 'post',
         element: <PostPage />,
       },
       {
         path: 'category',
         element: <CategoryPage />,
       },
-      {
-        path: 'login',
-        element: <LoginPage />,
-      },
-      {
-        path: '*',
-        element: <Empty404 />,
-      },
     ],
+  },
+  {
+    name: 'Login',
+    path: 'login',
+    element: <LoginPage />,
+  },
+  {
+    name: 'Not found',
+    path: '*',
+    element: <Empty404 />,
   },
 ];
 
