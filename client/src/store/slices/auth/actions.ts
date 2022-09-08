@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { makeRequestXHR, axiosConfig } from 'api';
+import { makeRequestXHR, axiosConfig } from 'shared/lib';
 //import { apiClient } from 'utils/api/AxiosInstance';
 //import { resetUserData } from 'store/slices/user';
 import { setNewToken } from './';

@@ -2,13 +2,13 @@ import { createSlice, current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 /* import { axiosBaseQuery } from 'utils/api'; */
 import { loginUser, registerUser, logoutUser } from './actions';
-import { Storage } from 'utils/storage';
+import { storage } from 'shared/lib';
 //import setRefreshToken from 'utils/common/setRefreshToken';
 
 const { actions, reducer } = createSlice({
   name: 'auth',
   initialState: {
-    isAuth: Boolean(Storage.getStorage('refreshToken')),
+    isAuth: Boolean(storage.getItem('refreshToken')),
     isLoading: false,
     token: null,
     errorsObj: null,
@@ -52,8 +52,8 @@ const { actions, reducer } = createSlice({
         state.isLoading = false;
         state.isAuth = false;
         state.token = null;
-        Storage.removeStorage('tokenRefresh');
-        Storage.removeStorage('tokenDate');
+        storage.removeItem('tokenRefresh');
+        storage.removeItem('tokenDate');
       })
 
       .addCase(logoutUser.rejected, (state) => {

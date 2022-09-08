@@ -1,5 +1,5 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import { makeRequestXHR } from 'api';
+import { makeRequestXHR } from 'shared/lib';
 
 export const fetchPosts = createAsyncThunk(
   'post/FETCH_POSTS',
