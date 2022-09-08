@@ -1,9 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
-import { store, TStore } from 'store';
-import { axiosCommon } from 'api';
+import { store, TStore } from 'app/store';
+import { axiosConfig } from 'shared/lib';
 import { AsyncThunkAction, Dispatch } from '@reduxjs/toolkit';
-import { fetchPosts, deletePost, updatePost, createPost } from 'store/slices/post/actions';
-import { selectPostData, selectPostErrors, selectPostLoading } from 'store/slices/post';
+import {
+  selectPostData,
+  selectPostErrors,
+  selectPostLoading,
+  fetchPosts,
+  deletePost,
+  updatePost,
+  createPost,
+} from './index';
 
 describe('post Selectors', () => {
   let state = store().getState();
@@ -27,7 +34,7 @@ describe('post Actions', () => {
   let _store: ReturnType<TStore>;
 
   beforeEach(() => {
-    mock = new MockAdapter(axiosCommon);
+    mock = new MockAdapter(axiosConfig);
   });
 
   afterEach(() => {

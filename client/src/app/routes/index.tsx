@@ -1,6 +1,6 @@
 import { Outlet, RouteObject } from 'react-router-dom';
 import { CategoryPage, HomePage, PostPage, NotFound } from 'pages';
-import { ErrorFallback } from 'widgets/ErrorFallback';
+import { ErrorFallback } from 'widgets/error-fallback';
 import { ErrorBoundary } from 'react-error-boundary';
 
 interface IRouters {

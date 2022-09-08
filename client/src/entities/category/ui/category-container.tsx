@@ -3,9 +3,9 @@ import { Alert, notification, Row } from 'antd';
 import { Modal } from 'shared/ui';
 import { CategoryList } from './category-list';
 import { CategoryForm } from './category-form';
-import { useAppSelector, useAppDispatch } from 'hooks/useRedux';
-import { selectCategoryErrors } from 'store/slices/category';
-import { createCategory, resetErrorsFromStore } from 'store/slices/category/actions';
+import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
+import { selectCategoryErrors } from '../model';
+import { createCategory, resetErrorsFromStore } from 'entities/category/model/actions';
 
 export const CategoryContainer = (props) => {
   const { showModal, setShowModal } = props;
@@ -44,7 +44,7 @@ export const CategoryContainer = (props) => {
         <CategoryList setShowModal={setShowModal} />
       </Row>
 
-      <Modal isVisible={showModal} text="Create new Category" handlerCancel={closeModal}>
+      <Modal isVisible={showModal} text="Create new Category" onCancel={closeModal}>
         <CategoryForm handler={create} errorHandler={onFinishFailed} />
         {backendErrors.status &&
           backendErrors.errorData.map((errors) => {

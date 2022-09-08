@@ -15,7 +15,7 @@ const initialState: CategoryState = {
   errors: {},
 };
 
-const { actions, reducer } = createSlice({
+export const { actions, reducer } = createSlice({
   name: 'category',
   initialState,
   reducers: {},
@@ -77,5 +77,3 @@ export const selectCategoryData = (state) => state.category.categories;
 export const selectCurrentCategory = (state) => state.category.currentCategory;
 export const selectIsLoading = (state) => state.category.isLoading;
 export const selectCategoryErrors = (state) => state.category.errors;
-
-export default reducer;

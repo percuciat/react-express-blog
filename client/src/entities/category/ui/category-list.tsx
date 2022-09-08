@@ -3,9 +3,9 @@ import { Col, Spin, Card } from 'antd';
 import { DeleteTwoTone } from '@ant-design/icons';
 import { AlertConfirm, Modal, StyledLoadingIndicator } from 'shared/ui';
 
-import { useAppSelector, useAppDispatch } from 'hooks/useRedux';
-import { selectIsLoading, selectCategoryData } from 'store/slices/category';
-import { fetchCategories, deleteCategory } from 'store/slices/category/actions';
+import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
+import { selectIsLoading, selectCategoryData, fetchCategories, deleteCategory } from '../model';
+
 
 export const CategoryList = (props: any) => {
   const [showModal, setShowModal] = useState(false);
@@ -58,7 +58,7 @@ export const CategoryList = (props: any) => {
           );
         })
       )}
-      <Modal isVisible={showModal} text="Delete category" handlerCancel={closeModal}>
+      <Modal isVisible={showModal} text="Delete category" onCancel={closeModal}>
         <AlertConfirm handler={deleteHandler} text="Are you sure?" />
       </Modal>
     </>

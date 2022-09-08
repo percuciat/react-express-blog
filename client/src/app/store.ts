@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import postReducer from './slices/post';
-import categoryReducer from './slices/category';
+import { reducer as PostReducer } from 'entities/post';
+import { reducer as CategoryReducer } from 'entities/category';
 
 const rootReducer = combineReducers({
-  post: postReducer,
-  category: categoryReducer,
+  post: PostReducer,
+  category: CategoryReducer,
 });
 
 export const store = (initialState: any = {}) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form as AntdForm, Input, Checkbox } from 'antd';
 import { Link, StyledFormAuthWrapper } from 'shared/ui/';
 
-export const LoginForm: any = (props: any) => {
+export const AuthLogin: any = (props: any) => {
   const onFinish = () => {};
 
   const onFinishFailed = () => {};

@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from 'styled-components';
+import styled from 'styled-components';
 
-const StyledFooter = styles.footer`
-padding: 1rem 0;
-background: lightblue;
-text-align: center;
+const StyledFooter = styled.footer`
+  padding: 1rem 0;
+  background: lightblue;
+  text-align: center;
 `;
 
 export const Footer = (props: any) => {

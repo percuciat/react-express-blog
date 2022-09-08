@@ -1,18 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
-import { store, TStore } from 'store';
-import { axiosCommon } from 'api';
+import { store, TStore } from 'app/store';
+import { axiosConfig } from 'shared/lib';
 import {
   fetchCategories,
   createCategory,
   deleteCategory,
   setCurrentCategory,
-} from 'store/slices/category/actions';
-import {
   selectCategoryData,
   selectCategoryErrors,
   selectCurrentCategory,
   selectIsLoading,
-} from 'store/slices/category';
+} from '../index';
 
 describe('category Selectors', () => {
   let state = store().getState();
@@ -36,7 +34,7 @@ describe('category Actions', () => {
   let _store: ReturnType<TStore>;
 
   beforeEach(() => {
-    mock = new MockAdapter(axiosCommon);
+    mock = new MockAdapter(axiosConfig);
   });
 
   afterEach(() => {
@@ -124,7 +122,7 @@ describe('category Actions', () => {
         name: 'birds',
       },
     };
-    let mockCategory = 23232 ;
+    let mockCategory = 23232;
     mock.onDelete(`/category/delete`).reply(200, mockResult);
 
     await _store.dispatch(deleteCategory(mockCategory)).then((result) => {

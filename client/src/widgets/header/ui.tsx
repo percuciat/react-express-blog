@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, StyledContainer } from 'shared/ui';
+import { AuthLogout } from 'features/auth';
 import styled from 'styled-components';
 
 const linksAuth = [
@@ -38,7 +39,7 @@ const StyledHeaderLink = styled(Link)((props) => ({
 }));
 
 export const Header = (props: any) => {
-  const isAuth = false;
+  const isAuth = true;
   return (
     <>
       <StyledHeader>
@@ -53,6 +54,7 @@ export const Header = (props: any) => {
                   </StyledHeaderListItem>
                 );
               })}
+              {isAuth && <AuthLogout />}
             </StyledHeaderList>
           </StyledHeaderNav>
         </StyledContainer>

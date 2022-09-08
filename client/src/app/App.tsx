@@ -6,7 +6,7 @@ import { lightTheme } from './styles/themes';
 import { MainLayout } from './layouts';
 
 
-const App = () => {
+export  const App = () => {
   const isAuth = false;
   // const isAuth = localStorage.getItem('refreshToken');
   let components = useRoutes(routes(isAuth));
@@ -18,5 +18,3 @@ const App = () => {
     </div>
   );
 };
-
-export default App;

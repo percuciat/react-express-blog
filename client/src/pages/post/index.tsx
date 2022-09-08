@@ -1,13 +1,16 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import { PostWidget } from 'widgets/post';
-import { PostFilter } from 'entities/post';
-import { useAppSelector } from 'hooks/useRedux';
-import { selectCurrentCategory } from 'store/slices/category';
+import { useAppSelector } from 'shared/hooks/useRedux';
+import { selectCurrentCategory, selectIsLoading, selectCategoryData } from 'entities/category';
+import { PostFilter } from './ui/post-filter';
 import { Helmet } from 'react-helmet-async';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export const PostPage = () => {
   const currentCategory = useAppSelector(selectCurrentCategory);
+  const isCategoriesLoading = useAppSelector(selectIsLoading);
+  const categories = useAppSelector(selectCategoryData);
   const filterForFetchPosts = { category: currentCategory, filterSort: 'title' };
   return (
     <>
@@ -22,7 +25,11 @@ export const PostPage = () => {
           <h1>PostPage</h1>
         </Col>
         <Col span={6}>
-          <PostFilter />
+          {isCategoriesLoading ? (
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+          ) : (
+            <PostFilter currentCategory={currentCategory} categories={categories} />
+          )}
         </Col>
       </Row>
       <Row>

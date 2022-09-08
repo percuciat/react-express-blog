@@ -1,25 +1,23 @@
 import React from 'react';
-import {Modal as ModalAnt} from 'antd';
+import { Modal as ModalAnt, ModalProps } from 'antd';
 
-
-interface IModal {
-    text?: string;
-    isVisible: boolean;
-    handlerCancel: () => void;
-    children: React.ReactNode
+interface TypeModal extends ModalProps {
+  text?: string;
+  isVisible: boolean;
+  children: React.ReactNode;
 }
 
-export const Modal = (props: IModal) => {
-    const {text, isVisible, handlerCancel, children} = props;
-    return (
-        <ModalAnt
-            title={text}
-            centered
-            visible={isVisible}
-            footer={null}
-            onCancel={handlerCancel}
-        >
-            {children}
-        </ModalAnt>
-    );
+export const Modal = (props: TypeModal) => {
+  const { text, isVisible, children } = props;
+  return (
+    <ModalAnt
+      title={text}
+      centered
+      visible={isVisible}
+      footer={null}
+      {...props}
+    >
+      {children}
+    </ModalAnt>
+  );
 };

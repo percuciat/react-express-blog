@@ -1,24 +1,21 @@
 import React from 'react';
-import { Button, Pagination } from 'antd';
+import { Pagination } from 'antd';
 import styled from 'styled-components';
+import { PostItemCreate } from '../atoms/post-item-create';
 
-const SFooter = styled.div`
+const StyledPostFooter = styled.div`
   padding: 1rem 0;
   display: flex;
   column-gap: 2rem;
 `;
 
 export const PostListFooter = (props) => {
-  const { footerOperations, paginationOptions, handlePaginationChange, postsData, handlePageSize } =
-    props;
+  const { paginationOptions, handlePaginationChange, postsData, handlePageSize } = props;
   const paginationSizeIntervals = ['5', '10', '15', '20'];
+
   return (
-    <SFooter>
-      {footerOperations.createPostHandler && (
-        <Button type="primary" title="Create Post" onClick={footerOperations.createPostHandler}>
-          Create
-        </Button>
-      )}
+    <StyledPostFooter>
+      <PostItemCreate />
       {postsData.length > paginationSizeIntervals[0] && (
         <Pagination
           current={paginationOptions.current}
@@ -31,6 +28,6 @@ export const PostListFooter = (props) => {
           total={postsData.length}
         />
       )}
-    </SFooter>
+    </StyledPostFooter>
   );
 };

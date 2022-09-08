@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './app/App';
+import { App } from './app/App';
 import { HomePage } from './pages';
-import { _testRender } from './shared/lib/_testRender';
+import { _testRender } from './shared/lib/';
 
 describe('start App', () => {
   it('render App', async () => {

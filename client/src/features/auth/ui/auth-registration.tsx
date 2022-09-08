@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Link, StyledFormAuthWrapper } from 'shared/ui/';
 
-export const RegistrationForm = () => {
+export const AuthRegistration = () => {
   const onFinish = () => {};
 
   const onFinishFailed = () => {};

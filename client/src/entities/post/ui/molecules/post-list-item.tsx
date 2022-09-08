@@ -1,6 +1,8 @@
 import React from 'react';
 import { List, Skeleton } from 'antd';
-import { TPostListItemProps } from '../../model/types';
+import { TypePostListItem } from '../../model/types';
+import { PostItemEdit } from '../atoms/post-item-edit';
+import { PostItemDelete } from '../atoms/post-item-delete';
 import styled from 'styled-components';
 
 const StyledPostAdditionalInfo = styled.div`
@@ -8,20 +10,20 @@ const StyledPostAdditionalInfo = styled.div`
   column-gap: 3rem;
 `;
 
-export const PostListItem = (props: TPostListItemProps) => {
-  const { elementList, postOperations } = props;
-  const actionOperations = postOperations.map((actionComponent) => {
-    actionComponent.props.onClick.bind(null, elementList);
-    return actionComponent;
-  });
-
+export const PostListItem = (props: TypePostListItem) => {
+  const { postItem } = props;
   return (
-    <List.Item actions={actionOperations}>
-      <Skeleton title={true} loading={elementList.loading} active>
-        <List.Item.Meta title={elementList.title} description={elementList.content} />
+    <List.Item
+      actions={[
+        <PostItemEdit />,
+        <PostItemDelete />,
+      ]}
+    >
+      <Skeleton title loading={postItem.loading} active>
+        <List.Item.Meta title={postItem.title} description={postItem.content} />
         <StyledPostAdditionalInfo>
-          <div>{elementList.createdAt}</div>
-          <div>{elementList.category}</div>
+          <div>{postItem.createdAt}</div>
+          <div>{postItem.category}</div>
         </StyledPostAdditionalInfo>
       </Skeleton>
     </List.Item>

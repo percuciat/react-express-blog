@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from 'antd';
+import { Select, Option } from '../Select';
 
 interface IFilter {
   options: Array<any>;
@@ -14,12 +14,12 @@ export const Filter = (props: IFilter) => {
     <>
       {
         <Select defaultValue={defaultValue} style={{ width: 120 }} onChange={handler}>
-          <Select.Option value="">All</Select.Option>
+          <Option value="">All</Option>
           {options.map((el: any) => {
             return (
-              <Select.Option key={el._id} value={el.name}>
+              <Option key={el._id} value={el.name}>
                 {el.name}
-              </Select.Option>
+              </Option>
             );
           })}
         </Select>

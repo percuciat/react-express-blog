@@ -2,4 +2,8 @@ export * from './styles';
 export * from './Modal';
 export * from './Filter';
 export * from './AlertConfirm';
+export * from './Alert';
 export * from './Link';
+export * from './Form';
+export * from './Input';
+export * from './Select';

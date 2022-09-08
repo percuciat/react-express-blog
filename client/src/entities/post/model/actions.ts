@@ -1,5 +1,6 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { makeRequestXHR } from 'shared/lib';
+import { TypeLocalPostInfo } from './types';
 
 export const fetchPosts = createAsyncThunk(
   'post/FETCH_POSTS',
@@ -67,3 +68,5 @@ export const deletePost = createAsyncThunk(
 );
 
 export const resetErrorsFromStore = createAction('post/RESET_ERRORS');
+export const setOpenModal = createAction<boolean>('post/open-modal');
+export const setLocalPostInfo = createAction<TypeLocalPostInfo>('post/set_postInfoForModal');

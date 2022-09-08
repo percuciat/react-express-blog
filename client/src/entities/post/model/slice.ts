@@ -1,19 +1,41 @@
 import { createSlice, current } from '@reduxjs/toolkit';
-import { fetchPosts, createPost, updatePost, deletePost, resetErrorsFromStore } from './actions';
+import {
+  fetchPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  resetErrorsFromStore,
+  setOpenModal,
+  setLocalPostInfo,
+} from './actions';
 import { PostsState } from './types';
 
 const initialState: PostsState = {
   posts: [],
+  isOpenModal: false,
+  postInfoForModal: {
+    info: {},
+    titleModal: '',
+    operation: '',
+  },
   isLoading: false,
   errors: {},
 };
 
-const { actions, reducer } = createSlice({
+export const { actions, reducer } = createSlice({
   name: 'post',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+
+      .addCase(setLocalPostInfo, (state, action) => {
+        state.isOpenModal = true;
+        state.postInfoForModal = action.payload;
+      })
+      .addCase(setOpenModal, (state, action) => {
+        state.isOpenModal = action.payload;
+      })
       .addCase(resetErrorsFromStore, (state, action) => {
         state.errors = {};
       })
@@ -89,5 +111,5 @@ const { actions, reducer } = createSlice({
 export const selectPostData = (state) => state.post.posts;
 export const selectPostLoading = (state) => state.post.isLoading;
 export const selectPostErrors = (state) => state.post.errors;
-
-export default reducer;
+export const selectPostModalStatus = (state) => state.post.isOpenModal;
+export const selectPostInfoForModal = (state) => state.post.postInfoForModal;

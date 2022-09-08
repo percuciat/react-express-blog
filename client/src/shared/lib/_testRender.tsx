@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { store } from 'store';
+import { store } from 'app/store';
 
 type T_testRender = {
   component: React.ReactNode;
