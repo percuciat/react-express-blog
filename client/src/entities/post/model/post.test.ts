@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { store, TStore } from 'app/store';
+import { store, TypeStore } from 'shared/config';
 import { axiosConfig } from 'shared/lib';
 import { AsyncThunkAction, Dispatch } from '@reduxjs/toolkit';
 import {
@@ -31,7 +31,7 @@ describe('post Actions', () => {
   let arg: any; */
 
   let mock: MockAdapter;
-  let _store: ReturnType<TStore>;
+  let _store: ReturnType<TypeStore>;
 
   beforeEach(() => {
     mock = new MockAdapter(axiosConfig);
@@ -95,7 +95,7 @@ describe('post Actions', () => {
 
   it('Delete Post data', async () => {
     let mockDeleted = {
-      _id: 23242,
+      id: '23242',
       title: 'Cool',
       content: 'Body content',
       category: 'birds',
@@ -110,19 +110,19 @@ describe('post Actions', () => {
       post: {
         posts: [
           {
-            _id: 23232,
+            id: '23232',
             title: 'alalal',
             content: 'content',
             category: 'birds',
           },
           { ...mockDeleted },
-          { _id: 23355, title: 'test', content: 'test content', category: 'birds' },
+          { id: '23355', title: 'test', content: 'test content', category: 'birds' },
         ],
       },
     });
     mock.onDelete(`/post/delete`).reply(200, mockResult);
 
-    await _store.dispatch(deletePost(mockDeleted)).then((result) => {
+    await _store.dispatch(deletePost(mockDeleted.id)).then((result) => {
       expect(result.type).toBe('post/DELETE_POST/fulfilled');
       expect(result.payload).not.toContain(mockDeleted);
     });
@@ -140,15 +140,15 @@ describe('post Actions', () => {
     _store = store({
       post: {
         posts: [
-          { _id: 23237, title: 'test 1', content: 'test 1 content', category: 'birds' },
-          { _id: 23232, title: 'test 2', content: 'test 2 content', category: 'birds' },
+          { id: '23237', title: 'test 1', content: 'test 1 content', category: 'birds', author: 'test 1' },
+          { id: '23232', title: 'test 2', content: 'test 2 content', category: 'birds', author: 'test 2' },
         ],
       },
     });
     let mockResult = {
       data: mockData,
     };
-    mock.onPut(`/post/update`).reply(200, mockResult);
+    mock.onPut(`/post/id/:id`).reply(200, mockResult);
 
     await _store.dispatch(updatePost(mockData)).then((result) => {
       expect(result.type).toBe('post/UPDATE_POST/fulfilled');

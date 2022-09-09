@@ -9,6 +9,7 @@ import {
   setLocalPostInfo,
 } from './actions';
 import { PostsState } from './types';
+import { TypeRootState } from 'shared/config';
 
 const initialState: PostsState = {
   posts: [],
@@ -75,9 +76,9 @@ export const { actions, reducer } = createSlice({
       })
 
       .addCase(updatePost.fulfilled, function addUpdatedPostToStore(state, { payload }) {
-        const { _id } = payload as any;
+        const { id } = payload as any;
         state.posts = state.posts.map((el) => {
-          if (el._id === _id) {
+          if (el.id === id) {
             return payload;
           }
           return el;
@@ -97,8 +98,8 @@ export const { actions, reducer } = createSlice({
 
       .addCase(deletePost.fulfilled, function addCreatedPostToStore(state, { payload }) {
         state.isLoading = false;
-        const { _id } = payload as any;
-        state.posts = state.posts.filter((el) => el._id !== _id);
+        const { id } = payload as any;
+        state.posts = state.posts.filter((el) => el.id !== id);
       })
 
       .addCase(deletePost.rejected, (state, action) => {
@@ -108,8 +109,8 @@ export const { actions, reducer } = createSlice({
   },
 });
 
-export const selectPostData = (state) => state.post.posts;
-export const selectPostLoading = (state) => state.post.isLoading;
-export const selectPostErrors = (state) => state.post.errors;
-export const selectPostModalStatus = (state) => state.post.isOpenModal;
-export const selectPostInfoForModal = (state) => state.post.postInfoForModal;
+export const selectPostData = (state: TypeRootState) => state.post.posts;
+export const selectPostLoading = (state: TypeRootState) => state.post.isLoading;
+export const selectPostErrors = (state: TypeRootState) => state.post.errors;
+export const selectPostModalStatus = (state: TypeRootState) => state.post.isOpenModal;
+export const selectPostInfoForModal = (state: TypeRootState) => state.post.postInfoForModal;

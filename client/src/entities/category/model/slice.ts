@@ -7,6 +7,7 @@ import {
   setCurrentCategory,
 } from './actions';
 import { CategoryState } from './types';
+import { TypeRootState } from 'shared/config';
 
 const initialState: CategoryState = {
   categories: [],
@@ -22,7 +23,7 @@ export const { actions, reducer } = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(setCurrentCategory, (state, action) => {
-        state.currentCategory = action.payload.currentCategory;
+        state.currentCategory = action.payload;
       })
       .addCase(resetErrorsFromStore, (state) => {
         state.errors = {};
@@ -63,7 +64,7 @@ export const { actions, reducer } = createSlice({
 
       .addCase(deleteCategory.fulfilled, function addCreatedPostToStore(state, { payload }) {
         state.isLoading = false;
-        state.categories = state.categories.filter((el) => el._id !== payload._id);
+        state.categories = state.categories.filter((el) => el.id !== payload);
       })
 
       .addCase(deleteCategory.rejected, (state, action) => {
@@ -73,7 +74,7 @@ export const { actions, reducer } = createSlice({
   },
 });
 
-export const selectCategoryData = (state) => state.category.categories;
-export const selectCurrentCategory = (state) => state.category.currentCategory;
-export const selectIsLoading = (state) => state.category.isLoading;
-export const selectCategoryErrors = (state) => state.category.errors;
+export const selectCategoryData = (state: TypeRootState) => state.category.categories;
+export const selectCurrentCategory = (state: TypeRootState) => state.category.currentCategory;
+export const selectIsLoading = (state: TypeRootState) => state.category.isLoading;
+export const selectCategoryErrors = (state: TypeRootState) => state.category.errors;

@@ -14,6 +14,6 @@ export const store = (initialState: any = {}) => {
   });
 };
 
-export type TStore = typeof store;
-export type TRootState = ReturnType<typeof rootReducer>;
-export type TAppDispatch = ReturnType<typeof store>['dispatch'];
+export type TypeStore = typeof store;
+export type TypeRootState = ReturnType<typeof rootReducer>;
+export type TypeAppDispatch = ReturnType<typeof store>['dispatch'];

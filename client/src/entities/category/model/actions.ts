@@ -16,7 +16,7 @@ export const fetchCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   'category/CREATE_CATEGORY',
-  async (category: { category: string }, { rejectWithValue }) => {
+  async (category: { category_name: string, author_id: number }, { rejectWithValue }) => {
     try {
       const categories = await makeRequestXHR('post', {
         url: '/post/category',
@@ -33,12 +33,12 @@ export const createCategory = createAsyncThunk(
 
 export const deleteCategory = createAsyncThunk(
   'category/DELETE_CATEGORY',
-  async (_id: number, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
       const categories = await makeRequestXHR('delete', {
         url: '/post/category/id/:id',
-        data: {
-          _id,
+        params: {
+          id,
         },
       });
       return categories.data as any;
@@ -49,13 +49,4 @@ export const deleteCategory = createAsyncThunk(
 );
 
 export const resetErrorsFromStore = createAction('category/RESET_ERRORS');
-export const setCurrentCategory = createAction(
-  'category/SET_CURRENT_CATEGORY',
-  function prepare(currentCategory: string) {
-    return {
-      payload: {
-        currentCategory,
-      },
-    };
-  }
-);
+export const setCurrentCategory = createAction<string>('category/SET_CURRENT_CATEGORY');

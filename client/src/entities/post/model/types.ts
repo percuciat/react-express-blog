@@ -1,8 +1,9 @@
 export type Post = {
-  _id: number;
+  id: string;
   title: string;
   content: string;
   category: string;
+  author?: string
 };
 
 export type PostsState = {
@@ -21,7 +22,6 @@ export type TypePaginationOptions = {
 };
 
 export type TypePostListForm = {
-  /* category: Array<any>; */
   postInfoForModal: TypeLocalPostInfo;
   categories: Array<PostCategory>;
 };

@@ -74,7 +74,7 @@ export const PostList = (props: TypePostList) => {
         }
         renderItem={(el: TypeListItem, index) =>
           index >= paginationOptions.minIndex &&
-          index < paginationOptions.maxIndex && <PostListItem key={el._id} postItem={el} />
+          index < paginationOptions.maxIndex && <PostListItem key={el.id} postItem={el} />
         }
       ></List>
 

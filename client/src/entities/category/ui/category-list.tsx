@@ -6,10 +6,9 @@ import { AlertConfirm, Modal, StyledLoadingIndicator } from 'shared/ui';
 import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
 import { selectIsLoading, selectCategoryData, fetchCategories, deleteCategory } from '../model';
 
-
 export const CategoryList = (props: any) => {
   const [showModal, setShowModal] = useState(false);
-  const [infoCategory, setInfoCategory] = useState({ _id: 0 });
+  const [infoCategory, setInfoCategory] = useState({ id: 0 });
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectIsLoading);
   const categories = useAppSelector(selectCategoryData);
@@ -24,11 +23,11 @@ export const CategoryList = (props: any) => {
 
   const _delete = (id) => {
     setShowModal(true);
-    setInfoCategory((prev) => ({ ...prev, _id: id }));
+    setInfoCategory((prev) => ({ ...prev, id }));
   };
 
   const deleteHandler = useCallback(async () => {
-    const response = await dispatch(deleteCategory(infoCategory._id));
+    const response = await dispatch(deleteCategory(infoCategory.id));
     if (response.payload.status !== 'Error') {
       setShowModal(false);
     }
@@ -41,10 +40,10 @@ export const CategoryList = (props: any) => {
       ) : (
         categories.map((el) => {
           return (
-            <Col span={8} key={el._id}>
+            <Col span={8} key={el.id}>
               <Card
                 hoverable
-                actions={[<DeleteTwoTone onClick={() => _delete(el._id)} />]}
+                actions={[<DeleteTwoTone onClick={() => _delete(el.id)} />]}
                 cover={
                   <img
                     alt="example"
@@ -52,7 +51,7 @@ export const CategoryList = (props: any) => {
                   />
                 }
               >
-                <Card.Meta title={el.name} description="www.instagram.com" />
+                <Card.Meta title={el.category_name} description="www.instagram.com" />
               </Card>
             </Col>
           );

@@ -25,7 +25,7 @@ export const createPost = createAsyncThunk(
   async (postDataForm: any, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('post', {
-        url: '/post/create',
+        url: '/post',
         data: postDataForm,
       });
       return newPost.data;
@@ -40,7 +40,10 @@ export const updatePost = createAsyncThunk(
   async (updatePostDataForm: any, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('put', {
-        url: '/post/update',
+        url: '/post/id/:id',
+        params: {
+          id: updatePostDataForm.id,
+        },
         data: updatePostDataForm,
       });
       return newPost.data;
@@ -52,12 +55,12 @@ export const updatePost = createAsyncThunk(
 
 export const deletePost = createAsyncThunk(
   'post/DELETE_POST',
-  async (idPost: any, { rejectWithValue }) => {
+  async (idPost: string, { rejectWithValue }) => {
     try {
       const newPost = await makeRequestXHR('delete', {
-        url: '/post/delete',
-        data: {
-          _id: idPost,
+        url: '/post/id/:id',
+        params: {
+          id: idPost,
         },
       });
       return newPost.data;
@@ -68,5 +71,5 @@ export const deletePost = createAsyncThunk(
 );
 
 export const resetErrorsFromStore = createAction('post/RESET_ERRORS');
-export const setOpenModal = createAction<boolean>('post/open-modal');
-export const setLocalPostInfo = createAction<TypeLocalPostInfo>('post/set_postInfoForModal');
+export const setOpenModal = createAction<boolean>('post/OPEN_MODAL');
+export const setLocalPostInfo = createAction<TypeLocalPostInfo>('post/SET_postInfoForModal');

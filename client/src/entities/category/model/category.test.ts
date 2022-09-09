@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { store, TStore } from 'app/store';
+import { store, TypeStore } from 'shared/config/store';
 import { axiosConfig } from 'shared/lib';
 import {
   fetchCategories,
@@ -31,7 +31,7 @@ describe('category Selectors', () => {
 
 describe('category Actions', () => {
   let mock: MockAdapter;
-  let _store: ReturnType<TStore>;
+  let _store: ReturnType<TypeStore>;
 
   beforeEach(() => {
     mock = new MockAdapter(axiosConfig);
@@ -46,16 +46,24 @@ describe('category Actions', () => {
     let mockResult = {
       data: [
         {
-          _id: 23232,
-          name: 'birds',
+          id: 1,
+          category_name: 'birds',
+          category_author: {
+            id: 1,
+            author_name: 'Peter David',
+          },
         },
         {
-          _id: 23732,
-          name: 'vehicles',
+          id: 2,
+          category_name: 'vehicles',
+          category_author: {
+            id: 2,
+            author_name: 'Test 2',
+          },
         },
       ],
     };
-    mock.onGet(`/category`).reply(200, mockResult);
+    mock.onGet(`/post/category`).reply(200, mockResult);
 
     await _store.dispatch(fetchCategories()).then((result) => {
       expect(result.type).toBe('category/FETCH_CATEGORIES/fulfilled');
@@ -70,24 +78,27 @@ describe('category Actions', () => {
       category: {
         categories: [
           {
-            _id: 23232,
-            name: 'birds',
+            id: 1,
+            category_name: 'birds',
+            author_id: 1,
           },
           {
-            _id: 23732,
-            name: 'vehicles',
+            id: 2,
+            category_name: 'vehicles',
+            author_id: 2,
           },
         ],
       },
     });
     let mockResult = {
       data: {
-        _id: 21232,
-        name: 'cats',
+        id: 3,
+        category_name: 'cats',
+        author_id: 2,
       },
     };
-    let mockCategory = { category: 'cats' };
-    mock.onPost(`/category/create`).reply(200, mockResult);
+    let mockCategory = { category_name: 'cats', author_id: 2 };
+    mock.onPost(`/post/category`).reply(200, mockResult);
 
     await _store.dispatch(createCategory(mockCategory)).then((result) => {
       expect(result.type).toBe('category/CREATE_CATEGORY/fulfilled');
@@ -102,28 +113,32 @@ describe('category Actions', () => {
       category: {
         categories: [
           {
-            _id: 23232,
-            name: 'birds',
+            id: 1,
+            category_name: 'birds',
+            author_id: 1,
           },
           {
-            _id: 23732,
-            name: 'vehicles',
+            id: 2,
+            category_name: 'vehicles',
+            author_id: 1,
           },
           {
-            _id: 21232,
-            name: 'cats',
+            id: 3,
+            category_name: 'cats',
+            author_id: 2,
           },
         ],
       },
     });
     let mockResult = {
       data: {
-        _id: 23232,
-        name: 'birds',
+        id: 1,
+        category_name: 'birds',
+        author_id: 1,
       },
     };
-    let mockCategory = 23232;
-    mock.onDelete(`/category/delete`).reply(200, mockResult);
+    let mockCategory = 1;
+    mock.onDelete(`/post/category/id/:id`).reply(200, mockResult);
 
     await _store.dispatch(deleteCategory(mockCategory)).then((result) => {
       expect(result.type).toBe('category/DELETE_CATEGORY/fulfilled');

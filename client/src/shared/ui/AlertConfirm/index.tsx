@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '_antd';
+import { Button } from 'shared/ui';
 
 export const AlertConfirm = (props: any) => {
   const { text, handler } = props;

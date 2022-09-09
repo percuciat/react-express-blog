@@ -1,6 +1,11 @@
 export type Category = {
-  _id: number;
-  name: string;
+  id: number;
+  category_name: string;
+  author_id?: number;
+  category_author?: {
+    id: number;
+    author_name: string;
+  };
 };
 
 export type CategoryState = {
