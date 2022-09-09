@@ -24,15 +24,13 @@ export const Token = sequelize.define<TokenModel>(
     refresh_token: {
       type: DataTypes.TEXT,
       unique: true,
-      primaryKey: true,
       validate: {
         notEmpty: true,
       },
     },
     user_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       unique: true,
-      primaryKey: true,
       validate: {
         notEmpty: true,
       },

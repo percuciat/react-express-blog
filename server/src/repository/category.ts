@@ -5,14 +5,14 @@ import { Author, AuthorType } from "../models/author";
 
 export interface InterfaceCategoryRepository {
   getCategories(): Promise<CategoryModel[]>;
-  getCategoryById(categoryId: string): Promise<CategoryModel | null>;
+  getCategoryById(categoryName: string): Promise<CategoryModel | null>;
   createCategory(categoryInfo: TypeCategoryInfo): Promise<CategoryModel>;
   deleteCategory(categoryId: string): Promise<number>;
 }
 
 type TypeCategoryInfo = {
   category_name: string;
-  authorId: string;
+  category_author: string;
 };
 
 class CategoryRepository implements InterfaceCategoryRepository {
@@ -28,7 +28,11 @@ class CategoryRepository implements InterfaceCategoryRepository {
     try {
       const categories = await this.categoryModel.findAll({
         attributes: ["id", "category_name"],
-        include: { model: this.authorModel, as: "author_category" },
+        include: {
+          model: this.authorModel,
+          as: "category_author",
+          attributes: ["id", "author_name"],
+        },
       });
       return categories;
     } catch (error: unknown) {
@@ -37,11 +41,15 @@ class CategoryRepository implements InterfaceCategoryRepository {
     }
   }
 
-  async getCategoryById(categoryId) {
+  async getCategoryById(categoryName) {
     try {
-      const category = await this.categoryModel.findByPk(categoryId, {
+      const category = await this.categoryModel.findByPk(categoryName, {
         attributes: ["id", "category_name"],
-        include: { model: this.authorModel, as: "author_category" },
+        include: {
+          model: this.authorModel,
+          as: "category_author",
+          attributes: ["id", "author_name"],
+        },
       });
       return category;
     } catch (error: unknown) {

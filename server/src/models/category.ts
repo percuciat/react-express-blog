@@ -24,11 +24,11 @@ export const Category = sequelize.define<CategoryModel>(
   "Category",
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
+      defaultValue: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
-      autoIncrement: false,
+      autoIncrement: true,
     },
     category_name: {
       type: DataTypes.STRING,
@@ -42,15 +42,15 @@ export const Category = sequelize.define<CategoryModel>(
   {
     tableName: "Categories",
     paranoid: true,
-    timestamps: false,
+    timestamps: true,
   }
 ) as ModelStatic<CategoryModel>;
 
 Category.hasMany(Post, {
-  foreignKey: "categoryId",
-  as: "category",
+  foreignKey: "category_id",
+  as: "post_category",
 });
 Post.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
+  foreignKey: "category_id",
+  as: "post_category",
 });

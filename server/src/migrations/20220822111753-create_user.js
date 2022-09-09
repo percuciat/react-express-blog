@@ -34,10 +34,18 @@ module.exports = {
             notEmpty: true,
           },
         },
+        createdAt: {
+          type: Sequelize.DATE,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+        },
+        deletedAt: {
+          type: Sequelize.DATE,
+        },
       },
       {
         paranoid: true,
-        timestamps: true,
         hooks: {
           beforeCreate: (user) => {
             const salt = 6;

@@ -20,8 +20,8 @@ type TypePostInfo = {
   title: string;
   content: string;
   status: "No published" | "Published";
-  categoryId: string;
-  authorId: string;
+  category: string;
+  author: string;
 };
 
 class PostRepository {
@@ -42,12 +42,12 @@ class PostRepository {
         include: [
           {
             model: this.authorModel,
-            as: "author",
+            as: "post_author",
             attributes: ["id", "author_name"],
           },
           {
             model: this.categoryModel,
-            as: "category",
+            as: "post_category",
             attributes: ["id", "category_name"],
           },
         ],
@@ -66,12 +66,12 @@ class PostRepository {
         include: [
           {
             model: this.authorModel,
-            as: "author",
+            as: "post_author",
             attributes: ["id", "author_name"],
           },
           {
             model: this.categoryModel,
-            as: "category",
+            as: "post_category",
             attributes: ["id", "category_name"],
           },
         ],

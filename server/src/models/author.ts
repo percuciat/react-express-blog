@@ -25,16 +25,15 @@ export const Author = sequelize.define<AuthorModel>(
   "Author",
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
+      defaultValue: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
-      autoIncrement: false,
+      autoIncrement: true,
     },
     author_name: {
       type: DataTypes.STRING,
       unique: true,
-      primaryKey: true,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -49,18 +48,18 @@ export const Author = sequelize.define<AuthorModel>(
 ) as ModelStatic<AuthorModel>;
 
 Author.hasMany(Category, {
-  foreignKey: "authorId",
-  as: "author_category",
+  foreignKey: "author_id",
+  as: "category_author",
 });
 Category.belongsTo(Author, {
-  foreignKey: "authorId",
-  as: "author_category",
+  foreignKey: "author_id",
+  as: "category_author",
 });
 Author.hasMany(Post, {
-  foreignKey: "authorId",
-  as: "author",
+  foreignKey: "author_id",
+  as: "post_author",
 });
 Post.belongsTo(Author, {
-  foreignKey: "authorId",
-  as: "author",
+  foreignKey: "author_id",
+  as: "post_author",
 });

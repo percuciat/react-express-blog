@@ -39,9 +39,9 @@ app.use(apiPrefix, routes);
 // TODO: 404
 app.use((req, res, next) => {
   res.status(404).json({
-    error: 404,
-    message:
+    error:
       "Ohh you are lost, read the API documentation to find your way back home :)",
+    data: null,
   });
 });
 

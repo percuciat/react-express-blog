@@ -105,7 +105,7 @@ class PostService {
   async restorePost(postId) {
     try {
       // TODO: check restore
-      const res = await this.postRepo.restorePost(postId) as any;
+      const res = (await this.postRepo.restorePost(postId)) as any;
       if (!res) {
         throw new NotFoundError("Cannot restore post");
       }

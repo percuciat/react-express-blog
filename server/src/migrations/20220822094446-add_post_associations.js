@@ -4,12 +4,12 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
       "Posts",
-      "category",
+      "category_id",
       {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: "Categories",
-          key: "category_name",
+          key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
@@ -20,12 +20,12 @@ module.exports = {
     );
     await queryInterface.addColumn(
       "Posts",
-      "author",
+      "author_id",
       {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: "Authors",
-          key: "author_name",
+          key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
@@ -37,13 +37,10 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn(
-      "Posts",
-      "category"
-    );
+    await queryInterface.removeColumn("Posts", "category_id");
     await queryInterface.removeColumn(
       "Posts", // name of Source model
-      "author" // key we want to remove
+      "author_id" // key we want to remove
     );
   },
 };
