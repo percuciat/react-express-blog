@@ -8,10 +8,10 @@ import {
   setOpenModal,
   setLocalPostInfo,
 } from './actions';
-import { PostsState } from './types';
+import { TypePostState } from './types';
 import { TypeRootState } from 'shared/config';
 
-const initialState: PostsState = {
+const initialState: TypePostState = {
   posts: [],
   isOpenModal: false,
   postInfoForModal: {
@@ -43,36 +43,36 @@ export const { actions, reducer } = createSlice({
 
       .addCase(fetchPosts.pending, (state, action) => {
         state.isLoading = true;
-        state.errors = {};
+        //state.errors = {};
       })
       .addCase(fetchPosts.fulfilled, function addFetchedPostsToStore(state, action) {
         state.isLoading = false;
-        state.posts = action.payload;
+        state.posts = action.payload.data;
       })
 
       .addCase(fetchPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload;
+        state.errors = action.payload?.error;
       })
 
       .addCase(createPost.pending, (state, action) => {
         state.isLoading = true;
-        state.errors = {};
+        //state.errors = {};
       })
 
-      .addCase(createPost.fulfilled, function addCreatedPostToStore(state, { payload }) {
+      .addCase(createPost.fulfilled, function addCreatedPostToStore(state, action) {
         state.isLoading = false;
-        state.posts.push(payload);
+        state.posts.push(action.payload.data);
       })
 
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload;
+        state.errors = action.payload?.error;
       })
 
       .addCase(updatePost.pending, (state, action) => {
         state.isLoading = true;
-        state.errors = {};
+        //state.errors = {};
       })
 
       .addCase(updatePost.fulfilled, function addUpdatedPostToStore(state, { payload }) {

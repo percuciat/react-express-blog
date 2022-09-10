@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { store, TypeStore } from 'shared/config';
-import { axiosConfig } from 'shared/lib';
+import { axiosConfig } from 'shared/api';
 import { AsyncThunkAction, Dispatch } from '@reduxjs/toolkit';
 import {
   selectPostData,
@@ -46,16 +46,24 @@ describe('post Actions', () => {
     let mockResult = {
       data: [
         {
-          _id: 23232,
+          id: '23232',
           title: 'Fetch title',
           content: 'Fetch content',
-          category: 'birds',
+          status: 'Not publised',
+          post_category: {
+            id: 1,
+            category_name: 'birds',
+          },
+          post_author: {
+            id: 1,
+            author_name: 'test auth',
+          },
         },
       ],
     };
-    mock.onGet(`/post`, { params: { category: '' } }).reply(200, mockResult);
+    mock.onGet(`/post`, { params: {} }).reply(200, mockResult);
 
-    await _store.dispatch(fetchPosts({ category: '' })).then((result) => {
+    await _store.dispatch(fetchPosts()).then((result) => {
       expect(result.type).toBe('post/FETCH_POSTS/fulfilled');
       expect(result.payload).toEqual(mockResult.data);
     });
@@ -68,18 +76,26 @@ describe('post Actions', () => {
       post: {
         posts: [
           {
-            _id: 23232,
+            id: '23232',
             title: 'Fetch title',
             content: 'Fetch content',
-            category: 'birds',
+            status: 'No published',
+            category_id: 1,
+            author_id: 2,
           },
         ],
       },
     });
-    let mockData = { title: 'test', content: 'test content', category: 'birds' };
+    let mockData = {
+      title: 'test',
+      content: 'test content',
+      status: 'No published',
+      category_id: 1,
+      author_id: 2,
+    } as any;
     let mockResult = {
       data: {
-        _id: 23355,
+        id: '23355',
         ...mockData,
       },
     };
@@ -98,7 +114,15 @@ describe('post Actions', () => {
       id: '23242',
       title: 'Cool',
       content: 'Body content',
-      category: 'birds',
+      status: 'No published',
+      post_category: {
+        id: 1,
+        category_name: 'cats',
+      },
+      post_author: {
+        id: 1,
+        author_name: 'Jacky Chan',
+      },
     };
     let mockResult = {
       data: {
@@ -113,10 +137,31 @@ describe('post Actions', () => {
             id: '23232',
             title: 'alalal',
             content: 'content',
-            category: 'birds',
+            status: 'No published',
+            post_category: {
+              id: 1,
+              category_name: 'cats',
+            },
+            post_author: {
+              id: 1,
+              author_name: 'Jacky Chan',
+            },
           },
           { ...mockDeleted },
-          { id: '23355', title: 'test', content: 'test content', category: 'birds' },
+          {
+            id: '23355',
+            title: 'test',
+            content: 'test content',
+            status: 'No published',
+            post_category: {
+              id: 1,
+              category_name: 'dogs',
+            },
+            post_author: {
+              id: 1,
+              author_name: 'Willy Chan',
+            },
+          },
         ],
       },
     });
@@ -132,16 +177,44 @@ describe('post Actions', () => {
 
   it('Update Post data', async () => {
     let mockData = {
-      _id: 23232,
+      id: '23232',
       title: 'test 2 changed',
       content: 'test content changed',
-      category: 'birds',
-    };
+      status: 'No published',
+      category_id: 2,
+      author_id: 1,
+    } as any;
     _store = store({
       post: {
         posts: [
-          { id: '23237', title: 'test 1', content: 'test 1 content', category: 'birds', author: 'test 1' },
-          { id: '23232', title: 'test 2', content: 'test 2 content', category: 'birds', author: 'test 2' },
+          {
+            id: '23237',
+            title: 'test 1',
+            content: 'test 1 content',
+            status: 'No published',
+            post_category: {
+              id: 1,
+              category_name: 'dogs',
+            },
+            post_author: {
+              id: 1,
+              author_name: 'Willy Chan',
+            },
+          },
+          {
+            id: '23232',
+            title: 'test 2',
+            content: 'test 2 content',
+            status: 'No published',
+            post_category: {
+              id: 1,
+              category_name: 'dogs',
+            },
+            post_author: {
+              id: 1,
+              author_name: 'Willy Chan',
+            },
+          },
         ],
       },
     });

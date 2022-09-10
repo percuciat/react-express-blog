@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import {
   fetchCategories,
   createCategory,
@@ -6,10 +6,10 @@ import {
   resetErrorsFromStore,
   setCurrentCategory,
 } from './actions';
-import { CategoryState } from './types';
+import { TypeCategoryState } from './types';
 import { TypeRootState } from 'shared/config';
 
-const initialState: CategoryState = {
+const initialState: TypeCategoryState = {
   categories: [],
   currentCategory: '',
   isLoading: false,
@@ -30,46 +30,47 @@ export const { actions, reducer } = createSlice({
       })
       .addCase(fetchCategories.pending, (state) => {
         state.isLoading = true;
-        state.errors = {};
+        // state.errors = {};
       })
-      .addCase(fetchCategories.fulfilled, function addFetchedPostsToStore(state, action) {
+      .addCase(fetchCategories.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.categories = action.payload;
+        state.categories = action.payload.data;
       })
 
       .addCase(fetchCategories.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload;
+        state.errors = action.payload?.error
       })
 
       .addCase(createCategory.pending, (state, action) => {
         state.isLoading = true;
-        state.errors = {};
+        // state.errors = {};
       })
 
-      .addCase(createCategory.fulfilled, function addCreatedPostToStore(state, { payload }) {
+      .addCase(createCategory.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.categories.push(payload);
+        // Remember - not provide empty Array [] -> any[]
+        state.categories.push(action.payload.data);
       })
 
       .addCase(createCategory.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload;
+        state.errors = action.payload?.error;
       })
 
       .addCase(deleteCategory.pending, (state, action) => {
         state.isLoading = true;
-        state.errors = {};
+        //state.errors = {};
       })
 
-      .addCase(deleteCategory.fulfilled, function addCreatedPostToStore(state, { payload }) {
+      .addCase(deleteCategory.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.categories = state.categories.filter((el) => el.id !== payload);
       })
 
       .addCase(deleteCategory.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload;
+        state.errors = action.payload?.error;
       });
   },
 });

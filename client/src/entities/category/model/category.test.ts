@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { store, TypeStore } from 'shared/config/store';
-import { axiosConfig } from 'shared/lib';
+import { axiosConfig } from 'shared/api';
 import {
   fetchCategories,
   createCategory,
@@ -80,12 +80,18 @@ describe('category Actions', () => {
           {
             id: 1,
             category_name: 'birds',
-            author_id: 1,
+            category_author: {
+              id: 2,
+              author_name: 'Test 2',
+            },
           },
           {
             id: 2,
             category_name: 'vehicles',
-            author_id: 2,
+            category_author: {
+              id: 2,
+              author_name: 'Test 2',
+            },
           },
         ],
       },
@@ -94,10 +100,13 @@ describe('category Actions', () => {
       data: {
         id: 3,
         category_name: 'cats',
-        author_id: 2,
+        category_author: {
+          id: 3,
+          author_name: 'Test 3',
+        },
       },
     };
-    let mockCategory = { category_name: 'cats', author_id: 2 };
+    let mockCategory = { category_name: 'cats', author_id: 3 };
     mock.onPost(`/post/category`).reply(200, mockResult);
 
     await _store.dispatch(createCategory(mockCategory)).then((result) => {
@@ -115,29 +124,34 @@ describe('category Actions', () => {
           {
             id: 1,
             category_name: 'birds',
-            author_id: 1,
+            category_author: {
+              id: 2,
+              author_name: 'Test 2',
+            },
           },
           {
             id: 2,
             category_name: 'vehicles',
-            author_id: 1,
+            category_author: {
+              id: 2,
+              author_name: 'Test 2',
+            },
           },
           {
             id: 3,
             category_name: 'cats',
-            author_id: 2,
+            category_author: {
+              id: 3,
+              author_name: 'Test 3',
+            },
           },
         ],
       },
     });
     let mockResult = {
-      data: {
-        id: 1,
-        category_name: 'birds',
-        author_id: 1,
-      },
+      data: 1,
     };
-    let mockCategory = 1;
+    let mockCategory = 3;
     mock.onDelete(`/post/category/id/:id`).reply(200, mockResult);
 
     await _store.dispatch(deleteCategory(mockCategory)).then((result) => {

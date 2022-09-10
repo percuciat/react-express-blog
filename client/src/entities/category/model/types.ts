@@ -1,15 +1,17 @@
-export type Category = {
-  id: number;
-  category_name: string;
-  author_id?: number;
-  category_author?: {
-    id: number;
-    author_name: string;
-  };
-};
+import { TypeCategory } from 'shared/api';
 
-export type CategoryState = {
-  categories: Category[];
+type TypeCategoryBase = Pick<TypeCategory, 'id' | 'category_name'>;
+
+export type TypeCategoryResponse = TypeCategory;
+
+export type TypeCategoryRequest =
+  | TypeCategoryBase
+  | {
+      author_id: number;
+    };
+
+export type TypeCategoryState = {
+  categories: TypeCategoryResponse[] | any[];
   currentCategory: string;
   isLoading: boolean;
   errors: any;
