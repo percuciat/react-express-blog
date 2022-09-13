@@ -15,8 +15,11 @@ interface AuthorModel
     InferAttributes<AuthorModel>,
     InferCreationAttributes<AuthorModel>
   > {
-  id: CreationOptional<string>;
+  id: CreationOptional<number>;
   author_name: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type AuthorType = ModelStatic<AuthorModel>;
@@ -26,9 +29,7 @@ export const Author = sequelize.define<AuthorModel>(
   {
     id: {
       type: DataTypes.INTEGER,
-      defaultValue: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
       autoIncrement: true,
     },
     author_name: {
@@ -36,14 +37,21 @@ export const Author = sequelize.define<AuthorModel>(
       unique: true,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: "code cannot be empty",
+        },
       },
     },
   },
   {
     paranoid: true,
     tableName: "Authors",
-    timestamps: false,
+    timestamps: true,
+    hooks: {
+      beforeCreate: (author: AuthorModel) => {
+        author.author_name = author.author_name.toLowerCase();
+      },
+    },
   }
 ) as ModelStatic<AuthorModel>;
 

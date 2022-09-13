@@ -6,21 +6,18 @@ module.exports = {
       "Categories",
       [
         {
-          id: 1,
           category_name: "cats",
           createdAt: new Date(),
           updatedAt: new Date(),
           author_id: 1,
         },
         {
-          id: 2,
           category_name: "dogs",
           createdAt: new Date(),
           updatedAt: new Date(),
           author_id: 1,
         },
         {
-          id: 3,
           category_name: "history",
           createdAt: new Date(),
           updatedAt: new Date(),

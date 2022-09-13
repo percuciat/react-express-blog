@@ -19,25 +19,25 @@ postRouter.get(
 );
 postRouter.post(
   "/",
-  verifyToken,
+ /*  verifyToken, */
   validatorMiddleware(checkCreatePost),
   PostController.createPost
 );
 postRouter.get(
   "/restore/id/:id",
-  verifyToken,
+  /* verifyToken, */
   validatorMiddleware(checkGetById),
   PostController.restorePost
 );
 postRouter.put(
   "/id/:id",
-  verifyToken,
+  /* verifyToken, */
   validatorMiddleware(checkUpdatePost),
   PostController.updatePost
 );
 postRouter.delete(
   "/id/:id",
-  verifyToken,
+  /* verifyToken, */
   validatorMiddleware(checkGetById),
   PostController.deletePost
 );

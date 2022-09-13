@@ -1,5 +1,5 @@
 import { compareSync } from "bcrypt";
-import { DataBaseError, ClientError } from "../helpers/errors";
+import { ServerError, ClientError } from "../helpers/errors";
 import { generateRefreshToken, generateAccessToken } from "../helpers/tokens";
 import type { Error } from "sequelize";
 
@@ -65,15 +65,15 @@ export class AuthRepository implements InterfaceAuthRepository {
         },
       });
       if (user) {
-        throw new DataBaseError(`${"User already registred"}`);
+        throw new ServerError("Auth", "User already registred");
       }
       const newUser = await this.userModel.create({
         ...userInfo,
       });
-      return newUser
+      return newUser;
     } catch (error: unknown) {
-      let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.message}`);
+      let { name, message } = error as Error;
+      throw new ServerError(name, message);
     }
   }
 
@@ -91,8 +91,8 @@ export class AuthRepository implements InterfaceAuthRepository {
       }
       return userInDB;
     } catch (error: any) {
-      let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.message}`);
+      let { name, message } = error as Error;
+      throw new ServerError(name, message);
     }
   }
 
@@ -110,8 +110,8 @@ export class AuthRepository implements InterfaceAuthRepository {
       });
       return { access_token: token, refresh_token: refreshToken };
     } catch (error: unknown) {
-      let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.message}`);
+      let { name, message } = error as Error;
+      throw new ServerError(name, message);
     }
   }
 
@@ -123,7 +123,7 @@ export class AuthRepository implements InterfaceAuthRepository {
         },
       });
       if (!tokenInDB) {
-        throw new DataBaseError("Token is invalid");
+        throw new ServerError("Auth", "Token is invalid");
       }
       await this.tokenModel.destroy({
         where: {
@@ -132,8 +132,8 @@ export class AuthRepository implements InterfaceAuthRepository {
       });
       return tokenInDB.user_id;
     } catch (error: unknown) {
-      let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.message}`);
+      let { name, message } = error as Error;
+      throw new ServerError(name, message);
     }
   }
 
@@ -145,7 +145,7 @@ export class AuthRepository implements InterfaceAuthRepository {
         },
       });
       if (!tokenInDB) {
-        throw new DataBaseError("Token is invalid");
+        throw new ServerError("Auth", "Token is invalid");
       }
       const result = await this.tokenModel.destroy({
         where: {
@@ -154,8 +154,8 @@ export class AuthRepository implements InterfaceAuthRepository {
       });
       return result;
     } catch (error: unknown) {
-      let errorDB = error as Error;
-      throw new DataBaseError(`${errorDB.message}`);
+      let { name, message } = error as Error;
+      throw new ServerError(name, message);
     }
   }
 }

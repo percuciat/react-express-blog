@@ -20,6 +20,9 @@ export interface UserModel
   user_name: string;
   user_email: string;
   user_password: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type UserType = ModelStatic<UserModel>;
@@ -46,9 +49,7 @@ export const User = sequelize.define<UserModel>(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+      validate: { isEmail: true },
     },
     user_password: {
       type: DataTypes.STRING,

@@ -9,10 +9,11 @@ const service = new PostService(PostRepository, CategoryRepository);
 const postController = {
   async getPosts(req: Request, res: Response) {
     try {
-      const posts = await service.getPosts();
+      const filterData = req.query;
+      const posts = await service.getPosts(filterData);
       return responseSuccess(res, posts);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -21,7 +22,7 @@ const postController = {
       const categories = await service.getPostCategories();
       return responseSuccess(res, categories);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -31,7 +32,7 @@ const postController = {
       const posts = await service.getPostById(postId);
       return responseSuccess(res, posts);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -41,7 +42,7 @@ const postController = {
       const category = await service.getPostCategoryById(categoryId);
       return responseSuccess(res, category);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -51,7 +52,7 @@ const postController = {
       const resCreate = await service.createPost(post);
       return responseSuccess(res, resCreate);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -61,7 +62,7 @@ const postController = {
       const resCreate = await service.createPostCategory(categoryInfo);
       return responseSuccess(res, resCreate);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -72,18 +73,18 @@ const postController = {
       const resPost = await service.updatePost(newPost, postId);
       return responseSuccess(res, resPost);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
   async deletePost(req: Request, res: Response) {
     try {
       const postId = req.params.id;
-      const isForce = req.params.flag;
+      const isForce = Boolean(req.params.flag);
       const resDelete = await service.deletePost(postId, isForce);
       return responseSuccess(res, resDelete);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -93,7 +94,17 @@ const postController = {
       const resRestore = await service.restorePost(postId);
       return responseSuccess(res, resRestore);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
+    }
+  },
+
+  async restoreCategory(req: Request, res: Response) {
+    try {
+      const categoryId = req.params.id;
+      const resRestore = await service.restoreCategory(categoryId);
+      return responseSuccess(res, resRestore);
+    } catch (error: any) {
+      return responseError(res, error);
     }
   },
 
@@ -103,7 +114,7 @@ const postController = {
       const resDelete = await service.deletePostCategory(categoryId);
       return responseSuccess(res, resDelete);
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 };

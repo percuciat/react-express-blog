@@ -14,15 +14,23 @@ categoryRouter.get(
   validatorMiddleware(checkGetById),
   PostController.getPostCategoryById
 );
+
+categoryRouter.get(
+  "/restore/id/:id",
+  /* verifyToken, */
+  validatorMiddleware(checkGetById),
+  PostController.restoreCategory
+);
+
 categoryRouter.post(
   "/",
-  verifyToken,
+  /* verifyToken, */
   validatorMiddleware(checkCreatePostCategory),
   PostController.createPostCategory
 );
 categoryRouter.delete(
   "/id/:id",
-  verifyToken,
+  /* verifyToken, */
   validatorMiddleware(checkGetById),
   PostController.deletePostCategory
 );

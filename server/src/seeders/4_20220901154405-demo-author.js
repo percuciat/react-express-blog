@@ -6,13 +6,15 @@ module.exports = {
       "Authors",
       [
         {
-          id: 1,
           author_name: "Peter David",
+          createdAt: new Date(),
+          updatedAt: new Date(),
           user_id: "50cf2fe4-e176-47bf-b9e3-4c2a73cb5c86",
         },
         {
-          id: 2,
           author_name: "Alfred Robben",
+          createdAt: new Date(),
+          updatedAt: new Date(),
           user_id: "50cf2fe4-e176-47bf-b9e3-4c2a73cb5c86",
         },
       ],

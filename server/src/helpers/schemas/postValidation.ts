@@ -7,9 +7,12 @@ export const checkCreatePost = [
   body("content")
     .isLength({ min: 5 })
     .withMessage("Content must contains more than 5 letters"),
-  body("status").notEmpty().withMessage("Enter the post's status"),
-  body("authorId").isUUID().withMessage("Enter the post's author"),
-  body("categoryId").isUUID().withMessage("Enter the post's category"),
+  body("status")
+    .trim()
+    .isIn(["No published", "Published"])
+    .withMessage("Select the correct post's status (published or not)"),
+  body("author_id").isNumeric().withMessage("Enter the post's author"),
+  body("category_id").isNumeric().withMessage("Enter the post's category"),
 ];
 
 export const checkUpdatePost = [
@@ -19,9 +22,18 @@ export const checkUpdatePost = [
   body("content")
     .isLength({ min: 5 })
     .withMessage("Content must contains more than 5 letters"),
-  body("status").notEmpty().withMessage("Enter the post's status"),
-  body("updatedby").isUUID().withMessage("Enter the post's updater"),
-  body("categoryId").isUUID().withMessage("Enter the post's category"),
+  body("status")
+    .trim()
+    .isIn(["No published", "Published"])
+    .withMessage("Select the correct post's status (published or not)"),
+  body("updatedby")
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage("Post updater must be longer than 3 letters")
+    .isAlpha()
+    .withMessage("Enter the post's updater without spaces"),
+  body("category_id").isNumeric().withMessage("Enter the post's category"),
+  body("author_id").isNumeric().withMessage("Enter the post's author"),
 ];
 
 export const checkGetById = [
@@ -32,5 +44,5 @@ export const checkCreatePostCategory = [
   body("category_name")
     .isLength({ min: 3 })
     .withMessage("Category name must contains more than 3 letters"),
-  body("authorId").isUUID().withMessage("Author must be contained uuid"),
+  body("author_id").isNumeric().withMessage("Author must be contained id"),
 ];
