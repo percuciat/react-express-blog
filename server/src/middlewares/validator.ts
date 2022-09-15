@@ -15,7 +15,11 @@ export function validatorMiddleware(schema) {
     if (errors.isEmpty()) {
       return next();
     } else {
-      return responseError(res, 400, errors.array());
+      return responseError(res, {
+        name: "Validation",
+        status: 400,
+        message: errors.array(),
+      });
     }
   };
 }

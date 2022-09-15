@@ -27,6 +27,7 @@ type TypePostInfo = {
 
 type TypePostFilterData = {
   category?: number;
+  order?: [string, string];
 };
 
 class PostRepository {
@@ -45,9 +46,12 @@ class PostRepository {
       const filterCategory = filterData.category
         ? { id: filterData.category }
         : {};
+      const filterOrder = filterData.order?.length
+        ? filterData.order
+        : (["id", "DESC"] as [string, string]);
       const posts = await this.postModel.findAll({
         attributes: ["id", "title", "content", "status", "createdAt"],
-        order: [["createdAt", "ASC"]],
+        order: [filterOrder],
         // { offset: 5, limit: 5 }
         include: [
           {

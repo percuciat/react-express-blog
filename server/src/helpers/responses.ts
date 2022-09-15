@@ -17,12 +17,10 @@ export function responseError(res: Response, error: TypeControllerError) {
   const { status, name, message } = error;
   return res.status(status).json({
     data: null,
-    error: [
-      {
-        type: name,
-        message: message,
-        code: status,
-      },
-    ],
+    error: {
+      type: name,
+      message: message,
+      code: status,
+    },
   });
 }
