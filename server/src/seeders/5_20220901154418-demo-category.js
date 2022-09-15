@@ -6,19 +6,22 @@ module.exports = {
       "Categories",
       [
         {
-          id: "31cf2fe4-e176-47bf-b9e3-4c2a73cb5c86",
           category_name: "cats",
-          author: "Peter David",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          author_id: 1,
         },
         {
-          id: "33cf2fe4-e176-47bf-b9e3-4c2a73cb5c86",
           category_name: "dogs",
-          author: "Peter David",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          author_id: 1,
         },
         {
-          id: "34cf2fe4-e176-47bf-b9e3-4c2a73cb5c86",
           category_name: "history",
-          author: "Alfred Robben",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          author_id: 2,
         },
       ],
       {}

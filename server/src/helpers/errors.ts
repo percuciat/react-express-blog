@@ -1,50 +1,28 @@
 import { BaseError } from "sequelize";
 
-/* 
-TODO: delete in master
-function convert(message) {
-  let textMsg = "";
-  if (typeof message === "object") {
-    try {
-      textMsg += JSON.stringify(message);
-    } catch (e) {
-      textMsg += "recursive link in message";
-    }
-  } else {
-    textMsg += message;
-  }
-  return textMsg;
-} */
-
-export class NotFoundError extends BaseError {
-  status: number;
+class ApiError extends BaseError {
+  name: string;
   expose: boolean;
-  constructor(message) {
+  constructor(name: string, message) {
     super(message);
+    this.expose = true;
+    this.name = name;
+  }
+}
+
+export class NotFoundError extends ApiError {
+  status: number;
+  constructor(name: string, message) {
+    super(name, message);
     this.status = 404;
-    this.expose = true;
   }
 }
 
-export class ServerError extends BaseError {
+export class ServerError extends ApiError {
   status: number;
-  expose: boolean;
-  constructor(message) {
-    const textMsg = message;
-    super(textMsg);
+  constructor(name, message) {
+    super(name, message);
     this.status = 500;
-    this.expose = true;
-  }
-}
-
-export class DataBaseError extends BaseError {
-  status: number;
-  expose: boolean;
-  constructor(message) {
-    const textMsgs = message;
-    super(textMsgs);
-    this.status = 500;
-    this.expose = true;
   }
 }
 

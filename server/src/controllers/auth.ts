@@ -23,7 +23,7 @@ const authController = {
         refresh_token: refresh_token,
       });
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -39,7 +39,7 @@ const authController = {
         refresh_token: refresh_token,
       });
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -58,7 +58,7 @@ const authController = {
         refresh_token: refresh_token,
       });
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 
@@ -69,14 +69,14 @@ const authController = {
       const result = await service.logout(user_id);
       cookie.destroy("refreshToken");
       if (!result) {
-        throw new ServerError("Cannot logout");
+        throw new ServerError("Auth", "Cannot logout");
       }
       return responseSuccess(res, {
         info: "Success!",
         success: true,
       });
     } catch (error: any) {
-      return responseError(res, error.status, error.message);
+      return responseError(res, error);
     }
   },
 };

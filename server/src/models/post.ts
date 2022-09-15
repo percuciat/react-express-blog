@@ -8,6 +8,11 @@ import {
 } from "sequelize";
 import sequelize from "../config/sequelize";
 
+export enum EnumPostStatus {
+  "No published",
+  "Published",
+}
+
 export interface PostModel
   extends Model<
     InferAttributes<PostModel>,
@@ -16,8 +21,11 @@ export interface PostModel
   id: CreationOptional<string>;
   title: string;
   content: string;
-  status: string;
+  status: EnumPostStatus;
   updatedby: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type PostType = ModelStatic<PostModel>;
@@ -61,5 +69,10 @@ export const Post = sequelize.define(
     paranoid: true,
     tableName: "Posts",
     timestamps: true,
+    hooks: {
+      beforeCreate: (post: PostModel) => {
+        post.title = post.title.toLowerCase();
+      },
+    },
   }
 ) as ModelStatic<PostModel>;

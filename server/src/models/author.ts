@@ -15,8 +15,11 @@ interface AuthorModel
     InferAttributes<AuthorModel>,
     InferCreationAttributes<AuthorModel>
   > {
-  id: CreationOptional<string>;
+  id: CreationOptional<number>;
   author_name: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type AuthorType = ModelStatic<AuthorModel>;
@@ -25,42 +28,46 @@ export const Author = sequelize.define<AuthorModel>(
   "Author",
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      autoIncrement: false,
+      autoIncrement: true,
     },
     author_name: {
       type: DataTypes.STRING,
       unique: true,
-      primaryKey: true,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: "code cannot be empty",
+        },
       },
     },
   },
   {
     paranoid: true,
     tableName: "Authors",
-    timestamps: false,
+    timestamps: true,
+    hooks: {
+      beforeCreate: (author: AuthorModel) => {
+        author.author_name = author.author_name.toLowerCase();
+      },
+    },
   }
 ) as ModelStatic<AuthorModel>;
 
 Author.hasMany(Category, {
-  foreignKey: "authorId",
-  as: "author_category",
+  foreignKey: "author_id",
+  as: "category_author",
 });
 Category.belongsTo(Author, {
-  foreignKey: "authorId",
-  as: "author_category",
+  foreignKey: "author_id",
+  as: "category_author",
 });
 Author.hasMany(Post, {
-  foreignKey: "authorId",
-  as: "author",
+  foreignKey: "author_id",
+  as: "post_author",
 });
 Post.belongsTo(Author, {
-  foreignKey: "authorId",
-  as: "author",
+  foreignKey: "author_id",
+  as: "post_author",
 });

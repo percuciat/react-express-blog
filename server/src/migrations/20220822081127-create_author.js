@@ -4,16 +4,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Authors", {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.INTEGER,
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
       },
       author_name: {
         type: Sequelize.STRING,
         unique: true,
-        primaryKey: true,
         allowNull: false,
         validate: {
           notEmpty: true,

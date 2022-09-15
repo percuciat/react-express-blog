@@ -5,12 +5,6 @@ const salt = 6;
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /* const roles = await queryInterface.sequelize.query(
-      `SELECT id from ROLES;`
-    );
-    console.log('roles--', roles);
-    process.exit(1);
-    const rolesRows = roles[0]; */
     await queryInterface.bulkInsert(
       "Users",
       [
@@ -19,6 +13,8 @@ module.exports = {
           user_name: "Frank",
           user_email: "kiol@test.com",
           user_password: bcrypt.hashSync("12345", salt),
+          createdAt: new Date(),
+          updatedAt: new Date(),
           role_id: 1,
         },
       ],

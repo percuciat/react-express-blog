@@ -8,6 +8,7 @@ import {
 } from "sequelize";
 import sequelize from "../config/sequelize";
 import { Token } from "./token";
+import { Author } from "./author";
 import bcrypt from "bcrypt";
 
 export interface UserModel
@@ -19,6 +20,9 @@ export interface UserModel
   user_name: string;
   user_email: string;
   user_password: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type UserType = ModelStatic<UserModel>;
@@ -36,7 +40,6 @@ export const User = sequelize.define<UserModel>(
     user_name: {
       type: DataTypes.STRING,
       unique: true,
-      primaryKey: true,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -46,9 +49,7 @@ export const User = sequelize.define<UserModel>(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+      validate: { isEmail: true },
     },
     user_password: {
       type: DataTypes.STRING,
@@ -61,7 +62,7 @@ export const User = sequelize.define<UserModel>(
   },
   {
     paranoid: true,
-    timestamps: false,
+    timestamps: true,
     hooks: {
       beforeCreate: (user: UserModel) => {
         const salt = 6;
@@ -72,10 +73,19 @@ export const User = sequelize.define<UserModel>(
 ) as ModelStatic<UserModel>;
 
 User.hasOne(Token, {
-  as: "User",
-  foreignKey: { name: "user_id" },
+  foreignKey: "user_id",
+  as: "user_data",
 });
 Token.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user_data",
+});
+
+User.hasOne(Author, {
+  foreignKey: "user_id",
   as: "User",
-  foreignKey: { name: "user_id" },
+});
+Author.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "User",
 });

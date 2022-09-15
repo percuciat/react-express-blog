@@ -10,6 +10,8 @@ function createRepository<Y>(repo: RepoCreator<Y>, ...args: ModelStatic<any>[]):
   return new repo(...args);
 } */
 
+type TypeFilterPostData = {};
+
 class PostService {
   postRepo: InterfacePostRepository;
   categoryPostRepo: InterfaceCategoryRepository;
@@ -18,9 +20,9 @@ class PostService {
     this.categoryPostRepo = categoryPostRepo;
   }
 
-  async getPosts() {
+  async getPosts(filterData) {
     try {
-      const res = await this.postRepo.getPosts();
+      const res = await this.postRepo.getPosts(filterData);
       return res;
     } catch (error: any) {
       throw error;
@@ -40,7 +42,7 @@ class PostService {
     try {
       const res = await this.categoryPostRepo.getCategoryById(categoryId);
       if (!res) {
-        throw new NotFoundError("Post category not found");
+        throw new NotFoundError("Not found", "Post category not found");
       }
       return res;
     } catch (error: any) {
@@ -52,7 +54,7 @@ class PostService {
     try {
       const res = await this.postRepo.getPostById(postId);
       if (!res) {
-        throw new NotFoundError("Post not found");
+        throw new NotFoundError("Not found", "Post not found");
       }
       return res;
     } catch (error: any) {
@@ -82,7 +84,7 @@ class PostService {
     try {
       const res = await this.postRepo.updatePost(post, postId);
       if (!res[0]) {
-        throw new NotFoundError("Cannot update post");
+        throw new NotFoundError("Not found", "Cannot update post");
       }
       return res[0];
     } catch (error: any) {
@@ -94,7 +96,7 @@ class PostService {
     try {
       const res = await this.categoryPostRepo.deleteCategory(categoryId);
       if (!res) {
-        throw new NotFoundError("Cannot delete category");
+        throw new NotFoundError("Not found", "Cannot delete category");
       }
       return res;
     } catch (error: any) {
@@ -102,24 +104,31 @@ class PostService {
     }
   }
 
-  async restorePost(postId) {
+  async restorePost(postId: string) {
     try {
-      // TODO: check restore
-      const res = await this.postRepo.restorePost(postId) as any;
-      if (!res) {
-        throw new NotFoundError("Cannot restore post");
-      }
+      const res = (await this.postRepo.restorePost(postId)) as any;
       return res;
     } catch (error: any) {
       throw error;
     }
   }
 
-  async deletePost(postId, isForce) {
+  async restoreCategory(categoryId: string) {
+    try {
+      const res = (await this.categoryPostRepo.restoreCategory(
+        categoryId
+      )) as any;
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  async deletePost(postId: string, isForce: boolean) {
     try {
       const res = await this.postRepo.deletePost(postId, isForce);
       if (!res) {
-        throw new NotFoundError("Cannot delete post");
+        throw new NotFoundError("Not found", "Cannot delete post");
       }
       return res;
     } catch (error: any) {

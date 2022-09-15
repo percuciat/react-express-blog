@@ -14,8 +14,11 @@ export interface CategoryModel
     InferAttributes<CategoryModel>,
     InferCreationAttributes<CategoryModel>
   > {
-  id: CreationOptional<string>;
+  id: CreationOptional<number>;
   category_name: string;
+  updatedAt?: CreationOptional<string>;
+  createdAt?: CreationOptional<string>;
+  deletedAt?: CreationOptional<string>;
 }
 
 export type CategoryType = ModelStatic<CategoryModel>;
@@ -24,33 +27,33 @@ export const Category = sequelize.define<CategoryModel>(
   "Category",
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      autoIncrement: false,
+      autoIncrement: true,
     },
     category_name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
   },
   {
     tableName: "Categories",
     paranoid: true,
-    timestamps: false,
+    timestamps: true,
+    hooks: {
+      beforeCreate: (category: CategoryModel) => {
+        category.category_name = category.category_name.toLowerCase();
+      },
+    },
   }
 ) as ModelStatic<CategoryModel>;
 
 Category.hasMany(Post, {
-  foreignKey: "categoryId",
-  as: "category",
+  foreignKey: "category_id",
+  as: "post_category",
 });
 Post.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
+  foreignKey: "category_id",
+  as: "post_category",
 });
