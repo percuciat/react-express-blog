@@ -1,6 +1,9 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { reducer as PostReducer } from 'entities/post';
 import { reducer as CategoryReducer } from 'entities/category';
+
+
+const listenerMiddleware = createListenerMiddleware()
 
 const rootReducer = combineReducers({
   post: PostReducer,
@@ -11,6 +14,8 @@ export const store = (initialState: any = {}) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState: initialState,
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().prepend(listenerMiddleware.middleware),
   });
 };
 

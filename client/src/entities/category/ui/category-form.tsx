@@ -1,13 +1,30 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, useForm, Field, Input } from 'shared/ui';
+import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
+import { selectCategoryErrors, selectCategoryModalStatus, createCategory } from '../model';
 
 export const CategoryForm = (props: any) => {
-  const { handler, errorHandler } = props;
-  const [form] = Form.useForm();
+  const dispatch = useAppDispatch();
+  const isOpenModal = useAppSelector(selectCategoryModalStatus);
+  const [form] = useForm();
+
+  const onFinishFailed = (r) => {
+    console.log('Error', r);
+  };
+
+  const create = async (newCategoryFormData) => {
+    const { category_name } = newCategoryFormData;
+    await dispatch(createCategory({
+      category_name,
+      author_id: 1
+    }));
+  };
 
   useEffect(() => {
-    form.resetFields();
-  }, [form]);
+    if(isOpenModal) {
+      form.resetFields();
+    }
+  }, [form, isOpenModal]);
 
   return (
     <Form
@@ -19,12 +36,12 @@ export const CategoryForm = (props: any) => {
         span: 16,
       }}
       form={form}
-      onFinish={handler}
-      onFinishFailed={errorHandler}
+      onFinish={create}
+      onFinishFailed={onFinishFailed}
     >
-      <Form.Item
+      <Field
         label="Category name"
-        name="category"
+        name="category_name"
         rules={[
           {
             required: true,
@@ -37,8 +54,8 @@ export const CategoryForm = (props: any) => {
         ]}
       >
         <Input placeholder="Title category" />
-      </Form.Item>
-      <Form.Item
+      </Field>
+      <Field
         wrapperCol={{
           offset: 8,
           span: 16,
@@ -47,7 +64,7 @@ export const CategoryForm = (props: any) => {
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
-      </Form.Item>
+      </Field>
     </Form>
   );
 };

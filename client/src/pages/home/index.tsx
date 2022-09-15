@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 
 export const HomePage: any = (props: any) => {
   /*   , filterDate: 1 */
-  const filterForFetchPosts = { filterSort: 'date', count: 3 };
+  const dataForFilter = { order: ['createdAt', 'DESC'] };
   return (
     <>
       <Helmet>
@@ -24,7 +24,7 @@ export const HomePage: any = (props: any) => {
           <h2>Latest posts</h2>
         </Col>
         <Col span={24}>
-          <PostWidget filterForFetchPosts={filterForFetchPosts} />
+          <PostWidget dataForFilter={dataForFilter} />
         </Col>
       </Row>
     </>

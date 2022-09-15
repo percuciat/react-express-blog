@@ -5,19 +5,28 @@ import axios, {
   AxiosPromise,
   AxiosError,
 } from 'axios';
-/* import { storage } from '../storage'; */
 
 export type TypeApiResponseData<T> = {
   data: T;
 };
+/* export enum TypeApiResponseErrorType {
+  'Auth',
+  'Validation',
+
+} */
+export type TypeApiError = {
+  type: string;
+  code: number;
+  message: string | any[];
+};
 export type TypeApiResponseError = {
-  error: Array<any> | string;
+  error: null | TypeApiError;
 };
 
 export const axiosConfig = axios.create({
-  baseURL: `${process.env.SERVER_ENDPOINT}`,
-  withCredentials: true,
-  /* headers: {
+  baseURL: `${process.env.REACT_APP_SERVER_ENDPOINT}`,
+  /*withCredentials: true,
+   headers: {
         Authorization: storage.getItemStorage('token') || '',
     },*/
 });
@@ -27,7 +36,6 @@ axiosConfig.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
-    console.log('REQUEST error axios interceptor:', error);
     return Promise.reject(error);
   }
 );
@@ -37,7 +45,6 @@ axiosConfig.interceptors.response.use(
     return response;
   },
   async function (error: AxiosError) {
-    console.log('RESPONSE interceptor error:', error.response);
     return Promise.reject(error.response);
   }
 );

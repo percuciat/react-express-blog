@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'antd';
-import { CategoryContainer } from 'entities/category';
+import { CategoryContainer, setOpenModal, setLocalCategoryInfo } from 'entities/category';
 import { Helmet } from 'react-helmet-async';
+import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
 
 export const CategoryPage: any = (props: any) => {
-  const [showModal, setShowModal] = useState(false);
+  const dispatch = useAppDispatch();
+  const createHandler = () => {
+    dispatch(
+      setLocalCategoryInfo({
+        info: {},
+        operation: 'create',
+        titleModal: 'Create category',
+      })
+    );
+    dispatch(setOpenModal(true));
+  };
   return (
     <>
       <Helmet>
@@ -18,10 +29,10 @@ export const CategoryPage: any = (props: any) => {
           <h1>CategoryPage</h1>
         </Col>
         <Col span={2}>
-          <Button onClick={() => setShowModal(true)}>Create</Button>
+          <Button onClick={createHandler}>Create</Button>
         </Col>
       </Row>
-      <CategoryContainer setShowModal={setShowModal} showModal={showModal} />
+      <CategoryContainer />
     </>
   );
 };

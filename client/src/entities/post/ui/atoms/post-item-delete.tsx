@@ -1,23 +1,29 @@
 import React from 'react';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { setLocalPostInfo } from '../../model';
+import { setLocalPostInfo, setOpenModal, TypePostItem } from '../../model';
 import { useAppDispatch } from 'shared/hooks/useRedux';
 
-export const PostItemDelete = (props) => {
-  const isAuth = false;
+type TypePostItemDeleteProps = {
+  el: TypePostItem;
+};
+
+export const PostItemDelete = (props: TypePostItemDeleteProps) => {
+  const { el } = props;
+  const isAuth = true;
   const dispatch = useAppDispatch();
   if (!isAuth) {
     return null;
   }
 
-  const deletePostHandler = (elemList) => {
+  const deletePostHandler = () => {
     dispatch(
       setLocalPostInfo({
-        info: { id: elemList.id },
+        info: { id: el.id },
         operation: 'delete',
         titleModal: 'Delete Post',
       })
     );
+    dispatch(setOpenModal(true));
   };
   return (
     <CloseCircleOutlined

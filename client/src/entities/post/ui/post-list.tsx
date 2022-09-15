@@ -1,58 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { List } from 'antd';
 import { PostListFooter } from './molecules/post-list-footer';
 import { PostListItem } from './molecules/post-list-item';
-import { PostListForm } from './molecules/post-list-form';
-import { StyledLoadingIndicator, Alert, Modal } from 'shared/ui';
-import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
-import {
-  selectPostLoading,
-  TypePaginationOptions,
-  TypeListItem,
-  TypePostList,
-  selectPostErrors,
-  resetErrorsFromStore,
-  selectPostModalStatus,
-  selectPostInfoForModal,
-  setOpenModal,
-} from '../model';
+import { StyledLoadingIndicator } from 'shared/ui';
+import { TypePost } from 'shared/api';
+import { useAppSelector } from 'shared/hooks/useRedux';
+import { selectPostLoading, TypePostItem, selectPostListPagination } from '../model';
 
-const defaultState = {
-  current: 1,
-  minIndex: 0,
-  maxIndex: 5,
-  postsOnPage: 5,
-};
+type TypePostListProps = { posts: Array<TypePost>; hasActions?: boolean };
 
-export const PostList = (props: TypePostList) => {
-  const { posts, categories } = props;
-  const hasLoading = useAppSelector(selectPostLoading);
-  const backendErrors = useAppSelector(selectPostErrors);
-  const isOpenModal = useAppSelector(selectPostModalStatus);
-  const postInfoForModal = useAppSelector(selectPostInfoForModal);
-  const [paginationOptions, setPaginationOptions] = useState<TypePaginationOptions>(defaultState);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    setPaginationOptions(defaultState);
-  }, [posts]);
-
-  const closeModal = () => {
-    dispatch(setOpenModal(false));
-    if (backendErrors.status) {
-      dispatch(resetErrorsFromStore());
-    }
-  };
-
-  const handlePaginationChange = (page: number, size: number) => {
-    setPaginationOptions({
-      current: page,
-      minIndex: (page - 1) * size,
-      maxIndex: page * size,
-      postsOnPage: size,
-    });
-  };
-
+export const PostList = (props: TypePostListProps) => {
+  const { posts, hasActions } = props;
+  const isPostLoading = useAppSelector(selectPostLoading);
+  const paginationOptions = useAppSelector(selectPostListPagination);
   return (
     <>
       <List
@@ -62,40 +22,21 @@ export const PostList = (props: TypePostList) => {
           emptyText: 'no Posts',
         }}
         loading={{
-          spinning: hasLoading,
+          spinning: isPostLoading,
           indicator: <StyledLoadingIndicator />,
         }}
         footer={
-          <PostListFooter
-            handlePaginationChange={handlePaginationChange}
-            postsData={posts}
-            paginationOptions={paginationOptions}
-          />
+          hasActions && (
+            <PostListFooter postsDataLength={posts.length} paginationOptions={paginationOptions} />
+          )
         }
-        renderItem={(el: TypeListItem, index) =>
+        renderItem={(el: TypePostItem, index) =>
           index >= paginationOptions.minIndex &&
-          index < paginationOptions.maxIndex && <PostListItem key={el.id} postItem={el} />
+          index < paginationOptions.maxIndex && (
+            <PostListItem key={el.id} postItem={el} hasActions={hasActions} />
+          )
         }
       ></List>
-
-      <Modal isVisible={isOpenModal} text={postInfoForModal.titleModal} onCancel={closeModal}>
-        <>
-          <PostListForm categories={categories} postInfoForModal={postInfoForModal} />
-          {backendErrors.status &&
-            backendErrors.errorData.map((errors) => {
-              return (
-                <Alert
-                  key={errors.value}
-                  message="Error"
-                  showIcon
-                  description={errors.message}
-                  type="error"
-                  closable
-                />
-              );
-            })}
-        </>
-      </Modal>
     </>
   );
 };

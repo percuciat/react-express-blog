@@ -80,8 +80,14 @@ describe('post Actions', () => {
             title: 'Fetch title',
             content: 'Fetch content',
             status: 'No published',
-            category_id: 1,
-            author_id: 2,
+            post_category: {
+              id: 1,
+              category_name: 'birds',
+            },
+            post_author: {
+              id: 1,
+              author_name: 'test auth',
+            },
           },
         ],
       },
@@ -91,7 +97,7 @@ describe('post Actions', () => {
       content: 'test content',
       status: 'No published',
       category_id: 1,
-      author_id: 2,
+      author_id: 1,
     } as any;
     let mockResult = {
       data: {
@@ -100,7 +106,7 @@ describe('post Actions', () => {
       },
     };
 
-    mock.onPost(`/post/create`).reply(200, mockResult);
+    mock.onPost(`/post`).reply(200, mockResult);
     await _store.dispatch(createPost(mockData)).then((result) => {
       expect(result.type).toBe('post/CREATE_POST/fulfilled');
       expect(result.payload).toEqual(mockResult.data);
@@ -165,7 +171,7 @@ describe('post Actions', () => {
         ],
       },
     });
-    mock.onDelete(`/post/delete`).reply(200, mockResult);
+    mock.onDelete(`/post/id/:id`).reply(200, mockResult);
 
     await _store.dispatch(deletePost(mockDeleted.id)).then((result) => {
       expect(result.type).toBe('post/DELETE_POST/fulfilled');

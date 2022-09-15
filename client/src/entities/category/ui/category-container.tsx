@@ -1,64 +1,45 @@
-import React, { useState } from 'react';
-import { Alert, notification, Row } from 'antd';
-import { Modal } from 'shared/ui';
+import React from 'react';
+import { Row } from 'antd';
+import { Modal, ErrorAlert, AlertConfirm } from 'shared/ui';
 import { CategoryList } from './category-list';
 import { CategoryForm } from './category-form';
 import { useAppSelector, useAppDispatch } from 'shared/hooks/useRedux';
-import { selectCategoryErrors } from '../model';
-import { createCategory, resetErrorsFromStore } from 'entities/category/model/actions';
+import {
+  selectCategoryErrors,
+  selectCategoryModalStatus,
+  setOpenModal,
+  resetErrorsFromStore,
+  deleteCategory,
+  selectCategoryInfoForModal,
+} from '../model';
 
 export const CategoryContainer = (props) => {
-  const { showModal, setShowModal } = props;
   const dispatch = useAppDispatch();
-  const backendErrors = useAppSelector(selectCategoryErrors);
+  const backendError = useAppSelector(selectCategoryErrors);
+  const isOpenModal = useAppSelector(selectCategoryModalStatus);
+  const categoryInfoForModal = useAppSelector(selectCategoryInfoForModal);
 
   const closeModal = () => {
-    setShowModal(false);
-    if (backendErrors.status) {
-      dispatch(resetErrorsFromStore());
-    }
+    dispatch(setOpenModal(false));
+    dispatch(resetErrorsFromStore(null));
   };
-
-  const onFinishFailed = (r) => {
-    console.log('Error', r);
-  };
-
-  const openNotification = (type, message) => {
-    notification[type]({
-      message: message,
-    });
-  };
-
-  const create = async (newCategoryFormData) => {
-    const { category } = newCategoryFormData;
-    const response = await dispatch(createCategory(category));
-    if (response.payload.status !== 'Error') {
-      setShowModal(false);
-      openNotification('success', 'Category has created!');
-    }
+  const deleteHandler = async () => {
+    await dispatch(deleteCategory(categoryInfoForModal.info.id));
   };
 
   return (
     <>
       <Row align="middle" gutter={18}>
-        <CategoryList setShowModal={setShowModal} />
+        <CategoryList />
       </Row>
 
-      <Modal isVisible={showModal} text="Create new Category" onCancel={closeModal}>
-        <CategoryForm handler={create} errorHandler={onFinishFailed} />
-        {backendErrors.status &&
-          backendErrors.errorData.map((errors) => {
-            return (
-              <Alert
-                key={errors.param}
-                message="Error"
-                showIcon
-                description={errors.message}
-                type="error"
-                closable
-              />
-            );
-          })}
+      <Modal isOpen={isOpenModal} text={categoryInfoForModal.titleModal} onCancel={closeModal}>
+        {categoryInfoForModal.operation === 'delete' ? (
+          <AlertConfirm handler={deleteHandler} text="Are you sure?" />
+        ) : (
+          <CategoryForm />
+        )}
+        {backendError && <ErrorAlert backendError={backendError} />}
       </Modal>
     </>
   );

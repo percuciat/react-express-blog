@@ -5,15 +5,23 @@ import {
   deleteCategory,
   resetErrorsFromStore,
   setCurrentCategory,
+  setOpenModal,
+  setLocalCategoryInfo,
 } from './actions';
 import { TypeCategoryState } from './types';
 import { TypeRootState } from 'shared/config';
 
 const initialState: TypeCategoryState = {
   categories: [],
+  isOpenModal: false,
   currentCategory: '',
+  categoryInfoForModal: {
+    info: {},
+    operation: '',
+    titleModal: '',
+  },
   isLoading: false,
-  errors: {},
+  errors: null,
 };
 
 export const { actions, reducer } = createSlice({
@@ -25,9 +33,17 @@ export const { actions, reducer } = createSlice({
       .addCase(setCurrentCategory, (state, action) => {
         state.currentCategory = action.payload;
       })
-      .addCase(resetErrorsFromStore, (state) => {
-        state.errors = {};
+      .addCase(resetErrorsFromStore, (state, action) => {
+        state.errors = action.payload;
       })
+      .addCase(setOpenModal, (state, action) => {
+        state.isOpenModal = action.payload;
+      })
+
+      .addCase(setLocalCategoryInfo, (state, action) => {
+        state.categoryInfoForModal = action.payload;
+      })
+
       .addCase(fetchCategories.pending, (state) => {
         state.isLoading = true;
         // state.errors = {};
@@ -39,7 +55,7 @@ export const { actions, reducer } = createSlice({
 
       .addCase(fetchCategories.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.payload?.error
+        state.errors = action.payload?.error;
       })
 
       .addCase(createCategory.pending, (state, action) => {
@@ -63,9 +79,9 @@ export const { actions, reducer } = createSlice({
         //state.errors = {};
       })
 
-      .addCase(deleteCategory.fulfilled, (state, { payload }) => {
+      .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.categories = state.categories.filter((el) => el.id !== payload);
+        state.categories = state.categories.filter((el) => el.id !== action.payload);
       })
 
       .addCase(deleteCategory.rejected, (state, action) => {
@@ -79,3 +95,7 @@ export const selectCategoryData = (state: TypeRootState) => state.category.categ
 export const selectCurrentCategory = (state: TypeRootState) => state.category.currentCategory;
 export const selectIsLoading = (state: TypeRootState) => state.category.isLoading;
 export const selectCategoryErrors = (state: TypeRootState) => state.category.errors;
+export const selectCategoryModalStatus = (state: TypeRootState) => state.category.isOpenModal;
+export const selectCategoryInfoForModal = (state: TypeRootState) =>
+  state.category.categoryInfoForModal;
+// .map((el) => ({ name: el.category_name, id: el.id }))

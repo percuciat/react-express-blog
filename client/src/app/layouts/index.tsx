@@ -5,7 +5,7 @@ import { StyledContainer, StyledMain } from 'shared/ui';
 
 export const MainLayout = (props) => {
   const { children } = props;
-
+ // const notification = useAppSelector(selectPostNotification);
   return (
     <>
       <Header />

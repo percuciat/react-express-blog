@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'antd';
 import { useAppDispatch } from 'shared/hooks/useRedux';
-import { setLocalPostInfo } from '../../model';
+import { setLocalPostInfo, setOpenModal } from '../../model';
 
 export const PostItemCreate = (props) => {
-  const isAuth = false;
+  const isAuth = true;
   const dispatch = useAppDispatch();
   if (!isAuth) {
     return null;
@@ -18,6 +18,7 @@ export const PostItemCreate = (props) => {
         titleModal: 'Create Post',
       })
     );
+    dispatch(setOpenModal(true));
   };
   return (
     <Button type="primary" title="Create Post" onClick={createPostHandler}>

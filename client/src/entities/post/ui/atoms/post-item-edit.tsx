@@ -1,25 +1,37 @@
 import React from 'react';
 import { EditOutlined } from '@ant-design/icons';
-import { setLocalPostInfo } from '../../model';
+import { setLocalPostInfo, TypePostItem, setOpenModal } from '../../model';
 import { useAppDispatch } from 'shared/hooks/useRedux';
 
-export const PostItemEdit = (props) => {
-  const isAuth = false;
+type TypePostItemEditProps = {
+  el: TypePostItem;
+};
+
+export const PostItemEdit = (props: TypePostItemEditProps) => {
+  const { el } = props;
+  const isAuth = true;
   const dispatch = useAppDispatch();
   if (!isAuth) {
     return null;
   }
 
-  const updatePostHandler = (value) => {
+  const updatePostHandler = () => {
     dispatch(
       setLocalPostInfo({
         info: {
-          ...value,
+          id: el.id,
+          title: el.title,
+          content: el.content,
+          category: {
+            name: el.post_category.category_name,
+            value: el.post_category.id,
+          },
         },
         operation: 'update',
         titleModal: 'Edit Post',
       })
     );
+    dispatch(setOpenModal(true));
   };
   return (
     <EditOutlined
